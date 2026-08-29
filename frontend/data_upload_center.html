@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <script>
@@ -33,7 +33,88 @@
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(140, 144, 159, 0.2); border-radius: 10px; }
     .dropzone-active { border-color: #adc6ff !important; background-color: rgba(77, 142, 255, 0.1) !important; }
-  </style>
+  
+    /* === GOVERNMENT RAILWAY THEME OVERRIDE === */
+    html,body{background:#F5F7F9 !important;color:#1A2B45 !important;}
+    /* Sidebar */
+    aside{width:220px !important;background:#12355B !important;border-right:1px solid rgba(255,255,255,0.08) !important;padding:0 !important;align-items:stretch !important;}
+    aside nav{gap:0 !important;flex:1;padding-top:8px;}
+    aside nav a{padding:9px 14px !important;border-radius:0 !important;display:flex !important;flex-direction:row !important;align-items:center !important;gap:10px !important;width:100% !important;color:rgba(255,255,255,0.82) !important;font-size:12.5px !important;font-weight:500 !important;font-family:var(--rt-font-body) !important;border-left:3px solid transparent !important;text-decoration:none;transition:background 0.15s,color 0.15s !important;box-shadow:none !important;background:transparent !important;}
+    aside nav a:hover{background:rgba(255,255,255,0.08) !important;color:#fff !important;}
+    aside nav a[aria-current="page"],aside nav a.active{background:rgba(0,90,156,0.40) !important;border-left-color:#C49A3A !important;color:#fff !important;font-weight:600 !important;}
+    aside nav a .material-symbols-outlined{font-size:18px !important;flex-shrink:0;opacity:0.82;}
+    aside nav a[aria-current="page"] .material-symbols-outlined{color:#C49A3A !important;opacity:1;}
+    /* Layout */
+    .pl-20,.pl-64,[class*="ml-64"]{padding-left:220px !important;}
+    /* Header/topbar */
+    header{background:#12355B !important;border-bottom:2px solid #C49A3A !important;backdrop-filter:none !important;}
+    /* Surface colors -> white/light */
+    [class*="bg-surface-container-lowest"]{background:#EEF2F5 !important;}
+    [class*="bg-surface-container-low"]{background:#F8FAFC !important;}
+    [class*="bg-surface-container-high"]{background:#FFFFFF !important;}
+    [class*="bg-surface-container-highest"]{background:#F0F3F6 !important;}
+    [class*="bg-surface-container"]:not([class*="bg-surface-container-l"]):not([class*="bg-surface-container-h"]){background:#FFFFFF !important;}
+    [class*="bg-surface-dim"],[class*="bg-background"],[class*="bg-surface"]:not([class*="bg-surface-c"]){background:#F5F7F9 !important;}
+    [class*="bg-surface-bright"]{background:#FFFFFF !important;}
+    /* Text */
+    [class*="text-on-surface"]:not([class*="text-on-surface-variant"]){color:#1A2B45 !important;}
+    [class*="text-on-surface-variant"]{color:#4A5E73 !important;}
+    [class*="text-on-background"]{color:#1A2B45 !important;}
+    [class*="text-primary"]{color:#005A9C !important;}
+    [class*="text-secondary"]{color:#1D5FA8 !important;}
+    [class*="text-tertiary"]{color:#B45309 !important;}
+    [class*="text-error"]{color:#B3261E !important;}
+    [class*="text-outline"]:not([class*="text-outline-variant"]){color:#7A8EA0 !important;}
+    [class*="text-outline-variant"]{color:#B8C4D2 !important;}
+    [class*="text-on-primary"]{color:#FFFFFF !important;}
+    /* Primary backgrounds */
+    [class*="bg-primary"]:not([class*="bg-primary/"]):not([class*="bg-primary-fixed"]):not([class*="bg-primary-c"]){background:#005A9C !important;}
+    [class*="bg-primary/10"]{background:rgba(0,90,156,0.08) !important;}
+    [class*="bg-primary/20"]{background:rgba(0,90,156,0.12) !important;}
+    [class*="bg-error"]{background:rgba(179,38,30,0.08) !important;}
+    [class*="bg-secondary-container"]{background:rgba(29,95,168,0.10) !important;}
+    [class*="bg-tertiary-container"]{background:rgba(180,83,9,0.08) !important;}
+    /* Borders */
+    [class*="border-outline-variant"]{border-color:#D0D7E3 !important;}
+    [class*="border-outline"]:not([class*="border-outline-variant"]){border-color:#B8C4D2 !important;}
+    [class*="border-primary"]{border-color:#005A9C !important;}
+    [class*="border-error"]{border-color:#B3261E !important;}
+    /* Radius */
+    [class*="rounded-2xl"]{border-radius:10px !important;}
+    [class*="rounded-xl"]{border-radius:8px !important;}
+    [class*="rounded-full"]{border-radius:20px !important;}
+    /* Shadows */
+    .shadow-md,.shadow-lg,.shadow-xl,.shadow-2xl{box-shadow:0 1px 4px rgba(18,53,91,0.08),0 2px 8px rgba(18,53,91,0.05) !important;}
+    /* Typography */
+    h1,h2,h3,h4{color:#1A2B45 !important;}
+    [class*="text-display-lg"]{color:#12355B !important;font-size:24px !important;}
+    [class*="text-headline-md"]{color:#1A2B45 !important;}
+    /* Gradient bleeds */
+    .bg-gradient-to-r:not(aside):not(header){background:transparent !important;}
+    /* Scrollbar */
+    ::-webkit-scrollbar-thumb{background:#C0CAD4 !important;}
+    ::-webkit-scrollbar-track{background:#EEF2F5 !important;}
+    /* Backdrop blur — remove */
+    .backdrop-blur-xl,.backdrop-blur-md,.backdrop-blur-sm{backdrop-filter:none !important;}
+    /* Animated glow blobs — hide */
+    .blur-\[140px\],.blur-\[120px\]{display:none !important;}
+    /* Buttons */
+    button[class*="bg-primary"]:not([class*="bg-primary/"]),a[class*="bg-primary"]:not([class*="bg-primary/"]){background:#005A9C !important;color:#fff !important;}
+    button[class*="bg-primary"]:hover,a[class*="bg-primary"]:hover{background:#004A87 !important;}
+    /* Input fields */
+    input,select,textarea{background:#FFFFFF !important;border-color:#D0D7E3 !important;color:#1A2B45 !important;}
+    input:focus,select:focus,textarea:focus{border-color:#005A9C !important;box-shadow:0 0 0 3px rgba(0,90,156,0.10) !important;}
+    /* Table heads */
+    thead,thead tr{background:#12355B !important;color:#FFFFFF !important;}
+    thead th{color:#FFFFFF !important;}
+    /* Glow effects — remove */
+    [class*="shadow-\[0_0"]{box-shadow:0 1px 3px rgba(18,53,91,0.08) !important;}
+    /* Animated elements — calm down */
+    .animate-ping{animation:none !important;background:#1B7340 !important;border-radius:50%;}
+    /* Font family */
+    body,html,p,span,div,td,th,label,button,a,input,select,textarea{font-family:'Noto Sans','Inter',system-ui,sans-serif !important;}
+    [class*="font-data-mono"],code,pre{font-family:'Source Code Pro','JetBrains Mono',monospace !important;}
+</style>
   <script src="https://cdn.tailwindcss.com"></script>
   <script id="tailwind-config">
     tailwind.config = {
@@ -69,7 +150,7 @@
       }
     }
   </script>
-</head>
+<link rel="stylesheet" href="govt_theme.css"/></head>
 <body class="bg-background font-body-base text-on-background">
 
   <!-- Sidebar Navigation -->
@@ -1151,3 +1232,4 @@
   </script>
 </body>
 </html>
+
