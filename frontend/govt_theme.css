@@ -245,5 +245,19 @@ body.sidebar-closed #sidebar-reopen-btn { display: flex !important; }
 /* -------- GLOBAL SCROLL FIX — ensure pages always scroll -------- */
 body { overflow-y: auto !important; }
 html { overflow-y: auto !important; }
-/* Fix fixed-position KPI strips not being cut off */
-main, .rt-page-content { overflow-y: visible !important; }
+/* Fixed header and sidebar must NOT block pointer events on main content area */
+aside, header { pointer-events: auto; }
+/* Main content must extend beyond viewport — remove any height:100vh traps */
+.pl-20 > main,
+.pl-64 > main,
+main { 
+  overflow: visible !important;
+  min-height: calc(100vh - 144px);
+}
+/* Prevent fixed overlay panels from eating scroll events */
+.fixed:not(aside):not(header):not(#sidebar-reopen-btn) {
+  pointer-events: none;
+}
+.fixed:not(aside):not(header):not(#sidebar-reopen-btn) * {
+  pointer-events: auto;
+}
