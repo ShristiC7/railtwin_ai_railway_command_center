@@ -705,17 +705,86 @@
       e.preventDefault();
       document.getElementById('drop-area').classList.remove('dropzone-active');
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        readFile(e.dataTransfer.files[0]);
+        handleFiles(Array.from(e.dataTransfer.files));
       }
     }
 
     function handleFileSelect(e) {
       if (e.target.files && e.target.files.length > 0) {
-        readFile(e.target.files[0]);
+        handleFiles(Array.from(e.target.files));
       }
     }
 
-    function readFile(file) {
+    function handleFiles(files) {
+      // Separate parseable text files from binary/document attachments
+      const textExts = ['csv', 'json', 'txt', 'tsv'];
+      const docExts  = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'ppt', 'pptx'];
+
+      const attachmentFiles = [];
+      const parseableFiles  = [];
+
+      files.forEach(file => {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (docExts.includes(ext) || (!textExts.includes(ext) && file.type && !file.type.startsWith('text'))) {
+          attachmentFiles.push(file);
+        } else {
+          parseableFiles.push(file);
+        }
+      });
+
+      // Show attachment chips for PDF/binary files
+      if (attachmentFiles.length > 0) {
+        addFileAttachmentChips(attachmentFiles);
+      }
+
+      // Parse first text file found
+      if (parseableFiles.length > 0) {
+        readTextFile(parseableFiles[0]);
+      }
+    }
+
+    function addFileAttachmentChips(files) {
+      const strip = document.getElementById('uploaded-files-strip');
+      const list  = document.getElementById('uploaded-files-list');
+      strip.classList.remove('hidden');
+      strip.classList.add('flex');
+
+      files.forEach(file => {
+        const ext = file.name.split('.').pop().toLowerCase();
+        let icon = 'description', color = 'text-on-surface-variant';
+        if (ext === 'pdf')  { icon = 'picture_as_pdf'; color = 'text-error'; }
+        else if (['xls','xlsx'].includes(ext)) { icon = 'table_chart'; color = 'text-tertiary'; }
+        else if (['doc','docx'].includes(ext)) { icon = 'description'; color = 'text-primary'; }
+        else if (['png','jpg','jpeg','gif','webp','bmp'].includes(ext)) { icon = 'image'; color = 'text-emerald-400'; }
+        else if (['ppt','pptx'].includes(ext)) { icon = 'slideshow'; color = 'text-secondary'; }
+
+        const sizeKb = (file.size / 1024).toFixed(1);
+        const chip = document.createElement('div');
+        chip.className = 'flex items-center gap-1.5 bg-surface-container-lowest border border-outline-variant/20 px-2.5 py-1.5 rounded-lg text-xs font-data-mono';
+        chip.innerHTML = `
+          <span class="material-symbols-outlined text-[16px] ${color}">${icon}</span>
+          <span class="text-on-surface">${file.name}</span>
+          <span class="text-outline">(${sizeKb} KB)</span>
+          <span class="material-symbols-outlined text-[14px] text-emerald-400">check_circle</span>
+        `;
+        list.appendChild(chip);
+
+        // Log as attachment in the database
+        RailTwinEngine.logAudit('FILE_ATTACHMENT', `Document attached: ${file.name} (${sizeKb} KB, ${file.type || ext.toUpperCase()})`);
+
+        // Store attachment metadata in localStorage
+        try {
+          const key = 'rt_attachments';
+          const existing = JSON.parse(localStorage.getItem(key) || '[]');
+          existing.unshift({ name: file.name, size: file.size, type: file.type || ext, attachedAt: new Date().toISOString() });
+          localStorage.setItem(key, JSON.stringify(existing.slice(0, 50))); // keep latest 50
+        } catch(e) {}
+      });
+
+      showToast('File Attached', `${files.length} document(s) logged in the database.`);
+    }
+
+    function readTextFile(file) {
       const reader = new FileReader();
       reader.onload = (event) => {
         const text = event.target.result;
@@ -725,14 +794,71 @@
       reader.readAsText(file);
     }
 
+    function clearTextInput() {
+      document.getElementById('raw-csv-input').value = '';
+      currentParsedData = [];
+      renderPreviewTable([]);
+    }
+
+    function processAsTextNote() {
+      const text = document.getElementById('raw-csv-input').value.trim();
+      if (!text) {
+        alert('Please type or paste an observation or maintenance note first.');
+        return;
+      }
+      // Save note to localStorage
+      try {
+        const key = 'rt_notes';
+        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+        const note = {
+          id: 'NOTE-' + Math.floor(1000 + Math.random() * 9000),
+          text: text,
+          savedAt: new Date().toISOString(),
+          author: (JSON.parse(sessionStorage.getItem('rt_auth') || '{"id":"NRD-4829"}').id)
+        };
+        existing.unshift(note);
+        localStorage.setItem(key, JSON.stringify(existing.slice(0, 100)));
+
+        // Update notes section UI
+        renderNotesSection(existing.slice(0, 10));
+        RailTwinEngine.logAudit('OBSERVATION_SAVED', `Field observation note saved: "${text.substring(0, 80)}..."`);
+        showToast('Note Saved', 'Observation stored in persistent notes database.');
+        clearTextInput();
+      } catch(e) {
+        alert('Could not save note: ' + e.message);
+      }
+    }
+
+    function renderNotesSection(notes) {
+      const section = document.getElementById('notes-section');
+      const list    = document.getElementById('notes-list');
+      if (!notes || notes.length === 0) return;
+      section.classList.remove('hidden');
+      section.classList.add('flex');
+      list.innerHTML = notes.map(n => {
+        const dt = new Date(n.savedAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' });
+        return `
+          <div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-3 flex gap-3">
+            <span class="material-symbols-outlined text-secondary text-[20px] mt-0.5 shrink-0">sticky_note_2</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs text-on-surface font-data-mono leading-relaxed whitespace-pre-wrap break-words">${n.text.substring(0, 300)}${n.text.length > 300 ? '...' : ''}</div>
+              <div class="text-[10px] text-outline mt-1">${n.id} &nbsp;•&nbsp; ${n.author} &nbsp;•&nbsp; ${dt}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     function processRawTextInput() {
       const text = document.getElementById('raw-csv-input').value.trim();
       if (!text) {
-        alert("Please paste or upload CSV data first.");
+        alert("Please type, paste, or upload some data first.");
         return;
       }
 
       let parsed = [];
+
+      // --- Try JSON array ---
       if (text.startsWith('[') && text.endsWith(']')) {
         try {
           parsed = JSON.parse(text);
@@ -740,16 +866,25 @@
           alert("Invalid JSON format: " + e.message);
           return;
         }
-      } else {
+      }
+      // --- Try CSV (must have comma-separated header row) ---
+      else if (text.includes(',')) {
         const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-        if (lines.length < 2) {
-          alert("CSV requires a header line and at least 1 record row.");
+        const hasTwoLines = lines.length >= 2;
+        const firstLineHasComma = lines[0] && lines[0].includes(',');
+
+        if (!hasTwoLines || !firstLineHasComma) {
+          // Looks like free text — offer to save as note
+          if (confirm("This doesn't look like CSV data.\n\nClick OK to save it as an Observation Note, or Cancel to keep editing.")) {
+            processAsTextNote();
+          }
           return;
         }
+
         const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/[\s_-]/g, ''));
         for (let i = 1; i < lines.length; i++) {
           const cols = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
-          if (cols.length < 3) continue;
+          if (cols.length < 2) continue;
           const row = {};
           headers.forEach((h, idx) => { row[h] = cols[idx] || ""; });
 
@@ -773,6 +908,13 @@
           taskObj.priorityScore = RailTwinEngine.getPriorityScore(taskObj);
           parsed.push(taskObj);
         }
+      }
+      // --- Pure free text — prompt to save as note ---
+      else {
+        if (confirm("This looks like free-text maintenance notes.\n\nClick OK to save as an Observation Note, or Cancel to keep editing.")) {
+          processAsTextNote();
+        }
+        return;
       }
 
       currentParsedData = parsed;
@@ -973,7 +1115,39 @@
       document.getElementById('hdr-section').innerText = net.section;
       refreshDatabaseStats();
       updateLiveScore();
+
+      // Restore saved observation notes from last session
+      try {
+        const savedNotes = JSON.parse(localStorage.getItem('rt_notes') || '[]');
+        if (savedNotes.length > 0) {
+          renderNotesSection(savedNotes.slice(0, 10));
+        }
+      } catch(e) {}
+
+      // Restore file attachment chips (metadata only)
+      try {
+        const attachments = JSON.parse(localStorage.getItem('rt_attachments') || '[]');
+        if (attachments.length > 0) {
+          const strip = document.getElementById('uploaded-files-strip');
+          const list  = document.getElementById('uploaded-files-list');
+          strip.classList.remove('hidden');
+          strip.classList.add('flex');
+          attachments.slice(0, 10).forEach(f => {
+            const ext = (f.name || '').split('.').pop().toLowerCase();
+            let icon = 'description', color = 'text-on-surface-variant';
+            if (ext === 'pdf')  { icon = 'picture_as_pdf'; color = 'text-error'; }
+            else if (['xls','xlsx'].includes(ext)) { icon = 'table_chart'; color = 'text-tertiary'; }
+            else if (['png','jpg','jpeg','webp'].includes(ext)) { icon = 'image'; color = 'text-emerald-400'; }
+            const sizeKb = ((f.size || 0) / 1024).toFixed(1);
+            const chip = document.createElement('div');
+            chip.className = 'flex items-center gap-1.5 bg-surface-container-lowest border border-outline-variant/20 px-2.5 py-1.5 rounded-lg text-xs font-data-mono opacity-70';
+            chip.innerHTML = `<span class="material-symbols-outlined text-[16px] ${color}">${icon}</span><span class="text-on-surface">${f.name}</span><span class="text-outline">(${sizeKb} KB)</span>`;
+            list.appendChild(chip);
+          });
+        }
+      } catch(e) {}
     });
+
   </script>
 </body>
 </html>
