@@ -256,35 +256,67 @@
             </div>
           </div>
 
-          <!-- Drag & Drop Uploader and Raw Paste Zone -->
+          <!-- Drag & Drop Uploader and Input Zone -->
           <div class="grid grid-cols-12 gap-gutter">
             <div class="col-span-7 bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
-              <h2 class="font-headline-md text-headline-md text-on-surface">File Upload &amp; Schema Parser</h2>
+              <h2 class="font-headline-md text-headline-md text-on-surface">File Upload &amp; Document Ingestion</h2>
+
+              <!-- File Type Legend -->
+              <div class="flex flex-wrap gap-2">
+                <span class="flex items-center gap-1 bg-primary/10 text-primary text-[10px] font-data-mono px-2.5 py-1 rounded-full border border-primary/20"><span class="material-symbols-outlined text-[13px]">picture_as_pdf</span> PDF</span>
+                <span class="flex items-center gap-1 bg-tertiary/10 text-tertiary text-[10px] font-data-mono px-2.5 py-1 rounded-full border border-tertiary/20"><span class="material-symbols-outlined text-[13px]">table_chart</span> CSV / Excel</span>
+                <span class="flex items-center gap-1 bg-secondary/10 text-secondary text-[10px] font-data-mono px-2.5 py-1 rounded-full border border-secondary/20"><span class="material-symbols-outlined text-[13px]">data_object</span> JSON</span>
+                <span class="flex items-center gap-1 bg-outline/10 text-on-surface-variant text-[10px] font-data-mono px-2.5 py-1 rounded-full border border-outline-variant/20"><span class="material-symbols-outlined text-[13px]">description</span> Word / TXT</span>
+                <span class="flex items-center gap-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-data-mono px-2.5 py-1 rounded-full border border-emerald-500/20"><span class="material-symbols-outlined text-[13px]">image</span> Images</span>
+              </div>
 
               <div id="drop-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" class="border-2 border-dashed border-outline-variant/40 hover:border-primary rounded-2xl p-8 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer bg-surface-container-lowest/50" onclick="document.getElementById('file-input').click()">
-                <input type="file" id="file-input" class="hidden" accept=".csv,.json,.txt" onchange="handleFileSelect(event)"/>
+                <input type="file" id="file-input" class="hidden" accept="*" multiple onchange="handleFileSelect(event)"/>
                 <div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                   <span class="material-symbols-outlined text-[36px]">cloud_upload</span>
                 </div>
                 <div class="text-center">
-                  <div class="font-bold text-on-surface text-base">Drag &amp; drop your CSV or JSON file here</div>
-                  <div class="text-xs text-on-surface-variant mt-1">Supports CSV and JSON arrays (Max 25 MB)</div>
+                  <div class="font-bold text-on-surface text-base">Drop any file here — PDF, Excel, CSV, JSON, Word, Image</div>
+                  <div class="text-xs text-on-surface-variant mt-1">All formats accepted. Structured data auto-parsed; PDFs &amp; images logged as document attachments. (Max 50 MB)</div>
                 </div>
                 <button type="button" class="bg-primary text-on-primary font-label-caps text-xs px-4 py-2 rounded-lg uppercase font-bold shadow-md hover:bg-primary-fixed transition-colors mt-2">
-                  Browse Local Files
+                  Browse &amp; Select Files
                 </button>
               </div>
 
-              <div class="flex flex-col gap-2 mt-2">
+              <!-- Uploaded File Preview Strip -->
+              <div id="uploaded-files-strip" class="hidden flex-col gap-2">
+                <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Attached Files</span>
+                <div id="uploaded-files-list" class="flex flex-wrap gap-2"></div>
+              </div>
+
+              <!-- Free-Text Structured Input -->
+              <div class="flex flex-col gap-2 border-t border-outline-variant/10 pt-4">
                 <div class="flex justify-between items-center">
-                  <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Or Quick Paste CSV Data Directly</span>
-                  <button onclick="loadSampleIntoTextarea()" class="text-xs text-primary hover:underline font-data-mono">Fill with Sample Data</button>
+                  <div>
+                    <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Or Type / Paste Data Directly</span>
+                    <p class="text-[10px] text-outline mt-0.5">Paste CSV rows, JSON, or write free-text observations — all formats accepted</p>
+                  </div>
+                  <div class="flex gap-2">
+                    <button onclick="loadSampleIntoTextarea()" class="text-xs text-primary hover:underline font-data-mono">Load Sample</button>
+                    <button onclick="clearTextInput()" class="text-xs text-outline hover:text-error font-data-mono">Clear</button>
+                  </div>
                 </div>
-                <textarea id="raw-csv-input" rows="4" placeholder="Paste raw CSV content with header row here..." class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs font-data-mono text-on-surface focus:outline-none focus:border-primary transition-all custom-scrollbar"></textarea>
-                <button onclick="processRawTextInput()" class="self-end bg-surface-container-highest hover:bg-surface-container-high text-primary px-4 py-2 rounded-lg text-xs font-data-mono uppercase font-bold transition-all border border-outline-variant/20 flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[16px]">play_arrow</span>
-                  <span>Parse &amp; Validate Data</span>
-                </button>
+                <textarea id="raw-csv-input" rows="5" placeholder="Type or paste anything here:
+• CSV rows with a header line (Task ID, Title, Location, ...)
+• JSON array of task objects
+• Free-text maintenance notes, e.g.:
+  'Bridge BX-8092 at KM 26.4 has micro-cracks on Pier 4. Epoxy grouting required urgently. Duration: 3.5 hrs. Block type: Traffic. Crew: 10 Bridge Cadre + Grouting Pump.'" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs font-data-mono text-on-surface focus:outline-none focus:border-primary transition-all custom-scrollbar"></textarea>
+                <div class="flex gap-2 justify-end">
+                  <button onclick="processAsTextNote()" class="bg-surface-container-highest hover:bg-secondary/20 hover:text-secondary text-on-surface-variant px-4 py-2 rounded-lg text-xs font-data-mono uppercase font-bold transition-all border border-outline-variant/20 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">note_add</span>
+                    <span>Save as Observation Note</span>
+                  </button>
+                  <button onclick="processRawTextInput()" class="bg-surface-container-highest hover:bg-surface-container-high text-primary px-4 py-2 rounded-lg text-xs font-data-mono uppercase font-bold transition-all border border-outline-variant/20 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px]">play_arrow</span>
+                    <span>Parse as Structured Data</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -339,13 +371,19 @@
           <div class="bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
             <div class="flex items-center justify-between">
               <div>
-                <h2 class="font-headline-md text-headline-md text-on-surface">Parsed Records Preview</h2>
-                <span class="text-xs text-on-surface-variant font-data-mono">Real-time schema preview before committing to database</span>
+                <h2 class="font-headline-md text-headline-md text-on-surface">Ingestion Preview &amp; Document Attachments</h2>
+                <span class="text-xs text-on-surface-variant font-data-mono">Structured tasks shown below. PDFs &amp; images logged as attachments. Observation notes archived separately.</span>
               </div>
               <div id="validation-pill" class="hidden items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-data-mono">
                 <span class="material-symbols-outlined text-[16px]">verified</span>
                 <span>All Fields Validated (PRD Compliant)</span>
               </div>
+            </div>
+
+            <!-- Observation Notes Log -->
+            <div id="notes-section" class="hidden flex-col gap-2">
+              <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-secondary">sticky_note_2</span> Saved Observation Notes</span>
+              <div id="notes-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
             </div>
 
             <div class="overflow-x-auto custom-scrollbar">
@@ -365,7 +403,7 @@
                 <tbody id="preview-table-body" class="divide-y divide-outline-variant/10 text-on-surface font-data-mono">
                   <tr>
                     <td colspan="8" class="p-6 text-center text-outline font-data-mono">
-                      No new file uploaded yet. Upload a CSV/JSON or paste raw text above to preview records.
+                      Upload any file or paste data above to preview records here.
                     </td>
                   </tr>
                 </tbody>
