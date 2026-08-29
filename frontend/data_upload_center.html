@@ -1230,25 +1230,13 @@
   </script>
 <script>
   function toggleSidebar() {
-    const sidebar = document.querySelector('aside');
-    const mainContent = document.querySelector('.pl-20') || document.querySelector('.pl-64') || document.querySelector('.ml-64');
-    if (!sidebar) return;
-    
-    if (sidebar.style.display === 'none') {
-      sidebar.style.display = 'flex';
-      if (mainContent) {
-        mainContent.style.paddingLeft = '220px';
-      }
-    } else {
-      sidebar.style.display = 'none';
-      if (mainContent) {
-        mainContent.style.paddingLeft = '0';
-      }
-    }
+    document.body.classList.toggle('sidebar-closed');
   }
 </script>
 </body>
 </html>
+
+
 
 
 
