@@ -1,230 +1,188 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>RailTwin AI — System Access</title>
-  <meta name="description" content="Secure login portal for RailTwin AI Railway Command Center. Authorized railway personnel only."/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet"/>
+  <title>RailTwin AI — System Access | Railway Operations Portal</title>
+  <meta name="description" content="Secure login portal for RailTwin AI Railway Asset & Maintenance Management System. Authorized railway personnel only."/>
+  <link rel="stylesheet" href="govt_theme.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary-fixed": "#d8e2ff", "tertiary": "#ffb786", "surface-dim": "#10131a",
-            "inverse-primary": "#005ac2", "inverse-on-surface": "#2e3038",
-            "secondary-container": "#571bc1", "tertiary-container": "#df7412",
-            "surface-container-highest": "#32353c", "surface-container-high": "#272a31",
-            "on-surface": "#e1e2ec", "secondary": "#d0bcff", "on-secondary": "#3c0091",
-            "on-background": "#e1e2ec", "outline": "#8c909f",
-            "surface-container": "#1d2027", "primary-container": "#4d8eff",
-            "surface-bright": "#363941", "on-primary-container": "#00285d",
-            "error-container": "#93000a", "on-primary-fixed": "#001a42",
-            "surface-container-low": "#191b23", "on-error": "#690005",
-            "surface-container-lowest": "#0b0e15", "tertiary-fixed": "#ffdcc6",
-            "background": "#10131a", "error": "#ffb4ab", "surface": "#10131a",
-            "inverse-surface": "#e1e2ec", "primary": "#adc6ff",
-            "tertiary-fixed-dim": "#ffb786", "surface-tint": "#adc6ff",
-            "primary-fixed-dim": "#adc6ff", "on-surface-variant": "#c2c6d6",
-            "on-secondary-container": "#c4abff", "outline-variant": "#424754",
-            "on-primary": "#002e6a"
-          },
-          borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
-          spacing: {
-            "kpi-height": "80px", "unit": "4px", "gutter": "16px",
-            "margin-page": "24px", "panel-padding": "20px"
-          },
-          fontFamily: {
-            "label-caps": ["Inter"], "body-base": ["Inter"],
-            "display-lg": ["Inter"], "headline-md": ["Inter"],
-            "data-mono": ["JetBrains Mono"]
-          },
-          fontSize: {
-            "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" }],
-            "body-base": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-            "display-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
-            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
-            "data-mono": ["14px", { lineHeight: "20px", fontWeight: "500" }]
-          }
-        }
-      }
-    }
-  </script>
   <style>
-    @layer base {
-      html, body { margin: 0; padding: 0; background-color: #10131a; }
-      body { overscroll-behavior: none; overflow-x: hidden; }
-    }
-    ::-webkit-scrollbar { display: none; }
-    .kpi-pulse { animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-
-    /* Animated grid lines */
-    @keyframes gridMove {
-      0% { background-position: 0 0; }
-      100% { background-position: 40px 40px; }
-    }
-    .animated-grid {
-      background-image:
-        linear-gradient(rgba(173,198,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(173,198,255,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-      animation: gridMove 4s linear infinite;
-    }
-
-    /* Scan line */
-    @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(500%); } }
-    .scan-line { animation: scan 3s linear infinite; }
-
-    /* Error shake */
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
-    }
-    .shake { animation: shake 0.4s ease; }
-
-    /* Loading spinner */
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .animate-spin { animation: spin 0.8s linear infinite; }
+    @keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-5px);}40%,80%{transform:translateX(5px);}}
+    .shake{animation:shake 0.35s ease;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .animate-spin{animation:spin 0.8s linear infinite;}
+    body{min-height:100vh;display:flex;flex-direction:column;background:var(--rt-bg);}
+    .login-bg{flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--rt-primary-dark) 0%,#1A4A7A 60%,var(--rt-primary) 100%);position:relative;overflow:hidden;}
+    .login-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 60px);}
+    /* Railway track motif */
+    .login-bg::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:repeating-linear-gradient(90deg,rgba(196,154,58,0.12) 0px,rgba(196,154,58,0.12) 28px,transparent 28px,transparent 50px);}
+    .login-card{background:#FFFFFF;border-radius:8px;box-shadow:0 8px 40px rgba(10,30,60,0.35);width:420px;max-width:calc(100vw - 32px);overflow:hidden;position:relative;z-index:1;}
+    .login-header{background:var(--rt-primary-dark);padding:20px 24px 18px;border-bottom:3px solid var(--rt-gold);}
+    .login-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+    .login-logo{width:42px;height:42px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.20);border-radius:6px;display:flex;align-items:center;justify-content:center;}
+    .login-logo .material-symbols-outlined{font-size:24px;color:var(--rt-gold);}
+    .login-sys-name{font-size:14px;font-weight:700;color:#FFFFFF;letter-spacing:0.03em;text-transform:uppercase;line-height:1.2;}
+    .login-sys-sub{font-size:10px;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;}
+    .login-tagline{font-size:11px;color:rgba(255,255,255,0.50);letter-spacing:0.04em;margin-top:4px;}
+    .login-body{padding:24px;}
+    .login-error{display:none;flex-direction:row;align-items:center;gap:8px;background:var(--rt-red-light);border:1px solid rgba(179,38,30,0.25);border-left:4px solid var(--rt-red);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px;color:var(--rt-red-dark);}
+    .login-error.show{display:flex;}
+    .login-error .material-symbols-outlined{font-size:18px;flex-shrink:0;color:var(--rt-red);}
+    .form-group{margin-bottom:16px;}
+    .form-label{display:block;font-size:11px;font-weight:700;color:var(--rt-text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+    .form-input-wrap{position:relative;}
+    .form-input-wrap .material-symbols-outlined.icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--rt-text-muted);pointer-events:none;transition:color 0.15s;}
+    .form-input-wrap:focus-within .material-symbols-outlined.icon{color:var(--rt-primary);}
+    .form-input{width:100%;background:#FFFFFF;border:1px solid var(--rt-border);border-radius:6px;padding:9px 12px 9px 38px;font-size:13px;font-family:var(--rt-font-body);color:var(--rt-text-primary);outline:none;transition:border-color 0.15s,box-shadow 0.15s;}
+    .form-input:focus{border-color:var(--rt-primary);box-shadow:0 0 0 3px rgba(0,90,156,0.10);}
+    .form-input.mono{font-family:var(--rt-font-mono);letter-spacing:0.04em;}
+    .pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--rt-text-muted);padding:2px;display:flex;}
+    .pw-toggle:hover{color:var(--rt-text-primary);}
+    .pw-toggle .material-symbols-outlined{font-size:18px;}
+    .label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+    .recover-link{font-size:11px;color:var(--rt-primary);text-decoration:none;font-weight:600;}
+    .recover-link:hover{text-decoration:underline;}
+    .keep-signed{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
+    .keep-signed input[type=checkbox]{width:15px;height:15px;accent-color:var(--rt-primary);cursor:pointer;}
+    .keep-signed label{font-size:12.5px;color:var(--rt-text-secondary);cursor:pointer;}
+    .btn-login{width:100%;background:var(--rt-primary);color:#FFFFFF;border:none;border-radius:6px;padding:11px 20px;font-size:14px;font-weight:700;font-family:var(--rt-font-body);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.02em;transition:background 0.15s;text-transform:uppercase;}
+    .btn-login:hover{background:var(--rt-primary-hover);}
+    .btn-login:disabled{opacity:0.65;cursor:not-allowed;}
+    .btn-login .material-symbols-outlined{font-size:18px;}
+    .login-footer{padding:14px 24px;border-top:1px solid var(--rt-border-light);background:var(--rt-card-alt);text-align:center;font-size:12px;color:var(--rt-text-muted);}
+    .login-footer a{color:var(--rt-primary);font-weight:600;text-decoration:none;}
+    .login-footer a:hover{text-decoration:underline;}
+    .security-bar{padding:12px 24px;background:var(--rt-bg-section);border-top:1px solid var(--rt-border);display:flex;align-items:center;justify-content:center;gap:20px;}
+    .security-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--rt-text-muted);text-transform:uppercase;letter-spacing:0.05em;}
+    .security-item .material-symbols-outlined{font-size:14px;color:var(--rt-primary);}
+    .right-panel{display:none;}
+    @media(min-width:900px){.login-bg{align-items:stretch;}.login-wrap{display:flex;align-items:center;justify-content:center;width:100%;gap:60px;z-index:1;position:relative;padding:40px 20px;}.right-panel{display:flex;flex-direction:column;gap:16px;max-width:320px;}.right-panel-title{font-size:18px;font-weight:700;color:#FFFFFF;letter-spacing:-0.01em;line-height:1.3;}.right-panel-sub{font-size:13px;color:rgba(255,255,255,0.60);line-height:1.6;}.feature-item{display:flex;align-items:flex-start;gap:10px;}.feature-icon{width:32px;height:32px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}.feature-icon .material-symbols-outlined{font-size:17px;color:var(--rt-gold);}.feature-text{font-size:12px;color:rgba(255,255,255,0.70);line-height:1.5;}.feature-label{display:block;font-weight:700;color:rgba(255,255,255,0.90);font-size:12.5px;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;}}
   </style>
 </head>
-<body class="bg-background font-body-base text-on-background min-h-screen flex items-center justify-center relative overflow-hidden">
-
-  <!-- Ambient glow blobs -->
-  <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[140px] pointer-events-none"></div>
-  <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-secondary-container/10 blur-[120px] pointer-events-none"></div>
-
-  <!-- Animated grid background -->
-  <div class="absolute inset-0 animated-grid pointer-events-none opacity-60"></div>
-
-  <!-- Top scanning line accent -->
-  <div class="absolute top-0 left-0 right-0 h-px bg-surface-container-highest overflow-hidden">
-    <div class="h-full w-1/4 bg-primary/60 blur-sm scan-line"></div>
+<body>
+  <!-- Top government identity strip -->
+  <div class="rt-identity-bar" style="font-family:var(--rt-font-body);">
+    <span>Railway Operations Management System &mdash; RailTwin AI</span>
+    <span>Authorized Personnel Only &mdash; Secured Portal</span>
   </div>
 
-  <!-- Main card -->
-  <div class="relative z-10 w-full max-w-[460px] mx-4">
-
-    <!-- Logo + Brand -->
-    <div class="flex flex-col items-center mb-8 gap-3">
-      <div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center shadow-[0_0_24px_rgba(173,198,255,0.15)] border border-primary/10">
-        <span class="material-symbols-outlined text-[32px] text-primary" style="font-variation-settings:'FILL' 1;">admin_panel_settings</span>
+  <div class="login-bg" style="flex:1;">
+    <div class="login-wrap">
+      <!-- Right information panel (visible on wide screens) -->
+      <div class="right-panel">
+        <div class="right-panel-title">Railway Asset &amp;<br/>Predictive Maintenance<br/>Command Center</div>
+        <div class="right-panel-sub">Integrated operations platform for track, signal, traction &amp; civil maintenance management.</div>
+        <div class="feature-item">
+          <div class="feature-icon"><span class="material-symbols-outlined">track_changes</span></div>
+          <div class="feature-text"><span class="feature-label">AI-Assisted Planning</span>Schedule optimization &amp; predictive maintenance windows</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><span class="material-symbols-outlined">map</span></div>
+          <div class="feature-text"><span class="feature-label">Network GIS Monitoring</span>Real-time railway network visualization &amp; asset tracking</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><span class="material-symbols-outlined">analytics</span></div>
+          <div class="feature-text"><span class="feature-label">Operations Analytics</span>Multi-department KPI dashboards &amp; maintenance trends</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><span class="material-symbols-outlined">precision_manufacturing</span></div>
+          <div class="feature-text"><span class="feature-label">Digital Twin Explorer</span>Asset health monitoring &amp; lifecycle management</div>
+        </div>
       </div>
-      <div class="text-center">
-        <h1 class="font-display-lg text-display-lg text-on-surface">System Access</h1>
-        <p class="font-body-base text-body-base text-on-surface-variant mt-1">Enter your operational credentials</p>
-      </div>
-    </div>
 
-    <!-- Card -->
-    <div class="bg-surface-container/80 backdrop-blur-xl shadow-2xl rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden border border-outline-variant/10">
-      <!-- Top shimmer line -->
-      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-40"></div>
-
-      <!-- Error banner (hidden by default) -->
-      <div class="hidden flex items-center gap-3 bg-error-container/30 border border-error/20 rounded-xl px-4 py-3" id="error-banner">
-        <span class="material-symbols-outlined text-error text-[18px]">error</span>
-        <span class="font-label-caps text-label-caps text-error" id="error-text">Invalid credentials. Please try again.</span>
-      </div>
-
-      <!-- Form -->
-      <form class="flex flex-col gap-5" id="login-form" onsubmit="handleLogin(event)" novalidate>
-
-        <!-- Employee ID -->
-        <div class="flex flex-col gap-2">
-          <label class="font-label-caps text-label-caps text-on-surface-variant uppercase ml-1" for="employee-id">Employee ID</label>
-          <div class="relative group">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary transition-colors text-[20px]">badge</span>
-            <input
-              id="employee-id"
-              type="text"
-              autocomplete="username"
-              placeholder="e.g. NRD-4829"
-              required
-              class="w-full bg-surface-container-highest/50 text-on-surface font-data-mono text-data-mono rounded-xl py-3.5 pl-12 pr-4 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-surface-container-highest transition-all shadow-inner placeholder:text-outline/50"
-            />
+      <!-- Login card -->
+      <div class="login-card">
+        <div class="login-header">
+          <div class="login-logo-row">
+            <div class="login-logo">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">train</span>
+            </div>
+            <div>
+              <div class="login-sys-name">RailTwin AI</div>
+              <div class="login-sys-sub">Railway Operations Portal</div>
+            </div>
           </div>
+          <div class="login-tagline">Asset &amp; Maintenance Management System &mdash; Authorized Access Only</div>
         </div>
 
-        <!-- Passcode -->
-        <div class="flex flex-col gap-2">
-          <div class="flex items-center justify-between ml-1">
-            <label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="password">Passcode</label>
-            <a class="font-label-caps text-label-caps text-primary hover:text-primary-fixed transition-colors" href="#">Recover</a>
+        <div class="login-body">
+          <!-- Error banner -->
+          <div class="login-error" id="error-banner">
+            <span class="material-symbols-outlined">error</span>
+            <span id="error-text">Invalid credentials. Please try again.</span>
           </div>
-          <div class="relative group">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary transition-colors text-[20px]">key</span>
-            <input
-              id="password"
-              type="password"
-              autocomplete="current-password"
-              placeholder="••••••••"
-              required
-              class="w-full bg-surface-container-highest/50 text-on-surface font-data-mono text-data-mono rounded-xl py-3.5 pl-12 pr-12 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-surface-container-highest transition-all shadow-inner placeholder:text-outline/50"
-            />
-            <button
-              type="button"
-              id="toggle-pass"
-              class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors focus:outline-none"
-              onclick="togglePassword()"
-              aria-label="Toggle password visibility"
-            >
-              <span class="material-symbols-outlined text-[20px]" id="eye-icon">visibility</span>
+
+          <form id="login-form" onsubmit="handleLogin(event)" novalidate>
+            <!-- Employee ID -->
+            <div class="form-group">
+              <label class="form-label" for="employee-id">Employee ID / Personnel Number</label>
+              <div class="form-input-wrap">
+                <span class="material-symbols-outlined icon">badge</span>
+                <input id="employee-id" type="text" autocomplete="username" placeholder="e.g. NRD-4829" required class="form-input mono"/>
+              </div>
+            </div>
+
+            <!-- Passcode -->
+            <div class="form-group">
+              <div class="label-row">
+                <label class="form-label" for="password" style="margin:0;">Passcode</label>
+                <a href="#" class="recover-link">Forgot credentials?</a>
+              </div>
+              <div class="form-input-wrap">
+                <span class="material-symbols-outlined icon">lock</span>
+                <input id="password" type="password" autocomplete="current-password" placeholder="Enter your passcode" required class="form-input" style="padding-right:38px;"/>
+                <button type="button" id="toggle-pass" class="pw-toggle" onclick="togglePassword()" aria-label="Toggle password visibility">
+                  <span class="material-symbols-outlined" id="eye-icon">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Keep signed in -->
+            <div class="keep-signed">
+              <input id="keep-signed-in" type="checkbox" checked/>
+              <label for="keep-signed-in">Keep me signed in on this device</label>
+            </div>
+
+            <!-- Submit -->
+            <button id="submit-btn" type="submit" class="btn-login">
+              <span class="submit-label" style="display:flex;align-items:center;gap:8px;">
+                <span class="material-symbols-outlined">login</span>
+                <span>Sign In to System</span>
+              </span>
+              <span class="loading-label" style="display:none;align-items:center;gap:8px;">
+                <span class="material-symbols-outlined animate-spin">refresh</span>
+                <span>Verifying credentials...</span>
+              </span>
             </button>
+          </form>
+        </div>
+
+        <div class="login-footer">
+          New personnel?&nbsp;<a href="signup.html">Request System Access</a>
+        </div>
+
+        <div class="security-bar">
+          <div class="security-item">
+            <span class="material-symbols-outlined">shield</span>
+            <span>Encrypted Channel</span>
+          </div>
+          <div class="security-item">
+            <span class="material-symbols-outlined">dns</span>
+            <span>Node: DEL-01</span>
+          </div>
+          <div class="security-item">
+            <span class="material-symbols-outlined">verified_user</span>
+            <span>Secure Login</span>
           </div>
         </div>
-
-        <!-- Keep signed in -->
-        <div class="flex items-center gap-3">
-          <label class="relative flex items-center cursor-pointer">
-            <input id="keep-signed-in" type="checkbox" checked class="sr-only peer"/>
-            <div class="w-10 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
-            <span class="ml-3 font-body-base text-body-base text-on-surface-variant">Keep me signed in</span>
-          </label>
-        </div>
-
-        <!-- Submit -->
-        <button
-          id="submit-btn"
-          type="submit"
-          class="mt-2 w-full bg-primary text-on-primary font-headline-md text-body-base py-4 rounded-xl shadow-[0_0_20px_rgba(173,198,255,0.15)] hover:shadow-[0_0_28px_rgba(173,198,255,0.3)] hover:bg-primary-fixed transition-all active:scale-[0.98] flex items-center justify-center gap-2 group relative overflow-hidden"
-        >
-          <span class="submit-label flex items-center gap-2">
-            <span>Authenticate</span>
-            <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-          </span>
-          <span class="loading-label hidden flex items-center gap-2">
-            <span class="material-symbols-outlined text-[20px] animate-spin">refresh</span>
-            <span>Verifying...</span>
-          </span>
-        </button>
-      </form>
-
-      <!-- Divider + signup link -->
-      <div class="pt-4 border-t border-outline-variant/20 text-center">
-        <p class="font-body-base text-body-base text-on-surface-variant">
-          Need terminal access?
-          <a href="signup.html" class="text-tertiary hover:text-tertiary-fixed font-semibold ml-1 transition-colors">Request Clearance</a>
-        </p>
       </div>
     </div>
+  </div>
 
-    <!-- Security badge -->
-    <div class="mt-6 flex items-center justify-center gap-6 opacity-50">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-[14px] text-outline">shield</span>
-        <span class="font-data-mono text-label-caps text-outline uppercase tracking-wider">End-to-End Encrypted</span>
-      </div>
-      <div class="w-1 h-1 rounded-full bg-outline-variant"></div>
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-[14px] text-outline">dns</span>
-        <span class="font-data-mono text-label-caps text-outline uppercase tracking-wider">Node: DEL-01</span>
-      </div>
-    </div>
+  <!-- Bottom strip -->
+  <div style="background:var(--rt-primary-dark);color:rgba(255,255,255,0.40);font-size:10px;text-align:center;padding:6px;letter-spacing:0.05em;text-transform:uppercase;font-family:var(--rt-font-body);">
+    RailTwin AI Operations Platform &mdash; For Authorized Railway Personnel Only
   </div>
 
   <script>
@@ -249,10 +207,9 @@
       const banner = document.getElementById('error-banner');
       const text = document.getElementById('error-text');
       text.innerText = msg;
-      banner.classList.remove('hidden');
-      banner.classList.add('flex');
+      banner.classList.add('show');
       document.getElementById('login-form').classList.add('shake');
-      setTimeout(() => document.getElementById('login-form').classList.remove('shake'), 500);
+      setTimeout(() => document.getElementById('login-form').classList.remove('shake'), 400);
     }
 
     function setLoading(loading) {
@@ -261,13 +218,11 @@
       const loadLabel = btn.querySelector('.loading-label');
       btn.disabled = loading;
       if (loading) {
-        label.classList.add('hidden');
-        loadLabel.classList.remove('hidden');
-        loadLabel.classList.add('flex');
+        label.style.display = 'none';
+        loadLabel.style.display = 'flex';
       } else {
-        label.classList.remove('hidden');
-        loadLabel.classList.add('hidden');
-        loadLabel.classList.remove('flex');
+        label.style.display = 'flex';
+        loadLabel.style.display = 'none';
       }
     }
 
@@ -277,9 +232,7 @@
       const pass = document.getElementById('password').value;
       const keep = document.getElementById('keep-signed-in').checked;
 
-      // Hide any previous error
-      document.getElementById('error-banner').classList.add('hidden');
-      document.getElementById('error-banner').classList.remove('flex');
+      document.getElementById('error-banner').classList.remove('show');
 
       if (!id || !pass) {
         showError('Please enter your Employee ID and Passcode.');
@@ -288,7 +241,6 @@
 
       setLoading(true);
 
-      // Simulate async auth check (frontend demo — accept any non-empty credentials)
       setTimeout(() => {
         const authData = { id, time: Date.now(), keep };
         sessionStorage.setItem('rt_auth', JSON.stringify(authData));
