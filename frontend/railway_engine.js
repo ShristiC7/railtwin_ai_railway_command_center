@@ -3,14 +3,15 @@
  * SIH 2026 | Problem Statement 26027
  * 
  * Features:
- * - Network Hierarchy (Zone -> Division -> Section -> Corridor -> Block Section -> Track -> Asset)
+ * - Persistent Database Layer (localStorage + sessionStorage Sync)
+ * - CRUD Maintenance Task & Requirements Engine
  * - Multi-Department Ingestion (TMS/Engineering, SMMS/S&T, TDMS/TRD)
  * - Explainable Priority Scoring (PRD Formula)
  * - Multi-Department Bundling & CP-SAT Constraint Optimization Simulator
  * - Dynamic Re-Planning & Critical Defect Injection
  * - What-If Scenario Simulator
  * - Human Approval Lifecycle & Audit Logging
- * - Complete CSV / Excel / JSON Ingestion Engine & Template Generator
+ * - Full Database Export / Backup & Restore
  */
 
 const RailTwinEngine = (function() {
@@ -79,7 +80,7 @@ const RailTwinEngine = (function() {
     }
   ];
 
-  // --- Initial Task Backlog (Normalized Schema across TMS, SMMS, TDMS) ---
+  // --- Initial Task Backlog ---
   const INITIAL_TASKS = [
     {
       id: "TSK-892A",
@@ -98,6 +99,7 @@ const RailTwinEngine = (function() {
       status: "CRITICAL",
       safetyProfile: "Absolute Block + Track Occupancy",
       blockType: "TRAFFIC_POWER_BLOCK",
+      machineReq: "USFD Flaw Detector + 8 Trackmen",
       bundleCandidate: "B-104"
     },
     {
@@ -117,6 +119,7 @@ const RailTwinEngine = (function() {
       status: "HIGH",
       safetyProfile: "Disconnection Notice + S&T Safety Buffer",
       blockType: "SIGNAL_DISCONNECTION",
+      machineReq: "Diagnostic Tool Set + 4 Signal Technicians",
       bundleCandidate: "B-104"
     },
     {
@@ -136,6 +139,7 @@ const RailTwinEngine = (function() {
       status: "ROUTINE",
       safetyProfile: "Power Block (25kV AC Isolation)",
       blockType: "POWER_BLOCK",
+      machineReq: "Tower Wagon TW-04 + 6 Electrical Fitters",
       bundleCandidate: "B-104"
     },
     {
@@ -155,6 +159,7 @@ const RailTwinEngine = (function() {
       status: "CRITICAL",
       safetyProfile: "Track Speed Restriction (30 km/h) + Traffic Block",
       blockType: "TRAFFIC_BLOCK",
+      machineReq: "High-Pressure Injection Rig + 10 Bridge Cadre",
       bundleCandidate: null
     },
     {
@@ -174,6 +179,7 @@ const RailTwinEngine = (function() {
       status: "ROUTINE",
       safetyProfile: "Caution Order",
       blockType: "NON_INTERLOCKED_BLOCK",
+      machineReq: "Axle Counter Multi-Meter + 3 Technicians",
       bundleCandidate: "B-105"
     },
     {
@@ -193,11 +199,12 @@ const RailTwinEngine = (function() {
       status: "HIGH",
       safetyProfile: "Tamping Machine Block",
       blockType: "TRAFFIC_BLOCK",
+      machineReq: "CSM Tamping Machine + 8 PW Gang",
       bundleCandidate: "B-105"
     }
   ];
 
-  // --- PRD Priority Scoring Formula ---
+  // --- PRD Priority Scoring Formula (Section 8.2) ---
   function calculatePriority(task) {
     const p = (0.30 * (task.criticality || 0.5)) +
               (0.25 * (task.severity || 0.5)) +
@@ -207,7 +214,7 @@ const RailTwinEngine = (function() {
     return Math.round(p * 100);
   }
 
-  // --- Bundles (Flagship USP) ---
+  // --- Bundles ---
   const BUNDLES = [
     {
       bundleId: "B-104",
@@ -245,7 +252,7 @@ const RailTwinEngine = (function() {
     }
   ];
 
-  // --- Audit Trail ---
+  // --- Initial Audit Trail ---
   const INITIAL_AUDIT = [
     { id: "AUD-101", user: "NRD-4829 (Chief Controller)", action: "SYSTEM_INITIALIZE", note: "Common railway data model loaded from TMS, SMMS, TDMS", timestamp: "08:30:15" },
     { id: "AUD-102", user: "AI_OPTIMIZER_V2.4", action: "BUNDLE_DISCOVERY", note: "Multi-department bundle B-104 formed (ENG + SNT + TRD at KM 42.5)", timestamp: "09:12:44" },
@@ -253,11 +260,15 @@ const RailTwinEngine = (function() {
     { id: "AUD-104", user: "NRD-4829", action: "PLAN_STATUS_UPDATE", note: "Plan status set to RECOMMENDED for Ghaziabad-Aligarh Section", timestamp: "09:45:00" }
   ];
 
-  // --- Storage Helper Functions ---
+  // --- Unified Persistent Storage Layer (localStorage + sessionStorage) ---
   function getStored(key, fallback) {
     try {
-      const data = sessionStorage.getItem('rt_' + key);
-      return data ? JSON.parse(data) : fallback;
+      // Check localStorage first, fallback to sessionStorage, then default
+      const localData = localStorage.getItem('rt_' + key);
+      if (localData) return JSON.parse(localData);
+      const sessData = sessionStorage.getItem('rt_' + key);
+      if (sessData) return JSON.parse(sessData);
+      return fallback;
     } catch(e) {
       return fallback;
     }
@@ -265,7 +276,9 @@ const RailTwinEngine = (function() {
 
   function setStored(key, val) {
     try {
-      sessionStorage.setItem('rt_' + key, JSON.stringify(val));
+      const json = JSON.stringify(val);
+      localStorage.setItem('rt_' + key, json);
+      sessionStorage.setItem('rt_' + key, json);
     } catch(e) {}
   }
 
@@ -291,7 +304,7 @@ const RailTwinEngine = (function() {
       RailTwinEngine.logAudit("CORRIDOR_SWITCH", `Switched active corridor to: ${NETWORKS[idx].name}`);
     },
 
-    // --- Task Backlog Queries ---
+    // --- Task Backlog Queries & CRUD ---
     getTasks: () => tasks,
     getTasksByDept: (dept) => {
       if (!dept || dept === 'ALL') return tasks;
@@ -299,12 +312,47 @@ const RailTwinEngine = (function() {
     },
     getPriorityScore: calculatePriority,
 
+    // Add New Maintenance Task / Requirement (Manual Creator)
+    addTask: function(taskData) {
+      const newTask = Object.assign({
+        id: "TSK-" + Math.floor(1000 + Math.random() * 9000),
+        code: "AST-" + Math.floor(100 + Math.random() * 900),
+        dept: "ENG",
+        deptName: "Track Engineering (TMS)",
+        source: "Controller Manual Entry",
+        title: "Field Maintenance Request",
+        location: "KM 42.0 UP Line",
+        durationMinutes: 120,
+        criticality: 0.70,
+        severity: 0.65,
+        urgency: 0.60,
+        opImpact: 0.50,
+        failureRisk: 0.50,
+        status: "HIGH",
+        safetyProfile: "Absolute Block Required",
+        blockType: "TRAFFIC_BLOCK",
+        machineReq: "Standard Gang Equipment",
+        bundleCandidate: null
+      }, taskData);
+
+      newTask.priorityScore = calculatePriority(newTask);
+      tasks.unshift(newTask);
+      setStored('tasks', tasks);
+      RailTwinEngine.logAudit("TASK_CREATED", `Created maintenance task ${newTask.id} (${newTask.title}) in database.`);
+      return newTask;
+    },
+
+    deleteTask: function(taskId) {
+      tasks = tasks.filter(t => t.id !== taskId);
+      setStored('tasks', tasks);
+      RailTwinEngine.logAudit("TASK_DELETED", `Removed task ${taskId} from active database.`);
+    },
+
     // --- Bundles & Optimization ---
     getBundles: () => BUNDLES,
     getOptimizationStatus: () => isOptimized,
     getPlanStatus: () => planStatus,
 
-    // --- Actions ---
     runOptimization: (onComplete) => {
       isOptimized = true;
       setStored('is_optimized', true);
@@ -346,6 +394,7 @@ const RailTwinEngine = (function() {
         status: "CRITICAL",
         safetyProfile: "IMMEDIATE TRAFFIC HALT + Emergency Clamping",
         blockType: "EMERGENCY_TRAFFIC_BLOCK",
+        machineReq: "Emergency Clamping Rig + 6 PW Trackmen",
         priorityScore: 99
       };
 
@@ -393,7 +442,7 @@ const RailTwinEngine = (function() {
       return result;
     },
 
-    // --- Data Upload & Ingestion Engine ---
+    // --- CSV & JSON Ingestion Engine ---
     importTasksFromCSV: function(csvText) {
       if (!csvText || typeof csvText !== 'string') return { success: false, error: "Empty CSV file" };
       try {
@@ -410,15 +459,14 @@ const RailTwinEngine = (function() {
           const row = {};
           headers.forEach((h, idx) => { row[h] = cols[idx] || ""; });
 
-          // Map to PRD normalized schema
           const taskObj = {
             id: row['taskid'] || row['id'] || ("TSK-" + Math.floor(1000 + Math.random() * 9000)),
             code: row['code'] || row['assetcode'] || ("AST-" + Math.floor(100 + Math.random() * 900)),
             dept: (row['dept'] || row['department'] || 'ENG').toUpperCase(),
             deptName: row['deptname'] || (row['dept'] === 'SNT' ? 'Signal & Telecom (SMMS)' : (row['dept'] === 'TRD' ? 'Traction Distribution (TDMS)' : 'Track Engineering (TMS)')),
             source: row['source'] || (row['dept'] === 'SNT' ? 'SMMS Portal' : (row['dept'] === 'TRD' ? 'TDMS Portal' : 'TMS Portal')),
-            title: row['title'] || row['tasktitle'] || "Imported Field Maintenance Order",
-            location: row['location'] || "Corridor Section KM " + (Math.random() * 80).toFixed(1),
+            title: row['title'] || row['tasktitle'] || "Imported Maintenance Order",
+            location: row['location'] || "KM " + (Math.random() * 80).toFixed(1) + " UP Line",
             durationMinutes: parseInt(row['durationminutes'] || row['duration'] || 120, 10),
             criticality: parseFloat(row['criticality'] || 0.7),
             severity: parseFloat(row['severity'] || 0.6),
@@ -428,6 +476,7 @@ const RailTwinEngine = (function() {
             status: (row['status'] || 'HIGH').toUpperCase(),
             safetyProfile: row['safetyprofile'] || "Absolute Safety Block",
             blockType: row['blocktype'] || "TRAFFIC_POWER_BLOCK",
+            machineReq: row['machinereq'] || row['machinerequirement'] || "PW Gang Equipment",
             bundleCandidate: row['bundlecandidate'] || null
           };
 
@@ -435,14 +484,11 @@ const RailTwinEngine = (function() {
           newTasks.push(taskObj);
         }
 
-        if (newTasks.length === 0) {
-          return { success: false, error: "No valid task rows could be parsed." };
-        }
+        if (newTasks.length === 0) return { success: false, error: "No valid task rows could be parsed." };
 
-        // Merge imported tasks with existing tasks
         tasks = [...newTasks, ...tasks];
         setStored('tasks', tasks);
-        RailTwinEngine.logAudit("DATA_INGESTION_CSV", `Successfully ingested ${newTasks.length} task records from uploaded CSV into Planning Backlog.`);
+        RailTwinEngine.logAudit("DATA_INGESTION_CSV", `Stored ${newTasks.length} task records into database.`);
         return { success: true, count: newTasks.length, sample: newTasks[0] };
       } catch (err) {
         return { success: false, error: err.message };
@@ -458,8 +504,40 @@ const RailTwinEngine = (function() {
       });
       tasks = [...parsed, ...tasks];
       setStored('tasks', tasks);
-      RailTwinEngine.logAudit("DATA_INGESTION_JSON", `Ingested ${parsed.length} tasks via JSON upload.`);
+      RailTwinEngine.logAudit("DATA_INGESTION_JSON", `Stored ${parsed.length} tasks into persistent database.`);
       return { success: true, count: parsed.length };
+    },
+
+    // Database Dump & Restore
+    exportDatabaseJSON: function() {
+      const dump = {
+        exportedAt: new Date().toISOString(),
+        tasks: tasks,
+        bundles: BUNDLES,
+        auditLogs: auditLogs,
+        corridorIndex: currentCorridorIndex,
+        planStatus: planStatus
+      };
+      return JSON.stringify(dump, null, 2);
+    },
+
+    importDatabaseJSON: function(jsonStr) {
+      try {
+        const data = JSON.parse(jsonStr);
+        if (data.tasks && Array.isArray(data.tasks)) {
+          tasks = data.tasks;
+          tasks.forEach(t => { t.priorityScore = calculatePriority(t); });
+          setStored('tasks', tasks);
+        }
+        if (data.auditLogs && Array.isArray(data.auditLogs)) {
+          auditLogs = data.auditLogs;
+          setStored('audit_logs', auditLogs);
+        }
+        RailTwinEngine.logAudit("DB_RESTORE", `Restored database backup (${tasks.length} tasks).`);
+        return { success: true, count: tasks.length };
+      } catch(e) {
+        return { success: false, error: e.message };
+      }
     },
 
     resetToDefaults: function() {
@@ -476,17 +554,17 @@ const RailTwinEngine = (function() {
     // Sample Download Generators
     getSampleCSV: function(type = 'TASKS_ALL') {
       if (type === 'TMS_ENG') {
-        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
-TSK-1001,TRK-901,ENG,Deep Screening of Ballast (BCM Machine),KM 14.5 UP Line,240,0.92,0.88,0.85,0.70,0.80,CRITICAL,Absolute Machine Block,TRAFFIC_BLOCK
-TSK-1002,TRK-902,ENG,Turnout Diamond Crossing Replacement,GZB Yard Pt 112,180,0.85,0.80,0.75,0.80,0.75,HIGH,Speed Restriction 20 km/h,TRAFFIC_BLOCK`;
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type,Machine Requirement
+TSK-1001,TRK-901,ENG,Deep Screening of Ballast (BCM Machine),KM 14.5 UP Line,240,0.92,0.88,0.85,0.70,0.80,CRITICAL,Absolute Machine Block,TRAFFIC_BLOCK,BCM Ballast Cleaner + 12 Gang
+TSK-1002,TRK-902,ENG,Turnout Diamond Crossing Replacement,GZB Yard Pt 112,180,0.85,0.80,0.75,0.80,0.75,HIGH,Speed Restriction 20 km/h,TRAFFIC_BLOCK,Rail Crane + 8 Trackmen`;
       } else if (type === 'SMMS_SNT') {
-        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
-TSK-2001,SIG-301,SNT,Track Circuit Lead Cable Renewal,KM 41.8 UP Line,120,0.88,0.80,0.85,0.60,0.70,HIGH,Signal Disconnection Notice,SIGNAL_DISCONNECTION
-TSK-2002,SIG-302,SNT,Automatic Block Signal Signal Head Overhaul,KM 68.2 DN Line,90,0.65,0.55,0.60,0.40,0.50,ROUTINE,Caution Order,NON_INTERLOCKED_BLOCK`;
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type,Machine Requirement
+TSK-2001,SIG-301,SNT,Track Circuit Lead Cable Renewal,KM 41.8 UP Line,120,0.88,0.80,0.85,0.60,0.70,HIGH,Signal Disconnection Notice,SIGNAL_DISCONNECTION,Cable Jointing Kit + 4 Techs
+TSK-2002,SIG-302,SNT,Automatic Block Signal Head Overhaul,KM 68.2 DN Line,90,0.65,0.55,0.60,0.40,0.50,ROUTINE,Caution Order,NON_INTERLOCKED_BLOCK,Signal Analyzer + 3 Techs`;
       } else if (type === 'TDMS_TRD') {
-        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
-TSK-3001,OHE-501,TRD,Catenary Insulator High-Pressure Jet Washing,KM 42.0 - 45.0,150,0.80,0.75,0.70,0.50,0.60,HIGH,25kV Power Block + Earth Discharge,POWER_BLOCK
-TSK-3002,OHE-502,TRD,Cantilever Assembly Contact Wire Dropper Fix,KM 28.0 UP Line,120,0.70,0.65,0.60,0.45,0.50,ROUTINE,25kV Power Block,POWER_BLOCK`;
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type,Machine Requirement
+TSK-3001,OHE-501,TRD,Catenary Insulator High-Pressure Washing,KM 42.0 - 45.0,150,0.80,0.75,0.70,0.50,0.60,HIGH,25kV Power Block + Earth,POWER_BLOCK,Tower Wagon TW-02 + 6 Fitters
+TSK-3002,OHE-502,TRD,Cantilever Assembly Contact Wire Dropper Fix,KM 28.0 UP Line,120,0.70,0.65,0.60,0.45,0.50,ROUTINE,25kV Power Block,POWER_BLOCK,Ladders + 4 OHE Linemen`;
       } else if (type === 'TIMETABLE') {
         return `Train Number,Train Name,Category,Origin,Destination,Section Arrival,Section Departure,Direction,Max Speed KMPH,Priority Rank
 12042,Shatabdi Express,PREMIUM_PASSENGER,NDLS,LKO,06:15,07:30,DOWN,130,1
@@ -494,10 +572,10 @@ TSK-3002,OHE-502,TRD,Cantilever Assembly Contact Wire Dropper Fix,KM 28.0 UP Lin
 12280,Taj Express,SUPERFAST,NZM,JHS,07:10,08:40,DOWN,110,2
 G-8891,Container Freight,FREIGHT,TKD,DADRI,01:30,03:15,DOWN,75,4`;
       } else {
-        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
-TSK-1001,TRK-901,ENG,Deep Screening of Ballast (BCM Machine),KM 14.5 UP Line,240,0.92,0.88,0.85,0.70,0.80,CRITICAL,Absolute Machine Block,TRAFFIC_BLOCK
-TSK-2001,SIG-301,SNT,Track Circuit Lead Cable Renewal,KM 41.8 UP Line,120,0.88,0.80,0.85,0.60,0.70,HIGH,Signal Disconnection Notice,SIGNAL_DISCONNECTION
-TSK-3001,OHE-501,TRD,Catenary Insulator High-Pressure Washing,KM 42.0 - 45.0,150,0.80,0.75,0.70,0.50,0.60,HIGH,25kV Power Block,POWER_BLOCK`;
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type,Machine Requirement
+TSK-1001,TRK-901,ENG,Deep Screening of Ballast (BCM Machine),KM 14.5 UP Line,240,0.92,0.88,0.85,0.70,0.80,CRITICAL,Absolute Machine Block,TRAFFIC_BLOCK,BCM Machine + 12 Trackmen
+TSK-2001,SIG-301,SNT,Track Circuit Lead Cable Renewal,KM 41.8 UP Line,120,0.88,0.80,0.85,0.60,0.70,HIGH,Signal Disconnection Notice,SIGNAL_DISCONNECTION,Cable Tester + 4 Techs
+TSK-3001,OHE-501,TRD,Catenary Insulator High-Pressure Washing,KM 42.0 - 45.0,150,0.80,0.75,0.70,0.50,0.60,HIGH,25kV Power Block,POWER_BLOCK,Tower Wagon + 6 Fitters`;
       }
     },
 
