@@ -242,22 +242,67 @@ body.sidebar-closed #sidebar-reopen-btn { display: flex !important; }
 
 @media(max-width:768px){.rt-sidebar{display:none;}.rt-page-content{padding:10px 12px;}.rt-topbar-zone-pill{display:none;}.rt-kpi-value{font-size:20px;}}
 
-/* -------- GLOBAL SCROLL FIX — ensure pages always scroll -------- */
-body { overflow-y: auto !important; }
-html { overflow-y: auto !important; }
-/* Fixed header and sidebar must NOT block pointer events on main content area */
-aside, header { pointer-events: auto; }
-/* Main content must extend beyond viewport — remove any height:100vh traps */
-.pl-20 > main,
-.pl-64 > main,
-main { 
+/* ============================================================
+   DEFINITIVE SCROLL ARCHITECTURE FIX
+   Pattern: body+html = overflow:hidden (no body scroll)
+   .pl-20 wrapper = the ONE scrollable container (overflow-y:auto)
+   header + KPI strip = position:sticky so they stick to top of .pl-20
+   ============================================================ */
+
+/* 1. Lock body/html — they must NOT scroll */
+html, body {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+/* 2. Sidebar stays fixed full-height */
+aside {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto;
+  z-index: 50 !important;
+}
+
+/* 3. The .pl-20 wrapper IS the scroll container */
+.pl-20, .pl-64 {
+  height: 100vh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  position: relative !important;
+}
+
+/* 4. Header becomes sticky (top of .pl-20, not body) */
+header {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 40 !important;
+}
+
+/* 5. KPI strip becomes sticky below header */
+.fixed.top-16 {
+  position: sticky !important;
+  top: 54px !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 30 !important;
+}
+
+/* 6. Main content: no top padding needed (header is in flow now) */
+main {
   overflow: visible !important;
-  min-height: calc(100vh - 144px);
+  padding-top: 0 !important;
 }
-/* Prevent fixed overlay panels from eating scroll events */
-.fixed:not(aside):not(header):not(#sidebar-reopen-btn) {
-  pointer-events: none;
-}
-.fixed:not(aside):not(header):not(#sidebar-reopen-btn) * {
-  pointer-events: auto;
+
+/* 7. Sidebar-closed adjustments */
+body.sidebar-closed aside { display: none !important; }
+body.sidebar-closed .pl-20,
+body.sidebar-closed .pl-64 {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
 }
