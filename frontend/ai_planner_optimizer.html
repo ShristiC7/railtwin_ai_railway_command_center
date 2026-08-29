@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <script>
@@ -183,7 +183,7 @@
   <!-- Top Zone & KPI Strip -->
   <div class="pl-20">
     <header class="fixed top-0 left-20 right-0 h-16 bg-surface-dim/90 backdrop-blur-md z-40 px-margin-page flex items-center justify-between border-b border-outline-variant/20">
-      <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant"><button onclick="toggleSidebar()" style="background:transparent;border:none;color:#fff;cursor:pointer;margin-right:12px;display:flex;align-items:center;" title="Toggle Sidebar"><span class="material-symbols-outlined" style="font-size:24px;">menu</span></button>
+      <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant">
         <span class="hover:text-primary cursor-pointer transition-colors uppercase">India</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="hover:text-primary cursor-pointer transition-colors uppercase" id="hdr-zone">Northern Zone</span>
@@ -253,8 +253,8 @@
 
     <!-- Main Planning Stage -->
     <main class="relative pt-[144px] pb-[88px] min-h-screen bg-surface-dim">
-      <div class="flex flex-col w-full h-[calc(100vh-232px)]">
-        <div class="flex flex-1 gap-6 px-margin-page py-6 h-full min-h-0">
+      <div class="flex flex-col w-full">
+        <div class="flex flex-1 gap-6 px-margin-page py-6 min-h-0 flex-wrap lg:flex-nowrap">
 
           <!-- Left Column: Pending Tasks by Department -->
           <div class="w-80 flex flex-col bg-surface-container rounded-xl shadow-lg flex-shrink-0 relative overflow-hidden border border-outline-variant/10">
@@ -282,7 +282,7 @@
           </div>
 
           <!-- Center: Corridor Timeline & Constraint Grid -->
-          <div class="flex-1 flex flex-col min-w-0 bg-surface-container rounded-xl shadow-lg relative overflow-hidden border border-outline-variant/10">
+          <div class="flex-1 flex flex-col min-w-0 bg-surface-container rounded-xl shadow-lg relative overflow-visible border border-outline-variant/10" style="min-width:0">
             <div class="p-4 px-6 flex items-center justify-between border-b border-outline-variant/10 z-10 bg-surface-container">
               <div class="flex items-center gap-4">
                 <div>
@@ -310,16 +310,16 @@
             </div>
 
             <!-- Gantt / Block Matrix -->
-            <div class="flex-1 p-6 overflow-hidden flex flex-col z-10">
-              <div class="grid grid-cols-8 gap-1 mb-2">
+            <div class="flex-1 p-6 overflow-x-auto flex flex-col z-10">
+              <div style="display:grid;grid-template-columns:90px repeat(7, minmax(130px,1fr));gap:4px;margin-bottom:8px;min-width:1010px;">
                 <div class="col-span-1"></div>
-                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase">Mon 14</div>
-                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase">Tue 15</div>
-                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase">Wed 16</div>
-                <div class="text-center font-data-mono text-label-caps text-primary uppercase font-bold">Thu 17 (Today)</div>
-                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase">Fri 18</div>
-                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase">Sat 19</div>
-                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase">Sun 20</div>
+                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Mon 14</div>
+                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Tue 15</div>
+                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Wed 16</div>
+                <div class="text-center font-data-mono text-label-caps text-primary uppercase font-bold" style="min-width:130px">Thu 17 (Today)</div>
+                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Fri 18</div>
+                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Sat 19</div>
+                <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Sun 20</div>
               </div>
 
               <!-- Matrix Rows -->
@@ -708,13 +708,18 @@
       document.getElementById('hdr-section').innerText = net.section;
     });
   </script>
+<button id="sidebar-reopen-btn" onclick="toggleSidebar()" title="Open Sidebar">
+  <span class="material-symbols-outlined">menu</span> Menu
+</button>
 <script>
-  function toggleSidebar() {
-    document.body.classList.toggle('sidebar-closed');
-  }
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-closed');
+}
 </script>
 </body>
 </html>
+
+
 
 
 

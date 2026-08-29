@@ -179,7 +179,7 @@
   <!-- Top Zone & Header -->
   <div class="pl-20">
     <header class="fixed top-0 left-20 right-0 h-16 bg-surface-dim/90 backdrop-blur-md z-40 px-margin-page flex items-center justify-between border-b border-outline-variant/20">
-      <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant"><button onclick="toggleSidebar()" style="background:transparent;border:none;color:#fff;cursor:pointer;margin-right:12px;display:flex;align-items:center;" title="Toggle Sidebar"><span class="material-symbols-outlined" style="font-size:24px;">menu</span></button>
+      <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant">
         <span class="hover:text-primary cursor-pointer transition-colors uppercase">India</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="hover:text-primary cursor-pointer transition-colors uppercase" id="dt-zone">Northern Zone</span>
@@ -419,13 +419,18 @@
       document.getElementById('dt-section').innerText = net.section;
     });
   </script>
+<button id="sidebar-reopen-btn" onclick="toggleSidebar()" title="Open Sidebar">
+  <span class="material-symbols-outlined">menu</span> Menu
+</button>
 <script>
-  function toggleSidebar() {
-    document.body.classList.toggle('sidebar-closed');
-  }
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-closed');
+}
 </script>
 </body>
 </html>
+
+
 
 
 

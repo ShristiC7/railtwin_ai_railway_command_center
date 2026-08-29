@@ -60,10 +60,11 @@
     aside { width:220px !important; background:#12355B !important; border-right:1px solid rgba(255,255,255,0.08) !important; padding:0 !important; align-items:stretch !important; }
     aside nav { gap:0 !important; flex:1; padding-top:8px; }
     aside nav a { padding:9px 14px !important; border-radius:0 !important; display:flex !important; flex-direction:row !important; align-items:center !important; gap:10px !important; width:100% !important; color:rgba(255,255,255,0.80) !important; font-size:12.5px !important; font-weight:500 !important; font-family:var(--rt-font-body) !important; border-left:3px solid transparent !important; text-decoration:none; transition:background 0.15s,color 0.15s !important; box-shadow:none !important; background:transparent !important; }
-    aside nav a:hover { background:rgba(255,255,255,0.08) !important; color:#FFFFFF !important; }
+    aside nav a:hover, aside nav a:hover span, aside nav a:hover * { background:transparent !important; } aside nav a:hover { background:rgba(255,255,255,0.08) !important; color:#FFFFFF !important; } aside nav a:hover span, aside nav a:hover * { color:#FFFFFF !important; }
     aside nav a[aria-current="page"], aside nav a.active { background:rgba(0,90,156,0.40) !important; border-left-color:#C49A3A !important; color:#FFFFFF !important; font-weight:600 !important; }
     aside nav a .material-symbols-outlined { font-size:18px !important; flex-shrink:0; opacity:0.82; }
     aside nav a[aria-current="page"] .material-symbols-outlined { color:#C49A3A !important; opacity:1; }
+    aside nav a:hover [class*="text-on-surface-variant"], aside nav a:hover [class*="text-primary"] { color:#FFFFFF !important; }
     
     /* Sidebar brand header */
     aside .sidebar-brand-placeholder { padding:14px; border-bottom:1px solid rgba(255,255,255,0.10); background:#0B2D4D; }
@@ -277,7 +278,7 @@
     <!-- Top Zone & KPI Strip -->
     <div class="pl-20">
         <header class="fixed top-0 left-20 right-0 h-16 bg-surface-dim/90 backdrop-blur-md z-40 px-margin-page flex items-center justify-between border-b border-outline-variant/20">
-            <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant cursor-pointer hover:text-primary transition-colors bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant/30" onclick="openCorridorModal()" title="Click to Switch Corridor / Division / Zone"><button onclick="toggleSidebar()" style="background:transparent;border:none;color:#fff;cursor:pointer;margin-right:12px;display:flex;align-items:center;" title="Toggle Sidebar"><span class="material-symbols-outlined" style="font-size:24px;">menu</span></button>
+            <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant cursor-pointer hover:text-primary transition-colors bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant/30" onclick="openCorridorModal()" title="Click to Switch Corridor / Division / Zone">
                 <span class="material-symbols-outlined text-primary text-[16px]">travel_explore</span>
                 <span class="hover:text-primary uppercase" id="bc-zone">Northern Zone</span>
                 <span class="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -782,13 +783,18 @@
             window.location.href = 'login.html';
         }
     </script>
+<button id="sidebar-reopen-btn" onclick="toggleSidebar()" title="Open Sidebar">
+  <span class="material-symbols-outlined">menu</span> Menu
+</button>
 <script>
-  function toggleSidebar() {
-    document.body.classList.toggle('sidebar-closed');
-  }
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-closed');
+}
 </script>
 </body>
 </html>
+
+
 
 
 
