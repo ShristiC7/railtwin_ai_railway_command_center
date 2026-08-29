@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+      // Auth Guard — must run before page renders
+      (function() {
+        if (!sessionStorage.getItem('rt_auth')) {
+          // Check localStorage for persisted session
+          try {
+            var stored = localStorage.getItem('rt_auth');
+            if (stored) { sessionStorage.setItem('rt_auth', stored); return; }
+          } catch(e) {}
+          window.location.replace('login.html');
+        }
+      })();
+    </script>
+    <script src="railway_engine.js"></script>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>RailTwin AI - Railway Command Center</title>
@@ -175,14 +189,14 @@
     <!-- Top Zone & KPI Strip -->
     <div class="pl-20">
         <header class="fixed top-0 left-20 right-0 h-16 bg-surface-dim/90 backdrop-blur-md z-40 px-margin-page flex items-center justify-between border-b border-outline-variant/20">
-            <div class="flex items-center gap-4 text-label-caps font-label-caps text-on-surface-variant">
-                <span class="hover:text-primary cursor-pointer transition-colors uppercase">India</span>
+            <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant cursor-pointer hover:text-primary transition-colors bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant/30" onclick="openCorridorModal()" title="Click to Switch Corridor / Division / Zone">
+                <span class="material-symbols-outlined text-primary text-[16px]">travel_explore</span>
+                <span class="hover:text-primary uppercase" id="bc-zone">Northern Zone</span>
                 <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                <span class="hover:text-primary cursor-pointer transition-colors uppercase">Northern Zone</span>
+                <span class="hover:text-primary uppercase" id="bc-div">Delhi Division</span>
                 <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                <span class="hover:text-primary cursor-pointer transition-colors uppercase">Delhi Division</span>
-                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                <span class="text-on-surface uppercase">Ghaziabad-Aligarh Section</span>
+                <span class="text-primary font-bold uppercase" id="bc-section">Ghaziabad-Aligarh Section</span>
+                <span class="material-symbols-outlined text-[14px] text-primary ml-1">arrow_drop_down</span>
             </div>
             <div class="flex items-center gap-gutter">
                 <div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant/30">
@@ -190,7 +204,20 @@
                     <span class="text-label-caps font-label-caps text-on-surface">AI Planner: Active</span>
                 </div>
                 <div class="w-px h-6 bg-outline-variant/30 mx-2"></div>
-                <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20 ring-offset-2 ring-offset-background" src="../professional_headshot_of_a_senior_railway_operations_manager_indian_male_in_his/screen.png"/>
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-end" id="user-info">
+                        <span class="font-data-mono text-[10px] text-on-surface-variant uppercase tracking-wider" id="user-id-display">Loading...</span>
+                    </div>
+                    <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20 ring-offset-2 ring-offset-background" src="../professional_headshot_of_a_senior_railway_operations_manager_indian_male_in_his/screen.png"/>
+                    <button
+                        id="logout-btn"
+                        onclick="doLogout()"
+                        title="Logout"
+                        class="p-2 rounded-lg bg-surface-container text-on-surface-variant hover:text-error hover:bg-error-container/20 transition-all"
+                    >
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -375,11 +402,17 @@
                 <div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
                     <!-- Critical Alerts Panel -->
                     <div class="bg-surface-container rounded-xl p-panel-padding shadow-md flex flex-col gap-4">
-                        <h3 class="font-headline-md text-[18px] text-on-surface flex items-center gap-2">
-                            <span class="material-symbols-outlined text-error">campaign</span>
-                            Active System Alerts
-                        </h3>
-                        <div class="flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-headline-md text-[18px] text-on-surface flex items-center gap-2">
+                                <span class="material-symbols-outlined text-error">campaign</span>
+                                Active System Alerts
+                            </h3>
+                            <button onclick="triggerEmergencyDefect()" class="bg-error/20 hover:bg-error/30 text-error border border-error/40 px-2.5 py-1 rounded-lg text-xs font-data-mono font-bold flex items-center gap-1 transition-all active:scale-95 shadow-sm" title="Simulate Emergency Defect for SIH Demo Step 7">
+                                <span class="material-symbols-outlined text-[14px]">bolt</span>
+                                <span>Inject Defect</span>
+                            </button>
+                        </div>
+                        <div class="flex flex-col gap-3" id="alerts-container">
                             <div class="bg-error/10 border border-error/20 p-3 rounded-lg flex items-start gap-3">
                                 <span class="material-symbols-outlined text-error mt-0.5">warning</span>
                                 <div class="flex flex-col">
@@ -392,9 +425,9 @@
                             <div class="bg-tertiary/10 border border-tertiary/20 p-3 rounded-lg flex items-start gap-3">
                                 <span class="material-symbols-outlined text-tertiary mt-0.5">priority_high</span>
                                 <div class="flex flex-col">
-                                    <span class="font-data-mono text-xs text-tertiary font-bold">TRAFFIC CONFLICT</span>
+                                    <span class="font-data-mono text-xs text-tertiary font-bold">TRAFFIC CONFLICT RESOLVED</span>
                                     <span class="text-xs text-on-surface mt-1 leading-normal">
-                                        Express Train Shatabdi 1204 conflict detected on UP Line with scheduled Maint Block from 14:00 - 16:30.
+                                        Express Train Shatabdi 12042 and Goods G-8891 interleaved safely. Zero corridor overlap.
                                     </span>
                                 </div>
                             </div>
@@ -541,6 +574,124 @@
         // Add first few immediately
         for (let i = 0; i < 4; i++) {
             addLogEntry();
+        }
+    </script>
+    <!-- Corridor Switcher Modal (FR-01, Demo Step 1 & 10) -->
+    <div id="corridor-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-surface-container border border-outline-variant/20 rounded-2xl max-w-xl w-full p-6 shadow-2xl flex flex-col gap-5">
+            <div class="flex items-center justify-between border-b border-outline-variant/10 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[24px]">account_tree</span>
+                    <h3 class="font-headline-md text-headline-md text-on-surface">India-Scale Network Selector</h3>
+                </div>
+                <button onclick="closeCorridorModal()" class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <p class="font-body-base text-sm text-on-surface-variant">
+                Select an operational corridor to filter maintenance backlogs, live train paths, and block schedules:
+            </p>
+            <div class="flex flex-col gap-3" id="corridor-list">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Synchronize Active Corridor and KPIs
+        function renderCorridor() {
+            if (!window.RailTwinEngine) return;
+            const net = RailTwinEngine.getCurrentNetwork();
+            document.getElementById('bc-zone').innerText = net.zone;
+            document.getElementById('bc-div').innerText = net.division;
+            document.getElementById('bc-section').innerText = net.section;
+        }
+
+        function openCorridorModal() {
+            const modal = document.getElementById('corridor-modal');
+            const list = document.getElementById('corridor-list');
+            const networks = RailTwinEngine.getNetworks();
+            const current = RailTwinEngine.getCurrentNetwork();
+            
+            list.innerHTML = networks.map((n, idx) => `
+                <div onclick="selectCorridor(${idx})" class="p-4 rounded-xl border ${n.corridorId === current.corridorId ? 'border-primary bg-primary/10' : 'border-outline-variant/10 bg-surface-container-low'} hover:border-primary/50 cursor-pointer transition-all flex items-center justify-between">
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-data-mono text-xs text-primary font-bold">${n.corridorId}</span>
+                            <span class="font-headline-md text-body-base text-on-surface font-semibold">${n.name}</span>
+                        </div>
+                        <span class="font-data-mono text-xs text-on-surface-variant">${n.tracks} • ${n.lengthKm} KM • ${n.blockSections.length} Block Sections</span>
+                    </div>
+                    ${n.corridorId === current.corridorId ? '<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>' : '<span class="material-symbols-outlined text-on-surface-variant text-[20px]">chevron_right</span>'}
+                </div>
+            `).join('');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCorridorModal() {
+            const modal = document.getElementById('corridor-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function selectCorridor(idx) {
+            RailTwinEngine.setCorridorIndex(idx);
+            renderCorridor();
+            closeCorridorModal();
+            renderTelemetry();
+        }
+
+        // Telemetry Stream
+        function renderTelemetry() {
+            const container = document.getElementById('console-logs');
+            if (!container || !window.RailTwinEngine) return;
+            const logs = RailTwinEngine.getAuditLogs();
+            container.innerHTML = logs.map(log => `
+                <div class="flex items-start gap-2 py-0.5 border-b border-outline-variant/5">
+                    <span class="text-primary font-bold shrink-0">[${log.timestamp}]</span>
+                    <span class="text-secondary shrink-0">[${log.action}]</span>
+                    <span class="text-on-surface-variant">${log.note}</span>
+                </div>
+            `).join('');
+            container.scrollTop = 0;
+        }
+
+        // Trigger Emergency Defect (Demo Step 7)
+        function triggerEmergencyDefect() {
+            RailTwinEngine.injectEmergencyDefect((task) => {
+                const alerts = document.getElementById('alerts-container');
+                const newAlert = document.createElement('div');
+                newAlert.className = 'bg-error/20 border border-error p-3 rounded-lg flex items-start gap-3 animate-pulse';
+                newAlert.innerHTML = `
+                    <span class="material-symbols-outlined text-error mt-0.5">error</span>
+                    <div class="flex flex-col">
+                        <span class="font-data-mono text-xs text-error font-bold">${task.title}</span>
+                        <span class="text-xs text-on-surface mt-1">Dynamic Re-Optimizer has isolated KM 42.8. Downstream freight shifted by +35m.</span>
+                    </div>
+                `;
+                alerts.prepend(newAlert);
+                renderTelemetry();
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCorridor();
+            renderTelemetry();
+            window.addEventListener('railtwin:audit_update', renderTelemetry);
+        });
+
+        // Display user info
+        (function() {
+            try {
+                var auth = JSON.parse(sessionStorage.getItem('rt_auth') || '{}');
+                var el = document.getElementById('user-id-display');
+                if (el && auth.id) el.innerText = auth.id;
+            } catch(e) {}
+        })();
+
+        function doLogout() {
+            sessionStorage.removeItem('rt_auth');
+            try { localStorage.removeItem('rt_auth'); } catch(e) {}
+            window.location.href = 'login.html';
         }
     </script>
 </body>

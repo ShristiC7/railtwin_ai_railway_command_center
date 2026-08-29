@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>RailTwin AI — Request Clearance</title>
+  <meta name="description" content="Request operational clearance for RailTwin AI Railway Command Center. Authorized railway personnel only."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed": "#d8e2ff", "tertiary": "#ffb786", "surface-dim": "#10131a",
+            "inverse-primary": "#005ac2", "inverse-on-surface": "#2e3038",
+            "secondary-container": "#571bc1", "tertiary-container": "#df7412",
+            "surface-container-highest": "#32353c", "surface-container-high": "#272a31",
+            "on-surface": "#e1e2ec", "secondary": "#d0bcff", "on-secondary": "#3c0091",
+            "on-background": "#e1e2ec", "outline": "#8c909f",
+            "surface-container": "#1d2027", "primary-container": "#4d8eff",
+            "surface-bright": "#363941", "on-primary-container": "#00285d",
+            "error-container": "#93000a", "on-primary-fixed": "#001a42",
+            "surface-container-low": "#191b23",
+            "surface-container-lowest": "#0b0e15", "tertiary-fixed": "#ffdcc6",
+            "background": "#10131a", "error": "#ffb4ab", "surface": "#10131a",
+            "inverse-surface": "#e1e2ec", "primary": "#adc6ff",
+            "primary-fixed-dim": "#adc6ff", "on-surface-variant": "#c2c6d6",
+            "on-secondary-container": "#c4abff", "outline-variant": "#424754",
+            "on-primary": "#002e6a", "on-tertiary": "#502400"
+          },
+          borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+          spacing: { "unit": "4px", "gutter": "16px", "margin-page": "24px", "panel-padding": "20px" },
+          fontFamily: {
+            "label-caps": ["Inter"], "body-base": ["Inter"],
+            "display-lg": ["Inter"], "headline-md": ["Inter"], "data-mono": ["JetBrains Mono"]
+          },
+          fontSize: {
+            "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" }],
+            "body-base": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "display-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "data-mono": ["14px", { lineHeight: "20px", fontWeight: "500" }]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; background-color: #10131a; }
+      body { overscroll-behavior: none; overflow-x: hidden; }
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
+    .animated-grid {
+      background-image:
+        linear-gradient(rgba(173,198,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(173,198,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 4s linear infinite;
+    }
+
+    @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(500%); } }
+    .scan-line { animation: scan 3s linear infinite; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .animate-spin { animation: spin 0.8s linear infinite; }
+
+    /* Float-label behavior for inputs */
+    .float-label-group input:not(:placeholder-shown) + label,
+    .float-label-group input:focus + label {
+      top: 0.5rem;
+      font-size: 10px;
+      color: #adc6ff;
+    }
+    .float-label-group select:focus + label {
+      top: 0.5rem;
+      font-size: 10px;
+      color: #ffb786;
+    }
+    .float-label-group label {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #8c909f;
+      pointer-events: none;
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    /* Success overlay */
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .fade-in { animation: fadeIn 0.3s ease; }
+  </style>
+</head>
+<body class="bg-background font-body-base text-on-background min-h-screen flex items-center justify-center py-8 relative overflow-hidden">
+
+  <!-- Ambient glow blobs -->
+  <div class="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-tertiary/5 blur-[140px] pointer-events-none"></div>
+  <div class="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] pointer-events-none"></div>
+
+  <!-- Animated grid -->
+  <div class="absolute inset-0 animated-grid pointer-events-none opacity-60"></div>
+
+  <!-- Top scan line -->
+  <div class="absolute top-0 left-0 right-0 h-px bg-surface-container-highest overflow-hidden">
+    <div class="h-full w-1/4 bg-tertiary/60 blur-sm scan-line"></div>
+  </div>
+
+  <!-- Main layout -->
+  <div class="relative z-10 w-full max-w-5xl mx-4 flex gap-10 items-center">
+
+    <!-- Left decorative panel (hidden on small screens) -->
+    <div class="hidden lg:flex flex-col w-5/12 shrink-0 gap-6">
+      <div class="flex items-center gap-3">
+        <span class="w-1 h-8 bg-tertiary rounded-full"></span>
+        <span class="font-data-mono text-label-caps text-on-surface-variant uppercase tracking-widest">Access Protocol</span>
+      </div>
+      <h1 class="font-display-lg text-display-lg text-on-surface leading-tight">
+        Request<br/><span class="text-primary">Clearance</span>
+      </h1>
+      <p class="font-body-base text-body-base text-on-surface-variant leading-relaxed">
+        Access to RailTwin AI is restricted to authorized railway personnel. Verification requires matching UID with divisional databases.
+      </p>
+
+      <!-- Security badges -->
+      <div class="flex flex-col gap-3 mt-4">
+        <div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-xl border border-outline-variant/10 transition-transform hover:-translate-y-0.5">
+          <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-primary text-[20px]">security</span>
+          </div>
+          <div>
+            <div class="font-data-mono text-label-caps text-on-surface">End-to-End Encryption</div>
+            <div class="font-data-mono text-[10px] text-on-surface-variant uppercase">AES-256 Standard</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-xl border border-outline-variant/10 transition-transform hover:-translate-y-0.5">
+          <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-tertiary text-[20px]">policy</span>
+          </div>
+          <div>
+            <div class="font-data-mono text-label-caps text-on-surface">RBAC Implemented</div>
+            <div class="font-data-mono text-[10px] text-on-surface-variant uppercase">Role-Based Access Control</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-xl border border-outline-variant/10 transition-transform hover:-translate-y-0.5">
+          <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-secondary text-[20px]">verified_user</span>
+          </div>
+          <div>
+            <div class="font-data-mono text-label-caps text-on-surface">MoR Compliant</div>
+            <div class="font-data-mono text-[10px] text-on-surface-variant uppercase">Ministry of Railways Standards</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan-line decorative -->
+      <div class="relative w-full h-px bg-outline-variant/20 mt-4 overflow-hidden">
+        <div class="absolute left-0 top-0 h-full w-1/4 bg-primary/60 blur-sm scan-line"></div>
+      </div>
+
+      <!-- Status -->
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_#ffb786]"></span>
+        <span class="font-data-mono text-label-caps text-on-surface-variant uppercase tracking-wider">System Status: Nominal</span>
+      </div>
+    </div>
+
+    <!-- Right: Form card -->
+    <div class="flex-1 min-w-0">
+      <!-- Success state (hidden) -->
+      <div id="success-state" class="hidden flex-col items-center gap-6 text-center bg-surface-container/80 backdrop-blur-xl rounded-2xl p-10 border border-outline-variant/10 shadow-2xl fade-in">
+        <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center shadow-[0_0_24px_rgba(173,198,255,0.2)]">
+          <span class="material-symbols-outlined text-[40px] text-primary" style="font-variation-settings:'FILL' 1;">check_circle</span>
+        </div>
+        <div>
+          <h2 class="font-headline-md text-headline-md text-on-surface">Request Submitted</h2>
+          <p class="font-body-base text-body-base text-on-surface-variant mt-2">Your clearance request has been forwarded to the divisional administrator. Redirecting you to the system...</p>
+        </div>
+        <div class="w-48 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+          <div id="redirect-bar" class="h-full bg-primary rounded-full w-0 transition-all duration-[3000ms]"></div>
+        </div>
+      </div>
+
+      <!-- Form card -->
+      <div id="form-card" class="bg-surface-container/80 backdrop-blur-xl shadow-2xl rounded-2xl p-8 relative overflow-hidden border border-outline-variant/10">
+        <!-- Top shimmer -->
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-tertiary to-transparent opacity-30"></div>
+
+        <form id="signup-form" class="flex flex-col gap-6" onsubmit="handleSignup(event)" novalidate>
+
+          <!-- Section: Identity -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-primary">badge</span>
+              <span class="font-data-mono text-label-caps text-on-surface-variant uppercase">Personnel Identity</span>
+            </div>
+
+            <!-- Full Name -->
+            <div class="float-label-group relative">
+              <input
+                id="fullName"
+                type="text"
+                placeholder=" "
+                required
+                class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
+              />
+              <label for="fullName">Full Name</label>
+            </div>
+
+            <div class="flex gap-4">
+              <!-- Employee ID -->
+              <div class="float-label-group relative flex-1">
+                <input
+                  id="uid"
+                  type="text"
+                  placeholder=" "
+                  required
+                  class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-data-mono text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
+                />
+                <label for="uid">Employee ID (UID)</label>
+              </div>
+              <!-- Email -->
+              <div class="float-label-group relative flex-1">
+                <input
+                  id="email"
+                  type="email"
+                  placeholder=" "
+                  required
+                  class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
+                />
+                <label for="email">Official Email</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Role -->
+          <div class="space-y-4 pt-4 border-t border-outline-variant/10">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary">engineering</span>
+              <span class="font-data-mono text-label-caps text-on-surface-variant uppercase">Operational Role</span>
+            </div>
+
+            <!-- Department -->
+            <div class="relative group">
+              <label class="absolute left-4 top-2 font-data-mono text-[10px] uppercase text-outline pointer-events-none z-10 transition-colors group-focus-within:text-tertiary">Department</label>
+              <select
+                id="department"
+                required
+                class="w-full appearance-none bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-tertiary shadow-inner cursor-pointer"
+              >
+                <option disabled selected value=""></option>
+                <option value="eng">Engineering</option>
+                <option value="snt">Signal &amp; Telecom (S&amp;T)</option>
+                <option value="trd">Traction Distribution (TRD)</option>
+                <option value="ops">Operations</option>
+                <option value="acc">Accounts</option>
+              </select>
+              <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
+            </div>
+
+            <!-- Designation -->
+            <div class="float-label-group relative">
+              <input
+                id="designation"
+                type="text"
+                placeholder=" "
+                required
+                class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-tertiary shadow-inner"
+              />
+              <label for="designation">Designation (e.g., SSE, ADEN)</label>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col items-center gap-4 pt-2">
+            <button
+              id="submit-btn"
+              type="submit"
+              class="relative overflow-hidden group w-full bg-primary hover:bg-primary-fixed text-on-primary font-label-caps text-label-caps uppercase py-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+            >
+              <span class="submit-label flex items-center gap-2">
+                <span>Submit Access Request</span>
+                <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">send</span>
+              </span>
+              <span class="loading-label hidden flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px] animate-spin">refresh</span>
+                <span>Submitting...</span>
+              </span>
+            </button>
+
+            <a href="login.html" class="font-data-mono text-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 uppercase">
+              <span class="material-symbols-outlined text-[14px]">arrow_back</span>
+              Return to Secure Login
+            </a>
+          </div>
+        </form>
+
+        <!-- Footer meta -->
+        <div class="mt-6 flex justify-between items-center font-data-mono text-[10px] text-on-surface-variant uppercase tracking-wider border-t border-outline-variant/10 pt-4">
+          <span>Sys. Status: <span class="text-primary">Nominal</span></span>
+          <span>ID: RT-AUTH-049</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // If already authenticated, skip to dashboard
+    (function() {
+      if (sessionStorage.getItem('rt_auth')) {
+        window.location.replace('index.html');
+      }
+      try {
+        const stored = localStorage.getItem('rt_auth');
+        if (stored) {
+          sessionStorage.setItem('rt_auth', stored);
+          window.location.replace('index.html');
+        }
+      } catch(e) {}
+    })();
+
+    function setLoading(loading) {
+      const btn = document.getElementById('submit-btn');
+      const label = btn.querySelector('.submit-label');
+      const loadLabel = btn.querySelector('.loading-label');
+      btn.disabled = loading;
+      if (loading) {
+        label.classList.add('hidden');
+        loadLabel.classList.remove('hidden');
+        loadLabel.classList.add('flex');
+      } else {
+        label.classList.remove('hidden');
+        loadLabel.classList.add('hidden');
+        loadLabel.classList.remove('flex');
+      }
+    }
+
+    function handleSignup(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value.trim();
+      const uid = document.getElementById('uid').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const dept = document.getElementById('department').value;
+      const desig = document.getElementById('designation').value.trim();
+
+      if (!fullName || !uid || !email || !dept || !desig) return;
+
+      setLoading(true);
+
+      setTimeout(() => {
+        // Store auth session with the submitted data
+        const authData = { id: uid, name: fullName, dept, time: Date.now() };
+        sessionStorage.setItem('rt_auth', JSON.stringify(authData));
+
+        // Show success state
+        document.getElementById('form-card').classList.add('hidden');
+        const successState = document.getElementById('success-state');
+        successState.classList.remove('hidden');
+        successState.classList.add('flex');
+
+        // Animate redirect bar then navigate
+        setTimeout(() => {
+          document.getElementById('redirect-bar').style.width = '100%';
+        }, 50);
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 3200);
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

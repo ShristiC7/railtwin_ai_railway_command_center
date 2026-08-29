@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>RailTwin AI — System Access</title>
+  <meta name="description" content="Secure login portal for RailTwin AI Railway Command Center. Authorized railway personnel only."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-fixed": "#d8e2ff", "tertiary": "#ffb786", "surface-dim": "#10131a",
+            "inverse-primary": "#005ac2", "inverse-on-surface": "#2e3038",
+            "secondary-container": "#571bc1", "tertiary-container": "#df7412",
+            "surface-container-highest": "#32353c", "surface-container-high": "#272a31",
+            "on-surface": "#e1e2ec", "secondary": "#d0bcff", "on-secondary": "#3c0091",
+            "on-background": "#e1e2ec", "outline": "#8c909f",
+            "surface-container": "#1d2027", "primary-container": "#4d8eff",
+            "surface-bright": "#363941", "on-primary-container": "#00285d",
+            "error-container": "#93000a", "on-primary-fixed": "#001a42",
+            "surface-container-low": "#191b23", "on-error": "#690005",
+            "surface-container-lowest": "#0b0e15", "tertiary-fixed": "#ffdcc6",
+            "background": "#10131a", "error": "#ffb4ab", "surface": "#10131a",
+            "inverse-surface": "#e1e2ec", "primary": "#adc6ff",
+            "tertiary-fixed-dim": "#ffb786", "surface-tint": "#adc6ff",
+            "primary-fixed-dim": "#adc6ff", "on-surface-variant": "#c2c6d6",
+            "on-secondary-container": "#c4abff", "outline-variant": "#424754",
+            "on-primary": "#002e6a"
+          },
+          borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+          spacing: {
+            "kpi-height": "80px", "unit": "4px", "gutter": "16px",
+            "margin-page": "24px", "panel-padding": "20px"
+          },
+          fontFamily: {
+            "label-caps": ["Inter"], "body-base": ["Inter"],
+            "display-lg": ["Inter"], "headline-md": ["Inter"],
+            "data-mono": ["JetBrains Mono"]
+          },
+          fontSize: {
+            "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" }],
+            "body-base": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "display-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "data-mono": ["14px", { lineHeight: "20px", fontWeight: "500" }]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; background-color: #10131a; }
+      body { overscroll-behavior: none; overflow-x: hidden; }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .kpi-pulse { animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+    /* Animated grid lines */
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
+    .animated-grid {
+      background-image:
+        linear-gradient(rgba(173,198,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(173,198,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 4s linear infinite;
+    }
+
+    /* Scan line */
+    @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(500%); } }
+    .scan-line { animation: scan 3s linear infinite; }
+
+    /* Error shake */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+
+    /* Loading spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .animate-spin { animation: spin 0.8s linear infinite; }
+  </style>
+</head>
+<body class="bg-background font-body-base text-on-background min-h-screen flex items-center justify-center relative overflow-hidden">
+
+  <!-- Ambient glow blobs -->
+  <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[140px] pointer-events-none"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-secondary-container/10 blur-[120px] pointer-events-none"></div>
+
+  <!-- Animated grid background -->
+  <div class="absolute inset-0 animated-grid pointer-events-none opacity-60"></div>
+
+  <!-- Top scanning line accent -->
+  <div class="absolute top-0 left-0 right-0 h-px bg-surface-container-highest overflow-hidden">
+    <div class="h-full w-1/4 bg-primary/60 blur-sm scan-line"></div>
+  </div>
+
+  <!-- Main card -->
+  <div class="relative z-10 w-full max-w-[460px] mx-4">
+
+    <!-- Logo + Brand -->
+    <div class="flex flex-col items-center mb-8 gap-3">
+      <div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center shadow-[0_0_24px_rgba(173,198,255,0.15)] border border-primary/10">
+        <span class="material-symbols-outlined text-[32px] text-primary" style="font-variation-settings:'FILL' 1;">admin_panel_settings</span>
+      </div>
+      <div class="text-center">
+        <h1 class="font-display-lg text-display-lg text-on-surface">System Access</h1>
+        <p class="font-body-base text-body-base text-on-surface-variant mt-1">Enter your operational credentials</p>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-surface-container/80 backdrop-blur-xl shadow-2xl rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden border border-outline-variant/10">
+      <!-- Top shimmer line -->
+      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-40"></div>
+
+      <!-- Error banner (hidden by default) -->
+      <div class="hidden flex items-center gap-3 bg-error-container/30 border border-error/20 rounded-xl px-4 py-3" id="error-banner">
+        <span class="material-symbols-outlined text-error text-[18px]">error</span>
+        <span class="font-label-caps text-label-caps text-error" id="error-text">Invalid credentials. Please try again.</span>
+      </div>
+
+      <!-- Form -->
+      <form class="flex flex-col gap-5" id="login-form" onsubmit="handleLogin(event)" novalidate>
+
+        <!-- Employee ID -->
+        <div class="flex flex-col gap-2">
+          <label class="font-label-caps text-label-caps text-on-surface-variant uppercase ml-1" for="employee-id">Employee ID</label>
+          <div class="relative group">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary transition-colors text-[20px]">badge</span>
+            <input
+              id="employee-id"
+              type="text"
+              autocomplete="username"
+              placeholder="e.g. NRD-4829"
+              required
+              class="w-full bg-surface-container-highest/50 text-on-surface font-data-mono text-data-mono rounded-xl py-3.5 pl-12 pr-4 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-surface-container-highest transition-all shadow-inner placeholder:text-outline/50"
+            />
+          </div>
+        </div>
+
+        <!-- Passcode -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between ml-1">
+            <label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="password">Passcode</label>
+            <a class="font-label-caps text-label-caps text-primary hover:text-primary-fixed transition-colors" href="#">Recover</a>
+          </div>
+          <div class="relative group">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-primary transition-colors text-[20px]">key</span>
+            <input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              required
+              class="w-full bg-surface-container-highest/50 text-on-surface font-data-mono text-data-mono rounded-xl py-3.5 pl-12 pr-12 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-surface-container-highest transition-all shadow-inner placeholder:text-outline/50"
+            />
+            <button
+              type="button"
+              id="toggle-pass"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors focus:outline-none"
+              onclick="togglePassword()"
+              aria-label="Toggle password visibility"
+            >
+              <span class="material-symbols-outlined text-[20px]" id="eye-icon">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Keep signed in -->
+        <div class="flex items-center gap-3">
+          <label class="relative flex items-center cursor-pointer">
+            <input id="keep-signed-in" type="checkbox" checked class="sr-only peer"/>
+            <div class="w-10 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
+            <span class="ml-3 font-body-base text-body-base text-on-surface-variant">Keep me signed in</span>
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <button
+          id="submit-btn"
+          type="submit"
+          class="mt-2 w-full bg-primary text-on-primary font-headline-md text-body-base py-4 rounded-xl shadow-[0_0_20px_rgba(173,198,255,0.15)] hover:shadow-[0_0_28px_rgba(173,198,255,0.3)] hover:bg-primary-fixed transition-all active:scale-[0.98] flex items-center justify-center gap-2 group relative overflow-hidden"
+        >
+          <span class="submit-label flex items-center gap-2">
+            <span>Authenticate</span>
+            <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </span>
+          <span class="loading-label hidden flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] animate-spin">refresh</span>
+            <span>Verifying...</span>
+          </span>
+        </button>
+      </form>
+
+      <!-- Divider + signup link -->
+      <div class="pt-4 border-t border-outline-variant/20 text-center">
+        <p class="font-body-base text-body-base text-on-surface-variant">
+          Need terminal access?
+          <a href="signup.html" class="text-tertiary hover:text-tertiary-fixed font-semibold ml-1 transition-colors">Request Clearance</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Security badge -->
+    <div class="mt-6 flex items-center justify-center gap-6 opacity-50">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[14px] text-outline">shield</span>
+        <span class="font-data-mono text-label-caps text-outline uppercase tracking-wider">End-to-End Encrypted</span>
+      </div>
+      <div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[14px] text-outline">dns</span>
+        <span class="font-data-mono text-label-caps text-outline uppercase tracking-wider">Node: DEL-01</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // If already authenticated, skip to dashboard
+    if (sessionStorage.getItem('rt_auth')) {
+      window.location.replace('index.html');
+    }
+
+    function togglePassword() {
+      const p = document.getElementById('password');
+      const icon = document.getElementById('eye-icon');
+      if (p.type === 'password') {
+        p.type = 'text';
+        icon.innerText = 'visibility_off';
+      } else {
+        p.type = 'password';
+        icon.innerText = 'visibility';
+      }
+    }
+
+    function showError(msg) {
+      const banner = document.getElementById('error-banner');
+      const text = document.getElementById('error-text');
+      text.innerText = msg;
+      banner.classList.remove('hidden');
+      banner.classList.add('flex');
+      document.getElementById('login-form').classList.add('shake');
+      setTimeout(() => document.getElementById('login-form').classList.remove('shake'), 500);
+    }
+
+    function setLoading(loading) {
+      const btn = document.getElementById('submit-btn');
+      const label = btn.querySelector('.submit-label');
+      const loadLabel = btn.querySelector('.loading-label');
+      btn.disabled = loading;
+      if (loading) {
+        label.classList.add('hidden');
+        loadLabel.classList.remove('hidden');
+        loadLabel.classList.add('flex');
+      } else {
+        label.classList.remove('hidden');
+        loadLabel.classList.add('hidden');
+        loadLabel.classList.remove('flex');
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const id = document.getElementById('employee-id').value.trim();
+      const pass = document.getElementById('password').value;
+      const keep = document.getElementById('keep-signed-in').checked;
+
+      // Hide any previous error
+      document.getElementById('error-banner').classList.add('hidden');
+      document.getElementById('error-banner').classList.remove('flex');
+
+      if (!id || !pass) {
+        showError('Please enter your Employee ID and Passcode.');
+        return;
+      }
+
+      setLoading(true);
+
+      // Simulate async auth check (frontend demo — accept any non-empty credentials)
+      setTimeout(() => {
+        const authData = { id, time: Date.now(), keep };
+        sessionStorage.setItem('rt_auth', JSON.stringify(authData));
+        if (keep) {
+          try { localStorage.setItem('rt_auth', JSON.stringify(authData)); } catch(e) {}
+        }
+        window.location.href = 'index.html';
+      }, 900);
+    }
+
+    // Restore from localStorage if "keep signed in" was used
+    (function() {
+      try {
+        const stored = localStorage.getItem('rt_auth');
+        if (stored) {
+          sessionStorage.setItem('rt_auth', stored);
+          window.location.replace('index.html');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</body>
+</html>
