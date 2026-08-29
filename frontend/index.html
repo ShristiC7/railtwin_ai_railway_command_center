@@ -279,7 +279,7 @@
     <!-- Top Zone & KPI Strip -->
     <div class="pl-20">
         <header class="fixed top-0 left-20 right-0 h-16 bg-surface-dim/90 backdrop-blur-md z-40 px-margin-page flex items-center justify-between border-b border-outline-variant/20">
-            <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant cursor-pointer hover:text-primary transition-colors bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant/30" onclick="openCorridorModal()" title="Click to Switch Corridor / Division / Zone">
+            <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant cursor-pointer hover:text-primary transition-colors bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant/30" onclick="openCorridorModal()" title="Click to Switch Corridor / Division / Zone"><button onclick="toggleSidebar()" style="background:transparent;border:none;color:#fff;cursor:pointer;margin-right:12px;display:flex;align-items:center;" title="Toggle Sidebar"><span class="material-symbols-outlined" style="font-size:24px;">menu</span></button>
                 <span class="material-symbols-outlined text-primary text-[16px]">travel_explore</span>
                 <span class="hover:text-primary uppercase" id="bc-zone">Northern Zone</span>
                 <span class="material-symbols-outlined text-[14px]">chevron_right</span>
@@ -784,8 +784,28 @@
             window.location.href = 'login.html';
         }
     </script>
+<script>
+  function toggleSidebar() {
+    const sidebar = document.querySelector('aside');
+    const mainContent = document.querySelector('.pl-20') || document.querySelector('.pl-64') || document.querySelector('.ml-64');
+    if (!sidebar) return;
+    
+    if (sidebar.style.display === 'none') {
+      sidebar.style.display = 'flex';
+      if (mainContent) {
+        mainContent.style.paddingLeft = '220px';
+      }
+    } else {
+      sidebar.style.display = 'none';
+      if (mainContent) {
+        mainContent.style.paddingLeft = '0';
+      }
+    }
+  }
+</script>
 </body>
 </html>
+
 
 
 

@@ -154,7 +154,7 @@
     /* Animated elements — calm down */
     .animate-ping{animation:none !important;background:#1B7340 !important;border-radius:50%;}
     /* Font family */
-    body,html,p,span,div,td,th,label,button,a,input,select,textarea{font-family:'Noto Sans','Inter',system-ui,sans-serif !important;}
+    body,html,p,span,div,td,th,label,button,a,input,select,textarea{.material-symbols-outlined { font-family: 'Material Symbols Outlined' !important; } body,html,p,span,div,td,th,label,button,a,input,select,textarea{font-family:'Noto Sans','Inter',system-ui,sans-serif !important;}
     [class*="font-data-mono"],code,pre{font-family:'Source Code Pro','JetBrains Mono',monospace !important;}
 </style>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -197,7 +197,7 @@
 
   <!-- Sidebar Navigation -->
   <aside class="fixed left-0 top-0 h-full w-20 bg-surface-container-lowest flex flex-col items-center py-gutter z-50 border-r border-outline-variant/10">
-    <div style="padding:14px 14px 12px;border-bottom:1px solid rgba(255,255,255,0.10);background:#0B2D4D;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-outlined" style="font-size:16px;color:#C49A3A;font-variation-settings:'FILL' 1;">train</span></div><div><div style="font-size:11px;font-weight:700;color:#FFFFFF;letter-spacing:0.04em;text-transform:uppercase;">RailTwin AI</div><div style="font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:0.05em;text-transform:uppercase;">Ops Portal</div></div></div></div>
+    <div style="padding:14px 14px 12px;border-bottom:1px solid rgba(255,255,255,0.10);background:#0B2D4D;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-outlined" style="font-size:16px;color:#C49A3A;font-variation-settings:'FILL' 1;">train</span></div><div><div style="font-size:11px;font-weight:700;color:#FFFFFF;letter-spacing:0.04em;text-transform:uppercase;">RailTwin AI</div><div style="font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:0.05em;text-transform:uppercase;">Ops Portal</div></div><button onclick="toggleSidebar()" style="background:transparent;border:none;color:#C49A3A;cursor:pointer;margin-left:auto;display:flex;" title="Close Sidebar"><span class="material-symbols-outlined" style="font-size:20px;">close</span></button></div></div>
     <nav class="flex flex-col gap-6">
       <a class="p-3 rounded-xl text-on-surface-variant hover:text-primary transition-all group" href="index.html" title="Overview">
         <span class="material-symbols-outlined text-[28px]">dashboard</span><span style="font-size:12px;">Dashboard</span>
@@ -226,7 +226,7 @@
   <!-- Top Zone & Header -->
   <div class="pl-20">
     <header class="fixed top-0 left-20 right-0 h-16 bg-surface-dim/90 backdrop-blur-md z-40 px-margin-page flex items-center justify-between border-b border-outline-variant/20">
-      <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant">
+      <div class="flex items-center gap-2 text-label-caps font-label-caps text-on-surface-variant"><button onclick="toggleSidebar()" style="background:transparent;border:none;color:#fff;cursor:pointer;margin-right:12px;display:flex;align-items:center;" title="Toggle Sidebar"><span class="material-symbols-outlined" style="font-size:24px;">menu</span></button>
         <span class="hover:text-primary cursor-pointer transition-colors uppercase">India</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="hover:text-primary cursor-pointer transition-colors uppercase" id="te-zone">Northern Zone</span>
@@ -720,7 +720,27 @@
       document.getElementById('te-section').innerText = net.section;
     });
   </script>
+<script>
+  function toggleSidebar() {
+    const sidebar = document.querySelector('aside');
+    const mainContent = document.querySelector('.pl-20') || document.querySelector('.pl-64') || document.querySelector('.ml-64');
+    if (!sidebar) return;
+    
+    if (sidebar.style.display === 'none') {
+      sidebar.style.display = 'flex';
+      if (mainContent) {
+        mainContent.style.paddingLeft = '220px';
+      }
+    } else {
+      sidebar.style.display = 'none';
+      if (mainContent) {
+        mainContent.style.paddingLeft = '0';
+      }
+    }
+  }
+</script>
 </body>
 </html>
+
 
 
