@@ -10,6 +10,7 @@
  * - Dynamic Re-Planning & Critical Defect Injection
  * - What-If Scenario Simulator
  * - Human Approval Lifecycle & Audit Logging
+ * - Complete CSV / Excel / JSON Ingestion Engine & Template Generator
  */
 
 const RailTwinEngine = (function() {
@@ -78,179 +79,146 @@ const RailTwinEngine = (function() {
     }
   ];
 
-  // --- Maintenance Task Backlog ---
+  // --- Initial Task Backlog (Normalized Schema across TMS, SMMS, TDMS) ---
   const INITIAL_TASKS = [
     {
       id: "TSK-892A",
       code: "TRK-842",
-      title: "Flash-Butt Weld Testing & Ultrasonic Inspection",
       dept: "ENG",
-      deptName: "Engineering (Civil)",
-      source: "TMS (Track Management System)",
-      corridorId: "CORR-GZB-ALJN",
-      blockId: "BLK-03",
-      location: "KM 42.5 UP Line",
-      kmStart: 42.0,
-      kmEnd: 43.5,
-      severity: 0.95,
-      criticality: 0.92,
-      urgency: 0.88,
-      opImpact: 0.85,
-      failureRisk: 0.90,
-      durationHrs: 2.5,
-      blockType: "TRAFFIC_POWER_DISCONNECT",
-      safetyProfile: "ISOLATION_REQUIRED",
+      deptName: "Track Engineering (TMS)",
+      source: "Track Management System (TMS)",
+      title: "Flash-Butt Weld Testing & Ultrasonic Inspection",
+      location: "KM 42.5 UP Line (Maripat–Dadri)",
+      durationMinutes: 150,
+      criticality: 0.95,
+      severity: 0.90,
+      urgency: 0.85,
+      opImpact: 0.70,
+      failureRisk: 0.80,
       status: "CRITICAL",
-      dueDate: "2026-09-02",
+      safetyProfile: "Absolute Block + Track Occupancy",
+      blockType: "TRAFFIC_POWER_BLOCK",
       bundleCandidate: "B-104"
     },
     {
       id: "TSK-441B",
       code: "SIG-119",
-      title: "Electronic Interlocking & Point Machine Diagnostic",
       dept: "SNT",
-      deptName: "Signal & Telecom (S&T)",
-      source: "SMMS (Signalling Maintenance System)",
-      corridorId: "CORR-GZB-ALJN",
-      blockId: "BLK-03",
-      location: "KM 42.8 Maripat-Dadri Junction",
-      kmStart: 42.4,
-      kmEnd: 43.2,
-      severity: 0.75,
+      deptName: "Signal & Telecom (SMMS)",
+      source: "Signalling Maintenance System (SMMS)",
+      title: "Electronic Interlocking & Point Machine Diagnostic",
+      location: "KM 43.1 Point 104A (Maripat–Dadri)",
+      durationMinutes: 120,
       criticality: 0.80,
-      urgency: 0.70,
+      severity: 0.75,
+      urgency: 0.80,
       opImpact: 0.65,
       failureRisk: 0.60,
-      durationHrs: 2.0,
-      blockType: "TRAFFIC_POWER_DISCONNECT",
-      safetyProfile: "TRACK_CIRCUIT_DEACTIVATE",
       status: "HIGH",
-      dueDate: "2026-09-03",
+      safetyProfile: "Disconnection Notice + S&T Safety Buffer",
+      blockType: "SIGNAL_DISCONNECTION",
       bundleCandidate: "B-104"
     },
     {
       id: "TSK-318C",
       code: "OHE-992",
-      title: "25kV Catenary Contact Wire Height Adjustment",
       dept: "TRD",
-      deptName: "Traction Distribution (TRD)",
-      source: "TDMS (Traction Distribution System)",
-      corridorId: "CORR-GZB-ALJN",
-      blockId: "BLK-03",
-      location: "KM 41.8 - 44.0 Sector B",
-      kmStart: 41.8,
-      kmEnd: 44.0,
+      deptName: "Traction Distribution (TDMS)",
+      source: "Traction Distribution System (TDMS)",
+      title: "25kV Catenary Contact Wire Height Adjustment",
+      location: "KM 41.8 – 44.0 (Maripat–Dadri)",
+      durationMinutes: 120,
+      criticality: 0.75,
       severity: 0.60,
-      criticality: 0.70,
-      urgency: 0.55,
-      opImpact: 0.60,
-      failureRisk: 0.50,
-      durationHrs: 2.0,
-      blockType: "OHE_POWER_SHUTDOWN",
-      safetyProfile: "TOWER_WAGON_OCCUPANCY",
+      urgency: 0.70,
+      opImpact: 0.50,
+      failureRisk: 0.55,
       status: "ROUTINE",
-      dueDate: "2026-09-04",
+      safetyProfile: "Power Block (25kV AC Isolation)",
+      blockType: "POWER_BLOCK",
       bundleCandidate: "B-104"
     },
     {
       id: "TSK-512D",
-      code: "BRG-8092",
-      title: "Bridge BX-8092 Pier 4 Micro-Crack Epoxy Grouting",
+      code: "BRG-201",
       dept: "ENG",
-      deptName: "Engineering (Civil / Bridges)",
-      source: "TMS (Bridge Cadre)",
-      corridorId: "CORR-GZB-ALJN",
-      blockId: "BLK-02",
-      location: "KM 26.4 Viaduct Pier 4",
-      kmStart: 26.0,
-      kmEnd: 26.8,
-      severity: 0.90,
+      deptName: "Bridge Civil Cadre (TMS)",
+      source: "Bridge Management System (TMS)",
+      title: "Bridge BX-8092 Pier 4 Micro-Crack Epoxy Grouting",
+      location: "KM 26.4 UP Line",
+      durationMinutes: 210,
       criticality: 0.98,
-      urgency: 0.95,
-      opImpact: 0.90,
-      failureRisk: 0.92,
-      durationHrs: 3.5,
-      blockType: "SPEED_RESTRICTION_CAUTION",
-      safetyProfile: "STRUCTURAL_MONITORING",
+      severity: 0.95,
+      urgency: 0.90,
+      opImpact: 0.85,
+      failureRisk: 0.90,
       status: "CRITICAL",
-      dueDate: "2026-08-30",
+      safetyProfile: "Track Speed Restriction (30 km/h) + Traffic Block",
+      blockType: "TRAFFIC_BLOCK",
       bundleCandidate: null
     },
     {
       id: "TSK-201E",
       code: "SIG-122",
-      title: "Digital Axle Counter Head Calibration",
       dept: "SNT",
-      deptName: "Signal & Telecom (S&T)",
-      source: "SMMS",
-      corridorId: "CORR-GZB-ALJN",
-      blockId: "BLK-01",
-      location: "GZB Yard Km 12-14",
-      kmStart: 12.0,
-      kmEnd: 14.0,
-      severity: 0.50,
-      criticality: 0.65,
-      urgency: 0.40,
-      opImpact: 0.50,
-      failureRisk: 0.45,
-      durationHrs: 1.5,
-      blockType: "TRAFFIC_CAUTION",
-      safetyProfile: "YARD_DISCONNECTION",
+      deptName: "Signal & Telecom (SMMS)",
+      source: "Signalling Maintenance System (SMMS)",
+      title: "Digital Axle Counter Head Calibration",
+      location: "GZB Yard Track 4",
+      durationMinutes: 90,
+      criticality: 0.50,
+      severity: 0.40,
+      urgency: 0.45,
+      opImpact: 0.30,
+      failureRisk: 0.40,
       status: "ROUTINE",
-      dueDate: "2026-09-07",
+      safetyProfile: "Caution Order",
+      blockType: "NON_INTERLOCKED_BLOCK",
       bundleCandidate: "B-105"
     },
     {
       id: "TSK-609F",
       code: "TRK-845",
-      title: "Ballast Tamping & Track Geometry Alignment",
       dept: "ENG",
-      deptName: "Engineering (Civil)",
-      source: "TMS (Track Cadre)",
-      corridorId: "CORR-GZB-ALJN",
-      blockId: "BLK-01",
-      location: "Km 13.0 - 15.2 Yard Exit",
-      kmStart: 13.0,
-      kmEnd: 15.2,
-      severity: 0.70,
-      criticality: 0.75,
-      urgency: 0.65,
-      opImpact: 0.70,
-      failureRisk: 0.60,
-      durationHrs: 2.0,
-      blockType: "TRAFFIC_BLOCK",
-      safetyProfile: "TAMPING_MACHINE_OCCUPANCY",
+      deptName: "Track Engineering (TMS)",
+      source: "Track Management System (TMS)",
+      title: "Ballast Tamping & Track Geometry Alignment",
+      location: "GZB Yard Turnout 12",
+      durationMinutes: 120,
+      criticality: 0.70,
+      severity: 0.65,
+      urgency: 0.60,
+      opImpact: 0.55,
+      failureRisk: 0.50,
       status: "HIGH",
-      dueDate: "2026-09-05",
+      safetyProfile: "Tamping Machine Block",
+      blockType: "TRAFFIC_BLOCK",
       bundleCandidate: "B-105"
     }
   ];
 
-  // --- Calculate Explainable Priority Score using PRD Formula ---
-  // Formula: Priority = 0.30*Crit + 0.25*Sev + 0.20*Urg + 0.15*OpImpact + 0.10*FailRisk
+  // --- PRD Priority Scoring Formula ---
   function calculatePriority(task) {
-    const score = (
-      0.30 * task.criticality +
-      0.25 * task.severity +
-      0.20 * task.urgency +
-      0.15 * task.opImpact +
-      0.10 * task.failureRisk
-    );
-    return parseFloat((score * 100).toFixed(1)); // percentage score out of 100
+    const p = (0.30 * (task.criticality || 0.5)) +
+              (0.25 * (task.severity || 0.5)) +
+              (0.20 * (task.urgency || 0.5)) +
+              (0.15 * (task.opImpact || 0.5)) +
+              (0.10 * (task.failureRisk || 0.5));
+    return Math.round(p * 100);
   }
 
-  // --- Multi-Department Bundles Definition ---
+  // --- Bundles (Flagship USP) ---
   const BUNDLES = [
     {
       bundleId: "B-104",
-      name: "Bundle B-104: Engineering + S&T + TRD Integrated Block",
+      name: "Bundle B-104: Track + Signal + OHE Integration",
       corridorId: "CORR-GZB-ALJN",
       blockSection: "Maripat – Dadri (KM 41.8 – 44.0)",
       departments: ["Engineering (Civil)", "Signal & Telecom (S&T)", "Traction Distribution (TRD)"],
       tasks: ["TSK-892A (TRK-842)", "TSK-441B (SIG-119)", "TSK-318C (OHE-992)"],
       scheduledWindow: "Monday 01:00 – 04:00 (Night Off-Peak)",
       durationMinutes: 180,
-      baselineSeparateMinutes: 390, // 150 + 120 + 120
+      baselineSeparateMinutes: 390,
       timeSavedMinutes: 210,
       blockReductionPercent: 42,
       utilizationUplift: 32,
@@ -285,7 +253,7 @@ const RailTwinEngine = (function() {
     { id: "AUD-104", user: "NRD-4829", action: "PLAN_STATUS_UPDATE", note: "Plan status set to RECOMMENDED for Ghaziabad-Aligarh Section", timestamp: "09:45:00" }
   ];
 
-  // --- State Store in Session Storage ---
+  // --- Storage Helper Functions ---
   function getStored(key, fallback) {
     try {
       const data = sessionStorage.getItem('rt_' + key);
@@ -304,12 +272,11 @@ const RailTwinEngine = (function() {
   // Active state initialization
   let currentCorridorIndex = getStored('active_corridor_idx', 0);
   let tasks = getStored('tasks', INITIAL_TASKS);
-  let planStatus = getStored('plan_status', "RECOMMENDED"); // DRAFT, RECOMMENDED, APPROVED, LOCKED
+  let planStatus = getStored('plan_status', "RECOMMENDED");
   let isOptimized = getStored('is_optimized', true);
   let auditLogs = getStored('audit_logs', INITIAL_AUDIT);
   let emergencyInjected = getStored('emergency_injected', false);
 
-  // Recalculate priority on all tasks
   tasks.forEach(t => {
     t.priorityScore = calculatePriority(t);
   });
@@ -350,53 +317,38 @@ const RailTwinEngine = (function() {
       });
     },
 
-    approvePlan: (onComplete) => {
-      planStatus = "APPROVED";
-      setStored('plan_status', planStatus);
-      RailTwinEngine.logAudit("PLAN_APPROVAL", `Plan approved and locked by user authorization.`);
-      if (onComplete) onComplete(planStatus);
+    setPlanStatus: (newStatus) => {
+      planStatus = newStatus;
+      setStored('plan_status', newStatus);
+      RailTwinEngine.logAudit("PLAN_APPROVAL", `Plan state transitioned to ${newStatus}`);
     },
 
-    lockPlan: (onComplete) => {
-      planStatus = "LOCKED";
-      setStored('plan_status', planStatus);
-      RailTwinEngine.logAudit("PLAN_LOCKED", `Plan locked against automated modifications.`);
-      if (onComplete) onComplete(planStatus);
-    },
-
-    // --- Dynamic Re-Optimization / Emergency Defect (Demo Step 7) ---
+    // --- Dynamic Re-Planner / Defect Injection ---
     injectEmergencyDefect: (onComplete) => {
+      if (emergencyInjected) return;
       emergencyInjected = true;
       setStored('emergency_injected', true);
-      
-      // Inject new critical task
+
       const emergencyTask = {
         id: "TSK-999-EMERG",
-        code: "EMERG-TRK-99",
-        title: "🚨 EMERGENCY: Rail Fracture at KM 42.8 UP Line",
+        code: "TRK-911-FRACTURE",
         dept: "ENG",
-        deptName: "Engineering (Civil / Safety)",
+        deptName: "Track Engineering (TMS)",
         source: "TMS Emergency Sensor Alarm",
-        corridorId: "CORR-GZB-ALJN",
-        blockId: "BLK-03",
-        location: "KM 42.8 UP Line (Immediate Isolation)",
-        kmStart: 42.6,
-        kmEnd: 43.0,
-        severity: 1.0,
+        title: "EMERGENCY: Rail Fracture at KM 42.8 UP Line",
+        location: "KM 42.8 UP Line (Maripat–Dadri)",
+        durationMinutes: 90,
         criticality: 1.0,
+        severity: 1.0,
         urgency: 1.0,
         opImpact: 0.95,
         failureRisk: 1.0,
-        durationHrs: 2.0,
-        blockType: "EMERGENCY_TRACK_CLOSURE",
-        safetyProfile: "IMMEDIATE_TRAFFIC_HALT",
         status: "CRITICAL",
-        dueDate: "IMMEDIATE (TODAY)",
-        bundleCandidate: "B-104-EMERG"
+        safetyProfile: "IMMEDIATE TRAFFIC HALT + Emergency Clamping",
+        blockType: "EMERGENCY_TRAFFIC_BLOCK",
+        priorityScore: 99
       };
-      emergencyTask.priorityScore = calculatePriority(emergencyTask);
 
-      // Prepend to tasks
       tasks.unshift(emergencyTask);
       setStored('tasks', tasks);
 
@@ -406,7 +358,7 @@ const RailTwinEngine = (function() {
       if (onComplete) onComplete(emergencyTask);
     },
 
-    // --- What-If Simulator (Demo Step 8) ---
+    // --- What-If Simulator ---
     simulateWhatIf: (scenarioType) => {
       let result = {};
       if (scenarioType === 'CANCEL_BLOCK') {
@@ -441,6 +393,114 @@ const RailTwinEngine = (function() {
       return result;
     },
 
+    // --- Data Upload & Ingestion Engine ---
+    importTasksFromCSV: function(csvText) {
+      if (!csvText || typeof csvText !== 'string') return { success: false, error: "Empty CSV file" };
+      try {
+        const lines = csvText.trim().split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length < 2) return { success: false, error: "CSV must contain a header row and at least one data record." };
+
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/[\s_-]/g, ''));
+        const newTasks = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const cols = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
+          if (cols.length < 3) continue;
+
+          const row = {};
+          headers.forEach((h, idx) => { row[h] = cols[idx] || ""; });
+
+          // Map to PRD normalized schema
+          const taskObj = {
+            id: row['taskid'] || row['id'] || ("TSK-" + Math.floor(1000 + Math.random() * 9000)),
+            code: row['code'] || row['assetcode'] || ("AST-" + Math.floor(100 + Math.random() * 900)),
+            dept: (row['dept'] || row['department'] || 'ENG').toUpperCase(),
+            deptName: row['deptname'] || (row['dept'] === 'SNT' ? 'Signal & Telecom (SMMS)' : (row['dept'] === 'TRD' ? 'Traction Distribution (TDMS)' : 'Track Engineering (TMS)')),
+            source: row['source'] || (row['dept'] === 'SNT' ? 'SMMS Portal' : (row['dept'] === 'TRD' ? 'TDMS Portal' : 'TMS Portal')),
+            title: row['title'] || row['tasktitle'] || "Imported Field Maintenance Order",
+            location: row['location'] || "Corridor Section KM " + (Math.random() * 80).toFixed(1),
+            durationMinutes: parseInt(row['durationminutes'] || row['duration'] || 120, 10),
+            criticality: parseFloat(row['criticality'] || 0.7),
+            severity: parseFloat(row['severity'] || 0.6),
+            urgency: parseFloat(row['urgency'] || 0.6),
+            opImpact: parseFloat(row['opimpact'] || 0.5),
+            failureRisk: parseFloat(row['failurerisk'] || 0.5),
+            status: (row['status'] || 'HIGH').toUpperCase(),
+            safetyProfile: row['safetyprofile'] || "Absolute Safety Block",
+            blockType: row['blocktype'] || "TRAFFIC_POWER_BLOCK",
+            bundleCandidate: row['bundlecandidate'] || null
+          };
+
+          taskObj.priorityScore = calculatePriority(taskObj);
+          newTasks.push(taskObj);
+        }
+
+        if (newTasks.length === 0) {
+          return { success: false, error: "No valid task rows could be parsed." };
+        }
+
+        // Merge imported tasks with existing tasks
+        tasks = [...newTasks, ...tasks];
+        setStored('tasks', tasks);
+        RailTwinEngine.logAudit("DATA_INGESTION_CSV", `Successfully ingested ${newTasks.length} task records from uploaded CSV into Planning Backlog.`);
+        return { success: true, count: newTasks.length, sample: newTasks[0] };
+      } catch (err) {
+        return { success: false, error: err.message };
+      }
+    },
+
+    importTasksFromJSON: function(jsonList) {
+      if (!Array.isArray(jsonList) || jsonList.length === 0) return { success: false, error: "Invalid JSON array" };
+      const parsed = jsonList.map(t => {
+        const item = Object.assign({}, t);
+        item.priorityScore = calculatePriority(item);
+        return item;
+      });
+      tasks = [...parsed, ...tasks];
+      setStored('tasks', tasks);
+      RailTwinEngine.logAudit("DATA_INGESTION_JSON", `Ingested ${parsed.length} tasks via JSON upload.`);
+      return { success: true, count: parsed.length };
+    },
+
+    resetToDefaults: function() {
+      tasks = INITIAL_TASKS.map(t => Object.assign({}, t));
+      tasks.forEach(t => { t.priorityScore = calculatePriority(t); });
+      emergencyInjected = false;
+      planStatus = "RECOMMENDED";
+      setStored('tasks', tasks);
+      setStored('emergency_injected', false);
+      setStored('plan_status', planStatus);
+      RailTwinEngine.logAudit("DATABASE_RESET", "Backlog and planning schedule restored to baseline factory state.");
+    },
+
+    // Sample Download Generators
+    getSampleCSV: function(type = 'TASKS_ALL') {
+      if (type === 'TMS_ENG') {
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
+TSK-1001,TRK-901,ENG,Deep Screening of Ballast (BCM Machine),KM 14.5 UP Line,240,0.92,0.88,0.85,0.70,0.80,CRITICAL,Absolute Machine Block,TRAFFIC_BLOCK
+TSK-1002,TRK-902,ENG,Turnout Diamond Crossing Replacement,GZB Yard Pt 112,180,0.85,0.80,0.75,0.80,0.75,HIGH,Speed Restriction 20 km/h,TRAFFIC_BLOCK`;
+      } else if (type === 'SMMS_SNT') {
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
+TSK-2001,SIG-301,SNT,Track Circuit Lead Cable Renewal,KM 41.8 UP Line,120,0.88,0.80,0.85,0.60,0.70,HIGH,Signal Disconnection Notice,SIGNAL_DISCONNECTION
+TSK-2002,SIG-302,SNT,Automatic Block Signal Signal Head Overhaul,KM 68.2 DN Line,90,0.65,0.55,0.60,0.40,0.50,ROUTINE,Caution Order,NON_INTERLOCKED_BLOCK`;
+      } else if (type === 'TDMS_TRD') {
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
+TSK-3001,OHE-501,TRD,Catenary Insulator High-Pressure Jet Washing,KM 42.0 - 45.0,150,0.80,0.75,0.70,0.50,0.60,HIGH,25kV Power Block + Earth Discharge,POWER_BLOCK
+TSK-3002,OHE-502,TRD,Cantilever Assembly Contact Wire Dropper Fix,KM 28.0 UP Line,120,0.70,0.65,0.60,0.45,0.50,ROUTINE,25kV Power Block,POWER_BLOCK`;
+      } else if (type === 'TIMETABLE') {
+        return `Train Number,Train Name,Category,Origin,Destination,Section Arrival,Section Departure,Direction,Max Speed KMPH,Priority Rank
+12042,Shatabdi Express,PREMIUM_PASSENGER,NDLS,LKO,06:15,07:30,DOWN,130,1
+22436,Vande Bharat Express,HIGH_SPEED,BSB,NDLS,14:20,15:35,UP,145,1
+12280,Taj Express,SUPERFAST,NZM,JHS,07:10,08:40,DOWN,110,2
+G-8891,Container Freight,FREIGHT,TKD,DADRI,01:30,03:15,DOWN,75,4`;
+      } else {
+        return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type
+TSK-1001,TRK-901,ENG,Deep Screening of Ballast (BCM Machine),KM 14.5 UP Line,240,0.92,0.88,0.85,0.70,0.80,CRITICAL,Absolute Machine Block,TRAFFIC_BLOCK
+TSK-2001,SIG-301,SNT,Track Circuit Lead Cable Renewal,KM 41.8 UP Line,120,0.88,0.80,0.85,0.60,0.70,HIGH,Signal Disconnection Notice,SIGNAL_DISCONNECTION
+TSK-3001,OHE-501,TRD,Catenary Insulator High-Pressure Washing,KM 42.0 - 45.0,150,0.80,0.75,0.70,0.50,0.60,HIGH,25kV Power Block,POWER_BLOCK`;
+      }
+    },
+
     // --- KPI Suite ---
     getKPIs: () => ({
       blockUtilization: { baseline: "48%", optimized: "78%", diff: "+30%" },
@@ -467,7 +527,6 @@ const RailTwinEngine = (function() {
       };
       auditLogs.unshift(entry);
       setStored('audit_logs', auditLogs);
-      // Dispatch custom event for views to refresh
       window.dispatchEvent(new CustomEvent('railtwin:audit_update', { detail: entry }));
     }
   };
