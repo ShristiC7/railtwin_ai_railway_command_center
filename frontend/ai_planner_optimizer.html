@@ -24,14 +24,17 @@
       main > :first-child { margin-top:0!important; }
       main > :last-child { margin-bottom:0!important; }
     }
-    ::-webkit-scrollbar { display:none; }
-    .glass-panel { background: rgba(29,32,39,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+    /* Scrollbars — show a thin one for corridors, hide for page body */
+    ::-webkit-scrollbar { width: 5px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #EEF2F5; }
+    ::-webkit-scrollbar-thumb { background: #B8C4D2; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #005A9C; }
+    .glass-panel { background: rgba(255,255,255,0.95); border: 1px solid #D0D7E3; }
     .kpi-pulse { animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(140, 144, 159, 0.2); border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(140, 144, 159, 0.4); }
+    /* Corridor scroll container */
+    #corridor-scroll { overflow-x: auto !important; overflow-y: visible !important; display: block !important; }
+    #corridor-grid-wrapper { min-width: 960px; }
   
     /* === GOVERNMENT RAILWAY THEME OVERRIDE === */
     html,body{background:#F5F7F9 !important;color:#1A2B45 !important;}
@@ -128,6 +131,38 @@
     [class*="bg-surface-container-highest"] { background:#EFF3F8 !important; border:1px solid #D0D7E3; }
     /* inverse-primary color */
     [class*="to-inverse-primary"] { --tw-gradient-to: #005A9C; }
+    /* ---- AI Optimizer buttons — force visible with max specificity ---- */
+    #run-solver-btn {
+      background: #1D5FA8 !important;
+      color: #FFFFFF !important;
+      border: none !important;
+      opacity: 1 !important;
+      cursor: pointer !important;
+    }
+    #run-solver-btn:hover { background: #164E8C !important; }
+    #run-solver-btn span { color: #FFFFFF !important; }
+    /* What-If button */
+    button[onclick="openWhatIfModal()"] {
+      background: #EEF2F5 !important;
+      color: #12355B !important;
+      border: 1px solid #D0D7E3 !important;
+      cursor: pointer !important;
+    }
+    button[onclick="openWhatIfModal()"]:hover { background: #D0D7E3 !important; }
+    /* Applied to Schedule button */
+    button[onclick*="applyBundle"] {
+      background: #005A9C !important;
+      color: #FFFFFF !important;
+      cursor: pointer !important;
+    }
+    button[onclick*="applyBundle"]:hover { background: #004A87 !important; }
+    /* WHY? button */
+    button[onclick*="openWhyModal"] {
+      background: transparent !important;
+      color: #1D5FA8 !important;
+      border: none !important;
+      cursor: pointer !important;
+    }
 </style>
   <script src="https://cdn.tailwindcss.com"></script>
   <script id="tailwind-config">
@@ -325,8 +360,8 @@
             </div>
 
             <!-- Gantt / Block Matrix -->
-            <div class="flex-1 p-4 z-10" style="overflow-x:auto;overflow-y:visible;">
-              <div style="display:grid;grid-template-columns:90px repeat(7, minmax(130px,1fr));gap:4px;margin-bottom:8px;min-width:1010px;">
+            <div id="corridor-scroll" class="flex-1 p-4 z-10" style="overflow-x:auto;overflow-y:visible;">
+              <div id="corridor-grid-wrapper">
                 <div class="col-span-1"></div>
                 <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Mon 14</div>
                 <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Tue 15</div>
