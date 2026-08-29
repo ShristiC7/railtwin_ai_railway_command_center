@@ -3,402 +3,177 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>RailTwin AI — Request Clearance</title>
+  <title>RailTwin AI — Request System Clearance | Railway Operations Portal</title>
   <meta name="description" content="Request operational clearance for RailTwin AI Railway Command Center. Authorized railway personnel only."/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet"/>
+  <link rel="stylesheet" href="govt_theme.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary-fixed": "#d8e2ff", "tertiary": "#ffb786", "surface-dim": "#10131a",
-            "inverse-primary": "#005ac2", "inverse-on-surface": "#2e3038",
-            "secondary-container": "#571bc1", "tertiary-container": "#df7412",
-            "surface-container-highest": "#32353c", "surface-container-high": "#272a31",
-            "on-surface": "#e1e2ec", "secondary": "#d0bcff", "on-secondary": "#3c0091",
-            "on-background": "#e1e2ec", "outline": "#8c909f",
-            "surface-container": "#1d2027", "primary-container": "#4d8eff",
-            "surface-bright": "#363941", "on-primary-container": "#00285d",
-            "error-container": "#93000a", "on-primary-fixed": "#001a42",
-            "surface-container-low": "#191b23",
-            "surface-container-lowest": "#0b0e15", "tertiary-fixed": "#ffdcc6",
-            "background": "#10131a", "error": "#ffb4ab", "surface": "#10131a",
-            "inverse-surface": "#e1e2ec", "primary": "#adc6ff",
-            "primary-fixed-dim": "#adc6ff", "on-surface-variant": "#c2c6d6",
-            "on-secondary-container": "#c4abff", "outline-variant": "#424754",
-            "on-primary": "#002e6a", "on-tertiary": "#502400"
-          },
-          borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
-          spacing: { "unit": "4px", "gutter": "16px", "margin-page": "24px", "panel-padding": "20px" },
-          fontFamily: {
-            "label-caps": ["Inter"], "body-base": ["Inter"],
-            "display-lg": ["Inter"], "headline-md": ["Inter"], "data-mono": ["JetBrains Mono"]
-          },
-          fontSize: {
-            "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" }],
-            "body-base": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-            "display-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
-            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
-            "data-mono": ["14px", { lineHeight: "20px", fontWeight: "500" }]
-          }
-        }
-      }
-    }
-  </script>
   <style>
-    @layer base {
-      html, body { margin: 0; padding: 0; background-color: #F5F7F9; }
-      body { overscroll-behavior: none; overflow-x: hidden; }
-    }
-    ::-webkit-scrollbar { display: none; }
-
-    @keyframes gridMove {
-      0% { background-position: 0 0; }
-      100% { background-position: 40px 40px; }
-    }
-    .animated-grid {
-      background-image:
-        linear-gradient(rgba(173,198,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(173,198,255,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-      animation: gridMove 4s linear infinite;
-    }
-
-    @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(500%); } }
-    .scan-line { animation: scan 3s linear infinite; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .animate-spin { animation: spin 0.8s linear infinite; }
-
-    /* Float-label behavior for inputs */
-    .float-label-group input:not(:placeholder-shown) + label,
-    .float-label-group input:focus + label {
-      top: 0.5rem;
-      font-size: 10px;
-      color: #adc6ff;
-    }
-    .float-label-group select:focus + label {
-      top: 0.5rem;
-      font-size: 10px;
-      color: #ffb786;
-    }
-    .float-label-group label {
-      position: absolute;
-      left: 1rem;
-      top: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      color: #8c909f;
-      pointer-events: none;
-      transition: all 0.15s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 700;
-    }
-
-    /* Success overlay */
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    .fade-in { animation: fadeIn 0.3s ease; }
-  
-    /* === GOVERNMENT RAILWAY THEME OVERRIDE === */
-    html,body{background:#F5F7F9 !important;color:#1A2B45 !important;}
-    /* Sidebar */
-    aside{width:220px !important;background:#12355B !important;border-right:1px solid rgba(255,255,255,0.08) !important;padding:0 !important;align-items:stretch !important;}
-    aside nav{gap:0 !important;flex:1;padding-top:8px;}
-    aside nav a{padding:9px 14px !important;border-radius:0 !important;display:flex !important;flex-direction:row !important;align-items:center !important;gap:10px !important;width:100% !important;color:rgba(255,255,255,0.82) !important;font-size:12.5px !important;font-weight:500 !important;font-family:var(--rt-font-body) !important;border-left:3px solid transparent !important;text-decoration:none;transition:background 0.15s,color 0.15s !important;box-shadow:none !important;background:transparent !important;}
-    aside nav a:hover{background:rgba(255,255,255,0.08) !important;color:#fff !important;}
-    aside nav a[aria-current="page"],aside nav a.active{background:rgba(0,90,156,0.40) !important;border-left-color:#C49A3A !important;color:#fff !important;font-weight:600 !important;}
-    aside nav a .material-symbols-outlined{font-size:18px !important;flex-shrink:0;opacity:0.82;}
-    aside nav a[aria-current="page"] .material-symbols-outlined{color:#C49A3A !important;opacity:1;}
-    /* Layout */
-    .pl-20,.pl-64,[class*="ml-64"]{padding-left:220px !important;}
-    /* Header/topbar */
-    header{background:#12355B !important;border-bottom:2px solid #C49A3A !important;backdrop-filter:none !important;}
-    /* Surface colors -> white/light */
-    [class*="bg-surface-container-lowest"]{background:#EEF2F5 !important;}
-    [class*="bg-surface-container-low"]{background:#F8FAFC !important;}
-    [class*="bg-surface-container-high"]{background:#FFFFFF !important;}
-    [class*="bg-surface-container-highest"]{background:#F0F3F6 !important;}
-    [class*="bg-surface-container"]:not([class*="bg-surface-container-l"]):not([class*="bg-surface-container-h"]){background:#FFFFFF !important;}
-    [class*="bg-surface-dim"],[class*="bg-background"],[class*="bg-surface"]:not([class*="bg-surface-c"]){background:#F5F7F9 !important;}
-    [class*="bg-surface-bright"]{background:#FFFFFF !important;}
-    /* Text */
-    [class*="text-on-surface"]:not([class*="text-on-surface-variant"]){color:#1A2B45 !important;}
-    [class*="text-on-surface-variant"]{color:#4A5E73 !important;}
-    [class*="text-on-background"]{color:#1A2B45 !important;}
-    [class*="text-primary"]{color:#005A9C !important;}
-    [class*="text-secondary"]{color:#1D5FA8 !important;}
-    [class*="text-tertiary"]{color:#B45309 !important;}
-    [class*="text-error"]{color:#B3261E !important;}
-    [class*="text-outline"]:not([class*="text-outline-variant"]){color:#7A8EA0 !important;}
-    [class*="text-outline-variant"]{color:#B8C4D2 !important;}
-    [class*="text-on-primary"]{color:#FFFFFF !important;}
-    /* Primary backgrounds */
-    [class*="bg-primary"]:not([class*="bg-primary/"]):not([class*="bg-primary-fixed"]):not([class*="bg-primary-c"]){background:#005A9C !important;}
-    [class*="bg-primary/10"]{background:rgba(0,90,156,0.08) !important;}
-    [class*="bg-primary/20"]{background:rgba(0,90,156,0.12) !important;}
-    [class*="bg-error"]{background:rgba(179,38,30,0.08) !important;}
-    [class*="bg-secondary-container"]{background:rgba(29,95,168,0.10) !important;}
-    [class*="bg-tertiary-container"]{background:rgba(180,83,9,0.08) !important;}
-    /* Borders */
-    [class*="border-outline-variant"]{border-color:#D0D7E3 !important;}
-    [class*="border-outline"]:not([class*="border-outline-variant"]){border-color:#B8C4D2 !important;}
-    [class*="border-primary"]{border-color:#005A9C !important;}
-    [class*="border-error"]{border-color:#B3261E !important;}
-    /* Radius */
-    [class*="rounded-2xl"]{border-radius:10px !important;}
-    [class*="rounded-xl"]{border-radius:8px !important;}
-    [class*="rounded-full"]{border-radius:20px !important;}
-    /* Shadows */
-    .shadow-md,.shadow-lg,.shadow-xl,.shadow-2xl{box-shadow:0 1px 4px rgba(18,53,91,0.08),0 2px 8px rgba(18,53,91,0.05) !important;}
-    /* Typography */
-    h1,h2,h3,h4{color:#1A2B45 !important;}
-    [class*="text-display-lg"]{color:#12355B !important;font-size:24px !important;}
-    [class*="text-headline-md"]{color:#1A2B45 !important;}
-    /* Gradient bleeds */
-    .bg-gradient-to-r:not(aside):not(header){background:transparent !important;}
-    /* Scrollbar */
-    ::-webkit-scrollbar-thumb{background:#C0CAD4 !important;}
-    ::-webkit-scrollbar-track{background:#EEF2F5 !important;}
-    /* Backdrop blur — remove */
-    .backdrop-blur-xl,.backdrop-blur-md,.backdrop-blur-sm{backdrop-filter:none !important;}
-    /* Animated glow blobs — hide */
-    .blur-\[140px\],.blur-\[120px\]{display:none !important;}
-    /* Buttons */
-    button[class*="bg-primary"]:not([class*="bg-primary/"]),a[class*="bg-primary"]:not([class*="bg-primary/"]){background:#005A9C !important;color:#fff !important;}
-    button[class*="bg-primary"]:hover,a[class*="bg-primary"]:hover{background:#004A87 !important;}
-    /* Input fields */
-    input,select,textarea{background:#FFFFFF !important;border-color:#D0D7E3 !important;color:#1A2B45 !important;}
-    input:focus,select:focus,textarea:focus{border-color:#005A9C !important;box-shadow:0 0 0 3px rgba(0,90,156,0.10) !important;}
-    /* Table heads */
-    thead,thead tr{background:#12355B !important;color:#FFFFFF !important;}
-    thead th{color:#FFFFFF !important;}
-    /* Glow effects — remove */
-    [class*="shadow-\[0_0"]{box-shadow:0 1px 3px rgba(18,53,91,0.08) !important;}
-    /* Animated elements — calm down */
-    .animate-ping{animation:none !important;background:#1B7340 !important;border-radius:50%;}
-    /* Font family */
-    body,html,p,span,div,td,th,label,button,a,input,select,textarea{font-family:'Noto Sans','Inter',system-ui,sans-serif !important;}
-    [class*="font-data-mono"],code,pre{font-family:'Source Code Pro','JetBrains Mono',monospace !important;}
-</style>
-<link rel="stylesheet" href="govt_theme.css"/></head>
-<body class="bg-background font-body-base text-on-background min-h-screen flex items-center justify-center py-8 relative overflow-hidden">
-
-  <!-- Ambient glow blobs -->
-  <div class="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-tertiary/5 blur-[140px] pointer-events-none"></div>
-  <div class="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] pointer-events-none"></div>
-
-  <!-- Animated grid -->
-  <div class="absolute inset-0 animated-grid pointer-events-none opacity-60"></div>
-
-  <!-- Top scan line -->
-  <div class="absolute top-0 left-0 right-0 h-px bg-surface-container-highest overflow-hidden">
-    <div class="h-full w-1/4 bg-tertiary/60 blur-sm scan-line"></div>
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .animate-spin{animation:spin 0.8s linear infinite;}
+    @keyframes fadeIn{from{opacity:0;transform:scale(0.96);}to{opacity:1;transform:scale(1);}}
+    .fade-in{animation:fadeIn 0.3s ease;}
+    body{min-height:100vh;display:flex;flex-direction:column;background:var(--rt-bg);}
+    .signup-bg{flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--rt-primary-dark) 0%,#1A4A7A 60%,var(--rt-primary) 100%);position:relative;overflow:hidden;padding:32px 16px;}
+    .signup-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 60px);}
+    .signup-wrap{display:flex;align-items:stretch;justify-content:center;gap:36px;max-width:960px;width:100%;z-index:1;position:relative;}
+    .left-panel{display:none;flex-direction:column;justify-content:space-between;width:340px;flex-shrink:0;color:#fff;}
+    @media(min-width:920px){.left-panel{display:flex;}}
+    .signup-card{background:#FFFFFF;border-radius:8px;box-shadow:0 8px 40px rgba(10,30,60,0.35);width:100%;max-width:520px;overflow:hidden;position:relative;}
+    .signup-header{background:var(--rt-primary-dark);padding:20px 24px 18px;border-bottom:3px solid var(--rt-gold);}
+    .signup-body{padding:24px;}
+    .form-group{margin-bottom:14px;}
+    .form-label{display:block;font-size:11px;font-weight:700;color:var(--rt-text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+    .form-input{width:100%;background:#FFFFFF;border:1px solid var(--rt-border);border-radius:6px;padding:9px 12px;font-size:13px;font-family:var(--rt-font-body);color:var(--rt-text-primary);outline:none;transition:border-color 0.15s,box-shadow 0.15s;}
+    .form-input:focus{border-color:var(--rt-primary);box-shadow:0 0 0 3px rgba(0,90,156,0.10);}
+    .form-input.mono{font-family:var(--rt-font-mono);letter-spacing:0.04em;}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .btn-submit{width:100%;background:var(--rt-primary);color:#FFFFFF;border:none;border-radius:6px;padding:11px 20px;font-size:13px;font-weight:700;font-family:var(--rt-font-body);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.03em;transition:background 0.15s;text-transform:uppercase;margin-top:8px;}
+    .btn-submit:hover{background:var(--rt-primary-hover);}
+    .btn-submit:disabled{opacity:0.65;cursor:not-allowed;}
+    .btn-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--rt-text-secondary);text-decoration:none;font-weight:600;margin-top:12px;}
+    .btn-back:hover{color:var(--rt-primary);text-decoration:underline;}
+    .policy-box{background:var(--rt-card-alt);border:1px solid var(--rt-border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--rt-text-secondary);line-height:1.5;margin-bottom:16px;}
+  </style>
+</head>
+<body>
+  <!-- Top identity bar -->
+  <div class="rt-identity-bar" style="font-family:var(--rt-font-body);">
+    <span>Railway Operations Management System &mdash; RailTwin AI</span>
+    <span>Clearance Authorization Protocol</span>
   </div>
 
-  <!-- Main layout -->
-  <div class="relative z-10 w-full max-w-5xl mx-4 flex gap-10 items-center">
-
-    <!-- Left decorative panel (hidden on small screens) -->
-    <div class="hidden lg:flex flex-col w-5/12 shrink-0 gap-6">
-      <div class="flex items-center gap-3">
-        <span class="w-1 h-8 bg-tertiary rounded-full"></span>
-        <span class="font-data-mono text-label-caps text-on-surface-variant uppercase tracking-widest">Access Protocol</span>
-      </div>
-      <h1 class="font-display-lg text-display-lg text-on-surface leading-tight">
-        Request<br/><span class="text-primary">Clearance</span>
-      </h1>
-      <p class="font-body-base text-body-base text-on-surface-variant leading-relaxed">
-        Access to RailTwin AI is restricted to authorized railway personnel. Verification requires matching UID with divisional databases.
-      </p>
-
-      <!-- Security badges -->
-      <div class="flex flex-col gap-3 mt-4">
-        <div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-xl border border-outline-variant/10 transition-transform hover:-translate-y-0.5">
-          <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-primary text-[20px]">security</span>
-          </div>
-          <div>
-            <div class="font-data-mono text-label-caps text-on-surface">End-to-End Encryption</div>
-            <div class="font-data-mono text-[10px] text-on-surface-variant uppercase">AES-256 Standard</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-xl border border-outline-variant/10 transition-transform hover:-translate-y-0.5">
-          <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-tertiary text-[20px]">policy</span>
-          </div>
-          <div>
-            <div class="font-data-mono text-label-caps text-on-surface">RBAC Implemented</div>
-            <div class="font-data-mono text-[10px] text-on-surface-variant uppercase">Role-Based Access Control</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-xl border border-outline-variant/10 transition-transform hover:-translate-y-0.5">
-          <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-secondary text-[20px]">verified_user</span>
-          </div>
-          <div>
-            <div class="font-data-mono text-label-caps text-on-surface">MoR Compliant</div>
-            <div class="font-data-mono text-[10px] text-on-surface-variant uppercase">Ministry of Railways Standards</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Scan-line decorative -->
-      <div class="relative w-full h-px bg-outline-variant/20 mt-4 overflow-hidden">
-        <div class="absolute left-0 top-0 h-full w-1/4 bg-primary/60 blur-sm scan-line"></div>
-      </div>
-
-      <!-- Status -->
-      <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_#ffb786]"></span>
-        <span class="font-data-mono text-label-caps text-on-surface-variant uppercase tracking-wider">System Status: Nominal</span>
-      </div>
-    </div>
-
-    <!-- Right: Form card -->
-    <div class="flex-1 min-w-0">
-      <!-- Success state (hidden) -->
-      <div id="success-state" class="hidden flex-col items-center gap-6 text-center bg-surface-container/80 backdrop-blur-xl rounded-2xl p-10 border border-outline-variant/10 shadow-2xl fade-in">
-        <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center shadow-[0_0_24px_rgba(173,198,255,0.2)]">
-          <span class="material-symbols-outlined text-[40px] text-primary" style="font-variation-settings:'FILL' 1;">check_circle</span>
-        </div>
+  <div class="signup-bg">
+    <div class="signup-wrap">
+      <!-- Left side info panel -->
+      <div class="left-panel">
         <div>
-          <h2 class="font-headline-md text-headline-md text-on-surface">Request Submitted</h2>
-          <p class="font-body-base text-body-base text-on-surface-variant mt-2">Your clearance request has been forwarded to the divisional administrator. Redirecting you to the system...</p>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <div style="width:34px;height:34px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.20);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+              <span class="material-symbols-outlined" style="font-size:20px;color:var(--rt-gold);font-variation-settings:'FILL' 1;">train</span>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">RailTwin AI</div>
+              <div style="font-size:9.5px;color:rgba(255,255,255,0.50);letter-spacing:0.06em;text-transform:uppercase;">Operations Control Hub</div>
+            </div>
+          </div>
+          <h1 style="font-size:22px;font-weight:700;color:#fff;line-height:1.3;margin:0 0 10px 0;">Request Personnel Clearance</h1>
+          <p style="font-size:12.5px;color:rgba(255,255,255,0.70);line-height:1.6;margin:0 0 20px 0;">
+            Access to the RailTwin AI Digital Twin &amp; Optimization Hub is restricted to authenticated engineering and operations officers.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px 12px;">
+              <span class="material-symbols-outlined" style="font-size:18px;color:var(--rt-gold);">shield</span>
+              <div style="font-size:11.5px;"><strong style="display:block;color:#fff;">Role-Based Access Control</strong>TMS, SMMS, TDMS access profiles</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:6px;padding:10px 12px;">
+              <span class="material-symbols-outlined" style="font-size:18px;color:var(--rt-gold);">verified</span>
+              <div style="font-size:11.5px;"><strong style="display:block;color:#fff;">Division Verification</strong>Direct sync with divisional employee DB</div>
+            </div>
+          </div>
         </div>
-        <div class="w-48 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-          <div id="redirect-bar" class="h-full bg-primary rounded-full w-0 transition-all duration-[3000ms]"></div>
+
+        <div style="font-size:10px;color:rgba(255,255,255,0.40);letter-spacing:0.05em;text-transform:uppercase;">
+          Ministry Standards &bull; Safe Operations Protocol
         </div>
       </div>
 
-      <!-- Form card -->
-      <div id="form-card" class="bg-surface-container/80 backdrop-blur-xl shadow-2xl rounded-2xl p-8 relative overflow-hidden border border-outline-variant/10">
-        <!-- Top shimmer -->
-        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-tertiary to-transparent opacity-30"></div>
+      <!-- Right side form card -->
+      <div class="signup-card">
+        <div class="signup-header">
+          <div style="font-size:14px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.03em;">Personnel Access Request</div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,0.55);letter-spacing:0.04em;margin-top:2px;">Complete all mandatory fields for clearance approval</div>
+        </div>
 
-        <form id="signup-form" class="flex flex-col gap-6" onsubmit="handleSignup(event)" novalidate>
+        <!-- Success state -->
+        <div id="success-state" style="display:none;padding:36px 24px;text-align:center;" class="fade-in">
+          <div style="width:52px;height:52px;background:var(--rt-green-light);border:1px solid rgba(27,115,64,0.30);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <span class="material-symbols-outlined" style="font-size:30px;color:var(--rt-green);">check_circle</span>
+          </div>
+          <h2 style="font-size:17px;font-weight:700;color:var(--rt-text-primary);margin:0 0 6px;">Clearance Request Approved</h2>
+          <p style="font-size:12.5px;color:var(--rt-text-secondary);line-height:1.5;margin:0 0 20px;">Your credentials have been validated. Initializing your command center session...</p>
+          <div style="width:100%;height:4px;background:var(--rt-border-light);border-radius:2px;overflow:hidden;">
+            <div id="redirect-bar" style="height:100%;background:var(--rt-primary);width:0%;transition:width 3s linear;"></div>
+          </div>
+        </div>
 
-          <!-- Section: Identity -->
-          <div class="space-y-4">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-[16px] text-primary">badge</span>
-              <span class="font-data-mono text-label-caps text-on-surface-variant uppercase">Personnel Identity</span>
-            </div>
+        <!-- Form card -->
+        <div id="form-card" class="signup-body">
+          <div class="policy-box">
+            <strong>Security Notice:</strong> All personnel access requests are logged and monitored under standard railway IT security policies.
+          </div>
 
+          <form id="signup-form" onsubmit="handleSignup(event)" novalidate>
             <!-- Full Name -->
-            <div class="float-label-group relative">
-              <input
-                id="fullName"
-                type="text"
-                placeholder=" "
-                required
-                class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
-              />
-              <label for="fullName">Full Name</label>
+            <div class="form-group">
+              <label class="form-label" for="fullName">Full Name</label>
+              <input id="fullName" type="text" placeholder="e.g. Rajesh Kumar Sharma" required class="form-input"/>
             </div>
 
-            <div class="flex gap-4">
+            <div class="grid-2">
               <!-- Employee ID -->
-              <div class="float-label-group relative flex-1">
-                <input
-                  id="uid"
-                  type="text"
-                  placeholder=" "
-                  required
-                  class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-data-mono text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
-                />
-                <label for="uid">Employee ID (UID)</label>
+              <div class="form-group">
+                <label class="form-label" for="uid">Employee ID / Personnel No.</label>
+                <input id="uid" type="text" placeholder="e.g. NRD-4829" required class="form-input mono"/>
               </div>
               <!-- Email -->
-              <div class="float-label-group relative flex-1">
-                <input
-                  id="email"
-                  type="email"
-                  placeholder=" "
-                  required
-                  class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
-                />
-                <label for="email">Official Email</label>
+              <div class="form-group">
+                <label class="form-label" for="email">Official Email</label>
+                <input id="email" type="email" placeholder="name@railway.gov.in" required class="form-input"/>
               </div>
             </div>
-          </div>
 
-          <!-- Section: Role -->
-          <div class="space-y-4 pt-4 border-t border-outline-variant/10">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-[16px] text-tertiary">engineering</span>
-              <span class="font-data-mono text-label-caps text-on-surface-variant uppercase">Operational Role</span>
+            <div class="grid-2">
+              <!-- Department -->
+              <div class="form-group">
+                <label class="form-label" for="department">Department / Cadre</label>
+                <select id="department" required class="form-input" style="cursor:pointer;">
+                  <option disabled selected value="">Select department...</option>
+                  <option value="eng">Engineering / Track (TMS)</option>
+                  <option value="snt">Signal &amp; Telecom (SMMS)</option>
+                  <option value="trd">Traction Distribution (TDMS)</option>
+                  <option value="ops">Traffic &amp; Operations</option>
+                  <option value="acc">Safety &amp; Inspections</option>
+                </select>
+              </div>
+
+              <!-- Designation -->
+              <div class="form-group">
+                <label class="form-label" for="designation">Designation</label>
+                <input id="designation" type="text" placeholder="e.g. SSE (P-Way), ADEN" required class="form-input"/>
+              </div>
             </div>
 
-            <!-- Department -->
-            <div class="relative group">
-              <label class="absolute left-4 top-2 font-data-mono text-[10px] uppercase text-outline pointer-events-none z-10 transition-colors group-focus-within:text-tertiary">Department</label>
-              <select
-                id="department"
-                required
-                class="w-full appearance-none bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-tertiary shadow-inner cursor-pointer"
-              >
-                <option disabled selected value=""></option>
-                <option value="eng">Engineering</option>
-                <option value="snt">Signal &amp; Telecom (S&amp;T)</option>
-                <option value="trd">Traction Distribution (TRD)</option>
-                <option value="ops">Operations</option>
-                <option value="acc">Accounts</option>
-              </select>
-              <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
-            </div>
-
-            <!-- Designation -->
-            <div class="float-label-group relative">
-              <input
-                id="designation"
-                type="text"
-                placeholder=" "
-                required
-                class="w-full bg-surface-container-lowest rounded-xl px-4 pt-7 pb-2 font-body-base text-body-base text-on-surface focus:outline-none focus:ring-1 focus:ring-tertiary shadow-inner"
-              />
-              <label for="designation">Designation (e.g., SSE, ADEN)</label>
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="flex flex-col items-center gap-4 pt-2">
-            <button
-              id="submit-btn"
-              type="submit"
-              class="relative overflow-hidden group w-full bg-primary hover:bg-primary-fixed text-on-primary font-label-caps text-label-caps uppercase py-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
-            >
-              <span class="submit-label flex items-center gap-2">
-                <span>Submit Access Request</span>
-                <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">send</span>
+            <!-- Submit button -->
+            <button id="submit-btn" type="submit" class="btn-submit">
+              <span class="submit-label" style="display:flex;align-items:center;gap:8px;">
+                <span class="material-symbols-outlined">send</span>
+                <span>Submit Clearance Request</span>
               </span>
-              <span class="loading-label hidden flex items-center gap-2">
-                <span class="material-symbols-outlined text-[20px] animate-spin">refresh</span>
-                <span>Submitting...</span>
+              <span class="loading-label" style="display:none;align-items:center;gap:8px;">
+                <span class="material-symbols-outlined animate-spin">refresh</span>
+                <span>Validating credentials...</span>
               </span>
             </button>
 
-            <a href="login.html" class="font-data-mono text-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 uppercase">
-              <span class="material-symbols-outlined text-[14px]">arrow_back</span>
-              Return to Secure Login
-            </a>
-          </div>
-        </form>
-
-        <!-- Footer meta -->
-        <div class="mt-6 flex justify-between items-center font-data-mono text-[10px] text-on-surface-variant uppercase tracking-wider border-t border-outline-variant/10 pt-4">
-          <span>Sys. Status: <span class="text-primary">Nominal</span></span>
-          <span>ID: RT-AUTH-049</span>
+            <div style="text-align:center;margin-top:12px;">
+              <a href="login.html" class="btn-back">
+                <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+                <span>Return to Secure Login</span>
+              </a>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Bottom strip -->
+  <div style="background:var(--rt-primary-dark);color:rgba(255,255,255,0.40);font-size:10px;text-align:center;padding:6px;letter-spacing:0.05em;text-transform:uppercase;font-family:var(--rt-font-body);">
+    RailTwin AI Operations Platform &mdash; Authorized Railway Personnel Only
+  </div>
+
   <script>
-    // If already authenticated, skip to dashboard
     (function() {
       if (sessionStorage.getItem('rt_auth')) {
         window.location.replace('index.html');
@@ -418,13 +193,11 @@
       const loadLabel = btn.querySelector('.loading-label');
       btn.disabled = loading;
       if (loading) {
-        label.classList.add('hidden');
-        loadLabel.classList.remove('hidden');
-        loadLabel.classList.add('flex');
+        label.style.display = 'none';
+        loadLabel.style.display = 'flex';
       } else {
-        label.classList.remove('hidden');
-        loadLabel.classList.add('hidden');
-        loadLabel.classList.remove('flex');
+        label.style.display = 'flex';
+        loadLabel.style.display = 'none';
       }
     }
 
@@ -436,29 +209,28 @@
       const dept = document.getElementById('department').value;
       const desig = document.getElementById('designation').value.trim();
 
-      if (!fullName || !uid || !email || !dept || !desig) return;
+      if (!fullName || !uid || !email || !dept || !desig) {
+        alert('Please fill out all fields before submitting.');
+        return;
+      }
 
       setLoading(true);
 
       setTimeout(() => {
-        // Store auth session with the submitted data
         const authData = { id: uid, name: fullName, dept, time: Date.now() };
         sessionStorage.setItem('rt_auth', JSON.stringify(authData));
 
-        // Show success state
-        document.getElementById('form-card').classList.add('hidden');
+        document.getElementById('form-card').style.display = 'none';
         const successState = document.getElementById('success-state');
-        successState.classList.remove('hidden');
-        successState.classList.add('flex');
+        successState.style.display = 'block';
 
-        // Animate redirect bar then navigate
         setTimeout(() => {
           document.getElementById('redirect-bar').style.width = '100%';
         }, 50);
         setTimeout(() => {
           window.location.href = 'index.html';
-        }, 3200);
-      }, 1200);
+        }, 3000);
+      }, 1000);
     }
   </script>
 </body>
