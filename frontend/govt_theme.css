@@ -165,6 +165,19 @@ html,body{margin:0;padding:0;font-family:var(--rt-font-body);background-color:va
 .rt-app-shell{display:flex;height:100vh;overflow:hidden;}
 .rt-main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--rt-bg);}
 
+/* -------- SECONDARY / BUTTON COLOR OVERRIDES -------- */
+/* bg-secondary used on AI Optimizer buttons — must be visible blue, not white */
+[class*="bg-secondary"]:not([class*="bg-secondary/"]):not([class*="bg-secondary-container"]):not([class*="bg-secondary-fixed"]) {
+  background: #1D5FA8 !important;
+  color: #FFFFFF !important;
+}
+[class*="bg-secondary-container"] { background: rgba(29,95,168,0.15) !important; }
+button[class*="bg-secondary"]:not([class*="bg-secondary/"]) { background: #1D5FA8 !important; color: #FFFFFF !important; }
+button[class*="bg-secondary"]:hover { background: #1A4E8F !important; }
+[class*="text-on-secondary"] { color: #FFFFFF !important; }
+/* Gradient buttons — restore visible color */
+button.bg-gradient-to-r, a.bg-gradient-to-r { background: #1D5FA8 !important; color: #FFFFFF !important; }
+
 /* -------- SIDEBAR HOVER FIX — must override Tailwind hover:text-primary -------- */
 aside nav a:hover,
 aside nav a:hover *,

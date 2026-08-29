@@ -111,8 +111,23 @@
     /* Animated elements — calm down */
     .animate-ping{animation:none !important;background:#1B7340 !important;border-radius:50%;}
     /* Font family */
-    body,html,p,span,div,td,th,label,button,a,input,select,textarea{.material-symbols-outlined { font-family: 'Material Symbols Outlined' !important; } body,html,p,span,div,td,th,label,button,a,input,select,textarea{font-family:'Noto Sans','Inter',system-ui,sans-serif !important;}
+    /* Font family */
+    .material-symbols-outlined { font-family: 'Material Symbols Outlined' !important; }
+    body,html,p,span,div,td,th,label,button,a,input,select,textarea{font-family:'Noto Sans','Inter',system-ui,sans-serif !important;}
     [class*="font-data-mono"],code,pre{font-family:'Source Code Pro','JetBrains Mono',monospace !important;}
+    /* AI Optimizer section — fix button colors that got turned white */
+    [class*="bg-secondary"]:not([class*="bg-secondary/"]):not([class*="bg-secondary-container"]):not([class*="bg-secondary-fixed"]) { background:#1D5FA8 !important; color:#FFFFFF !important; }
+    [class*="bg-secondary-container"] { background:rgba(29,95,168,0.18) !important; color:#1D5FA8 !important; }
+    button[class*="bg-secondary"]:not([class*="bg-secondary/"]) { background:#1D5FA8 !important; color:#FFFFFF !important; }
+    button[class*="bg-secondary"]:hover { background:#1A4E8F !important; }
+    [class*="text-secondary"] { color:#1D5FA8 !important; }
+    [class*="text-on-secondary"] { color:#FFFFFF !important; }
+    /* Gradient buttons (bg-gradient-to-r) — override transparent hack for these specifically */
+    button.bg-gradient-to-r, a.bg-gradient-to-r { background:#1D5FA8 !important; color:#FFFFFF !important; }
+    /* Surface-container-highest cards — ensure they have a light but visible background */
+    [class*="bg-surface-container-highest"] { background:#EFF3F8 !important; border:1px solid #D0D7E3; }
+    /* inverse-primary color */
+    [class*="to-inverse-primary"] { --tw-gradient-to: #005A9C; }
 </style>
   <script src="https://cdn.tailwindcss.com"></script>
   <script id="tailwind-config">
@@ -282,7 +297,7 @@
           </div>
 
           <!-- Center: Corridor Timeline & Constraint Grid -->
-          <div class="flex-1 flex flex-col min-w-0 bg-surface-container rounded-xl shadow-lg relative overflow-visible border border-outline-variant/10" style="min-width:0">
+          <div class="flex-1 flex flex-col min-w-0 bg-surface-container rounded-xl shadow-lg relative border border-outline-variant/10" style="min-width:0;overflow:hidden;">
             <div class="p-4 px-6 flex items-center justify-between border-b border-outline-variant/10 z-10 bg-surface-container">
               <div class="flex items-center gap-4">
                 <div>
@@ -310,7 +325,7 @@
             </div>
 
             <!-- Gantt / Block Matrix -->
-            <div class="flex-1 p-6 overflow-x-auto flex flex-col z-10">
+            <div class="flex-1 p-4 z-10" style="overflow-x:auto;overflow-y:visible;">
               <div style="display:grid;grid-template-columns:90px repeat(7, minmax(130px,1fr));gap:4px;margin-bottom:8px;min-width:1010px;">
                 <div class="col-span-1"></div>
                 <div class="text-center font-data-mono text-label-caps text-on-surface-variant uppercase" style="min-width:130px">Mon 14</div>
