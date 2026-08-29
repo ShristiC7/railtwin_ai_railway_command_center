@@ -13,7 +13,7 @@
   <script src="railway_engine.js"></script>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>RailTwin AI — Multi-Department Data Ingestion &amp; Upload Center</title>
+  <title>RailTwin AI — Multi-Department Data Ingestion &amp; Database Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
@@ -90,7 +90,7 @@
       <a class="p-3 rounded-xl text-on-surface-variant hover:text-primary transition-all group" href="command_center_network_map_2.html" title="Task Explorer">
         <span class="material-symbols-outlined text-[28px]">assignment</span>
       </a>
-      <a aria-current="page" class="p-3 rounded-xl transition-all group bg-primary text-on-primary shadow-[0_0_12px_rgba(173,198,255,0.4)]" href="data_upload_center.html" title="Data Ingestion &amp; Upload">
+      <a aria-current="page" class="p-3 rounded-xl transition-all group bg-primary text-on-primary shadow-[0_0_12px_rgba(173,198,255,0.4)]" href="data_upload_center.html" title="Data Ingestion &amp; Database">
         <span class="material-symbols-outlined text-[28px]">cloud_upload</span>
       </a>
       <a class="p-3 rounded-xl text-on-surface-variant hover:text-primary transition-all group" href="asset_digital_twin_explorer.html" title="Asset Inventory">
@@ -116,8 +116,8 @@
       </div>
       <div class="flex items-center gap-gutter">
         <div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant/30">
-          <span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#adc6ff]"></span>
-          <span class="text-label-caps font-label-caps text-on-surface">Data Ingestion Engine (FR-04)</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+          <span class="text-label-caps font-label-caps text-on-surface">Database: Persistent (Local Storage)</span>
         </div>
         <div class="w-px h-6 bg-outline-variant/30 mx-2"></div>
         <div class="flex items-center gap-3">
@@ -132,30 +132,30 @@
     <!-- KPI Strip -->
     <div class="fixed top-16 left-20 right-0 h-kpi-height bg-surface-container-low/50 backdrop-blur-sm z-30 px-margin-page flex items-center gap-8 border-b border-outline-variant/10">
       <div class="flex flex-col">
-        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Current Active Tasks</span>
+        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Database Total Records</span>
         <div class="flex items-end gap-2">
           <span class="font-data-mono text-headline-md text-primary" id="kpi-task-count">6 Tasks</span>
-          <span class="material-symbols-outlined text-primary text-[18px] mb-1">list_alt</span>
+          <span class="material-symbols-outlined text-primary text-[18px] mb-1">database</span>
         </div>
       </div>
       <div class="flex flex-col">
-        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Ingested Sources</span>
+        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Active Sources</span>
         <div class="flex items-end gap-2">
           <span class="font-data-mono text-headline-md text-secondary">TMS • SMMS • TDMS</span>
           <span class="material-symbols-outlined text-secondary text-[18px] mb-1">dataset</span>
         </div>
       </div>
       <div class="flex flex-col">
-        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Data Parser Status</span>
+        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Storage Status</span>
         <div class="flex items-end gap-2">
-          <span class="font-data-mono text-headline-md text-emerald-400 font-bold">READY (CSV/JSON/XLSX)</span>
-          <span class="material-symbols-outlined text-emerald-400 text-[18px] mb-1">check_circle</span>
+          <span class="font-data-mono text-headline-md text-emerald-400 font-bold">Auto-Persisted</span>
+          <span class="material-symbols-outlined text-emerald-400 text-[18px] mb-1">cloud_done</span>
         </div>
       </div>
       <div class="flex flex-col">
-        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Normalization Formula</span>
+        <span class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase">Scoring Engine</span>
         <div class="flex items-end gap-2">
-          <span class="font-data-mono text-headline-md text-tertiary">PRD Eq 8.2 Active</span>
+          <span class="font-data-mono text-headline-md text-tertiary">PRD Formula (Eq 8.2)</span>
           <span class="material-symbols-outlined text-tertiary text-[18px] mb-1">functions</span>
         </div>
       </div>
@@ -165,23 +165,46 @@
     <main class="relative pt-[144px] pb-[88px] min-h-screen bg-surface-dim">
       <div class="flex flex-col w-full px-margin-page gap-gutter">
 
-        <!-- Top Welcome & Data Category Selector -->
-        <div class="bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-5">
+        <!-- Top Header & Primary Ingestion Navigation Tabs -->
+        <div class="bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
           <div class="flex items-center justify-between">
             <div>
-              <h1 class="font-display-lg text-display-lg text-on-surface">Data Ingestion &amp; Upload Hub</h1>
+              <h1 class="font-display-lg text-display-lg text-on-surface">Data Ingestion &amp; Maintenance Database</h1>
               <p class="font-body-base text-sm text-on-surface-variant mt-1">
-                Upload maintenance backlogs, working timetables, and asset sensor logs. The AI engine auto-normalizes data to the Ministry of Railways common schema and recomputes priority rankings in real time.
+                Upload bulk CSV/Excel files, manually log maintenance work orders and machinery requirements, or manage your database backups.
               </p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
+              <button onclick="exportDatabaseDump()" class="bg-surface-container-highest hover:bg-primary/20 hover:text-primary text-on-surface font-label-caps text-xs px-3.5 py-2 rounded-xl transition-all border border-outline-variant/20 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">download</span>
+                <span>Export DB Backup</span>
+              </button>
               <button onclick="resetDataToFactory()" class="bg-surface-container-highest hover:bg-error/20 hover:text-error text-on-surface-variant font-label-caps text-xs px-3.5 py-2 rounded-xl transition-all border border-outline-variant/20 flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[16px]">restart_alt</span>
-                <span>Reset to Factory Defaults</span>
+                <span>Reset Defaults</span>
               </button>
             </div>
           </div>
 
+          <!-- Ingestion Mode Selector Tabs -->
+          <div class="flex gap-2 border-b border-outline-variant/20 pt-2">
+            <button onclick="switchTab('upload')" id="tab-btn-upload" class="ingest-tab-btn pb-3 px-4 font-label-caps text-xs uppercase font-bold border-b-2 border-primary text-primary flex items-center gap-2 transition-all">
+              <span class="material-symbols-outlined text-[18px]">upload_file</span>
+              <span>1. Bulk File Ingestion (CSV / JSON)</span>
+            </button>
+            <button onclick="switchTab('create')" id="tab-btn-create" class="ingest-tab-btn pb-3 px-4 font-label-caps text-xs uppercase font-bold border-b-2 border-transparent text-on-surface-variant hover:text-on-surface flex items-center gap-2 transition-all">
+              <span class="material-symbols-outlined text-[18px]">add_circle</span>
+              <span>2. Maintenance &amp; Requirements Builder</span>
+            </button>
+            <button onclick="switchTab('database')" id="tab-btn-database" class="ingest-tab-btn pb-3 px-4 font-label-caps text-xs uppercase font-bold border-b-2 border-transparent text-on-surface-variant hover:text-on-surface flex items-center gap-2 transition-all">
+              <span class="material-symbols-outlined text-[18px]">storage</span>
+              <span>3. Database Storage &amp; Backups</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= TAB 1: BULK FILE UPLOAD ================= -->
+        <div id="tab-content-upload" class="flex flex-col gap-gutter">
           <!-- Category Selection Cards -->
           <div class="grid grid-cols-4 gap-4">
             <div onclick="selectCategory('ALL')" id="cat-card-ALL" class="cat-card bg-surface-container-high border-2 border-primary rounded-xl p-4 cursor-pointer hover:border-primary transition-all flex flex-col gap-2 shadow-md">
@@ -232,128 +255,328 @@
               </button>
             </div>
           </div>
-        </div>
 
-        <!-- Drag & Drop Uploader and Raw Paste Zone -->
-        <div class="grid grid-cols-12 gap-gutter">
+          <!-- Drag & Drop Uploader and Raw Paste Zone -->
+          <div class="grid grid-cols-12 gap-gutter">
+            <div class="col-span-7 bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
+              <h2 class="font-headline-md text-headline-md text-on-surface">File Upload &amp; Schema Parser</h2>
 
-          <!-- Left Dropzone Box -->
-          <div class="col-span-7 bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
-            <h2 class="font-headline-md text-headline-md text-on-surface">File Upload &amp; Schema Parser</h2>
+              <div id="drop-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" class="border-2 border-dashed border-outline-variant/40 hover:border-primary rounded-2xl p-8 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer bg-surface-container-lowest/50" onclick="document.getElementById('file-input').click()">
+                <input type="file" id="file-input" class="hidden" accept=".csv,.json,.txt" onchange="handleFileSelect(event)"/>
+                <div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                  <span class="material-symbols-outlined text-[36px]">cloud_upload</span>
+                </div>
+                <div class="text-center">
+                  <div class="font-bold text-on-surface text-base">Drag &amp; drop your CSV or JSON file here</div>
+                  <div class="text-xs text-on-surface-variant mt-1">Supports CSV and JSON arrays (Max 25 MB)</div>
+                </div>
+                <button type="button" class="bg-primary text-on-primary font-label-caps text-xs px-4 py-2 rounded-lg uppercase font-bold shadow-md hover:bg-primary-fixed transition-colors mt-2">
+                  Browse Local Files
+                </button>
+              </div>
 
-            <!-- Dropzone Area -->
-            <div id="drop-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" class="border-2 border-dashed border-outline-variant/40 hover:border-primary rounded-2xl p-8 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer bg-surface-container-lowest/50" onclick="document.getElementById('file-input').click()">
-              <input type="file" id="file-input" class="hidden" accept=".csv,.json,.txt" onchange="handleFileSelect(event)"/>
-              <div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-[36px]">cloud_upload</span>
-              </div>
-              <div class="text-center">
-                <div class="font-bold text-on-surface text-base">Drag &amp; drop your CSV or JSON file here</div>
-                <div class="text-xs text-on-surface-variant mt-1">Supports standard CSV, JSON arrays, and text files (Max 25 MB)</div>
-              </div>
-              <button type="button" class="bg-primary text-on-primary font-label-caps text-xs px-4 py-2 rounded-lg uppercase font-bold shadow-md hover:bg-primary-fixed transition-colors mt-2">
-                Browse Local Files
-              </button>
-            </div>
-
-            <!-- Quick Paste Alternative -->
-            <div class="flex flex-col gap-2 mt-2">
-              <div class="flex justify-between items-center">
-                <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Or Quick Paste CSV / Text Data Directly</span>
-                <button onclick="loadSampleIntoTextarea()" class="text-xs text-primary hover:underline font-data-mono">Fill with Sample Data</button>
-              </div>
-              <textarea id="raw-csv-input" rows="4" placeholder="Paste raw CSV content with header row here..." class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs font-data-mono text-on-surface focus:outline-none focus:border-primary transition-all custom-scrollbar"></textarea>
-              <button onclick="processRawTextInput()" class="self-end bg-surface-container-highest hover:bg-surface-container-high text-primary px-4 py-2 rounded-lg text-xs font-data-mono uppercase font-bold transition-all border border-outline-variant/20 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[16px]">play_arrow</span>
-                <span>Parse &amp; Validate Data</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Right Schema & Normalization Map -->
-          <div class="col-span-5 bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
-            <h2 class="font-headline-md text-headline-md text-on-surface">PRD Schema Normalizer</h2>
-            <p class="text-xs text-on-surface-variant">
-              Every ingested record is mapped automatically to the Ministry of Railways common planning model with 5 weighted scoring factors:
-            </p>
-
-            <div class="space-y-2.5 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/10 text-xs font-data-mono">
-              <div class="flex justify-between items-center text-primary">
-                <span>0.30 × Asset Criticality</span>
-                <span class="text-outline">Mainline / High Speed</span>
-              </div>
-              <div class="flex justify-between items-center text-error">
-                <span>0.25 × Defect Severity</span>
-                <span class="text-outline">Flaw Depth / Stress</span>
-              </div>
-              <div class="flex justify-between items-center text-tertiary">
-                <span>0.20 × Urgency / Overdue</span>
-                <span class="text-outline">Days Past Maintenance</span>
-              </div>
-              <div class="flex justify-between items-center text-secondary">
-                <span>0.15 × Operational Impact</span>
-                <span class="text-outline">Affected Train Paths</span>
-              </div>
-              <div class="flex justify-between items-center text-outline">
-                <span>0.10 × Historical Risk</span>
-                <span class="text-outline">Failure Probability</span>
+              <div class="flex flex-col gap-2 mt-2">
+                <div class="flex justify-between items-center">
+                  <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Or Quick Paste CSV Data Directly</span>
+                  <button onclick="loadSampleIntoTextarea()" class="text-xs text-primary hover:underline font-data-mono">Fill with Sample Data</button>
+                </div>
+                <textarea id="raw-csv-input" rows="4" placeholder="Paste raw CSV content with header row here..." class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs font-data-mono text-on-surface focus:outline-none focus:border-primary transition-all custom-scrollbar"></textarea>
+                <button onclick="processRawTextInput()" class="self-end bg-surface-container-highest hover:bg-surface-container-high text-primary px-4 py-2 rounded-lg text-xs font-data-mono uppercase font-bold transition-all border border-outline-variant/20 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px]">play_arrow</span>
+                  <span>Parse &amp; Validate Data</span>
+                </button>
               </div>
             </div>
 
-            <!-- Ingestion Commit Actions -->
-            <div id="ingestion-action-box" class="mt-auto bg-surface-container-high p-4 rounded-xl border border-primary/30 flex flex-col gap-3">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-on-surface text-sm">Parsed Records Ready</span>
-                <span id="ready-badge" class="bg-primary/20 text-primary font-data-mono text-xs px-2.5 py-0.5 rounded-full font-bold">0 Records</span>
-              </div>
-              <p class="text-[11px] text-on-surface-variant">
-                Clicking commit adds records to the central memory store, recalculates mathematical priority scores, and broadcasts to the Task Explorer and AI Optimizer.
+            <!-- Right Schema & Normalization Map -->
+            <div class="col-span-5 bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
+              <h2 class="font-headline-md text-headline-md text-on-surface">PRD Schema Normalizer</h2>
+              <p class="text-xs text-on-surface-variant">
+                Every ingested record is mapped automatically to the Ministry of Railways common planning model with 5 weighted scoring factors:
               </p>
-              <button onclick="commitIngestedTasks()" id="commit-btn" disabled class="w-full bg-primary disabled:opacity-40 disabled:cursor-not-allowed text-on-primary font-label-caps text-xs py-3 rounded-xl uppercase font-bold shadow-lg hover:bg-primary-fixed transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">publish</span>
-                <span>Commit &amp; Load into AI Planner</span>
-              </button>
+
+              <div class="space-y-2.5 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/10 text-xs font-data-mono">
+                <div class="flex justify-between items-center text-primary">
+                  <span>0.30 × Asset Criticality</span>
+                  <span class="text-outline">Mainline / High Speed</span>
+                </div>
+                <div class="flex justify-between items-center text-error">
+                  <span>0.25 × Defect Severity</span>
+                  <span class="text-outline">Flaw Depth / Stress</span>
+                </div>
+                <div class="flex justify-between items-center text-tertiary">
+                  <span>0.20 × Urgency / Overdue</span>
+                  <span class="text-outline">Days Past Maintenance</span>
+                </div>
+                <div class="flex justify-between items-center text-secondary">
+                  <span>0.15 × Operational Impact</span>
+                  <span class="text-outline">Affected Train Paths</span>
+                </div>
+                <div class="flex justify-between items-center text-outline">
+                  <span>0.10 × Historical Risk</span>
+                  <span class="text-outline">Failure Probability</span>
+                </div>
+              </div>
+
+              <!-- Ingestion Commit Actions -->
+              <div class="mt-auto bg-surface-container-high p-4 rounded-xl border border-primary/30 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-on-surface text-sm">Parsed Records Ready</span>
+                  <span id="ready-badge" class="bg-primary/20 text-primary font-data-mono text-xs px-2.5 py-0.5 rounded-full font-bold">0 Records</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant">
+                  Commit saves data to the persistent local database and broadcasts updates across the entire command center.
+                </p>
+                <button onclick="commitIngestedTasks()" id="commit-btn" disabled class="w-full bg-primary disabled:opacity-40 disabled:cursor-not-allowed text-on-primary font-label-caps text-xs py-3 rounded-xl uppercase font-bold shadow-lg hover:bg-primary-fixed transition-all flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">publish</span>
+                  <span>Commit to Persistent Database</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Parsed Records Preview Table -->
+          <div class="bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="font-headline-md text-headline-md text-on-surface">Parsed Records Preview</h2>
+                <span class="text-xs text-on-surface-variant font-data-mono">Real-time schema preview before committing to database</span>
+              </div>
+              <div id="validation-pill" class="hidden items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-data-mono">
+                <span class="material-symbols-outlined text-[16px]">verified</span>
+                <span>All Fields Validated (PRD Compliant)</span>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar">
+              <table class="w-full text-left text-xs font-body-base border-collapse">
+                <thead>
+                  <tr class="border-b border-outline-variant/20 text-on-surface-variant font-label-caps text-[11px] uppercase bg-surface-container-lowest/50">
+                    <th class="p-3">Task ID</th>
+                    <th class="p-3">Dept</th>
+                    <th class="p-3">Title &amp; Description</th>
+                    <th class="p-3">Location</th>
+                    <th class="p-3">Duration</th>
+                    <th class="p-3">Calculated Priority</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Machine / Crew Requirement</th>
+                  </tr>
+                </thead>
+                <tbody id="preview-table-body" class="divide-y divide-outline-variant/10 text-on-surface font-data-mono">
+                  <tr>
+                    <td colspan="8" class="p-6 text-center text-outline font-data-mono">
+                      No new file uploaded yet. Upload a CSV/JSON or paste raw text above to preview records.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <!-- Live Parsed Records Preview Table -->
-        <div id="preview-section" class="bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-4">
-          <div class="flex items-center justify-between">
+        <!-- ================= TAB 2: MANUAL REQUIREMENTS BUILDER ================= -->
+        <div id="tab-content-create" class="hidden flex-col gap-gutter">
+          <div class="bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-6">
             <div>
-              <h2 class="font-headline-md text-headline-md text-on-surface">Parsed Records Preview</h2>
-              <span class="text-xs text-on-surface-variant font-data-mono">Real-time schema preview before committing to database</span>
+              <h2 class="font-headline-md text-headline-md text-on-surface">Create Maintenance Work Order &amp; Resource Requirements</h2>
+              <p class="text-xs text-on-surface-variant mt-1">
+                Enter details for a single track, signal, bridge, or traction maintenance requirement. The system will automatically compute the PRD priority score and store it in your persistent database.
+              </p>
             </div>
-            <div id="validation-pill" class="hidden items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-data-mono">
-              <span class="material-symbols-outlined text-[16px]">verified</span>
-              <span>All Fields Validated (PRD Compliant)</span>
+
+            <form id="task-creator-form" onsubmit="handleManualTaskSubmit(event)" class="grid grid-cols-12 gap-5">
+              <!-- Left Col: Core Details -->
+              <div class="col-span-6 flex flex-col gap-4">
+                <div class="flex flex-col gap-1.5">
+                  <label class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Department / Source System *</label>
+                  <select id="m-dept" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs text-on-surface focus:outline-none focus:border-primary" required onchange="updateDeptDefaults()">
+                    <option value="ENG">Track Engineering (TMS)</option>
+                    <option value="SNT">Signal &amp; Telecom (SMMS)</option>
+                    <option value="TRD">Traction Distribution (TDMS)</option>
+                    <option value="ENG_BRIDGE">Bridge Civil Cadre (TMS)</option>
+                  </select>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Work Order / Task Title *</label>
+                  <input type="text" id="m-title" placeholder="e.g. Ultrasonic Rail Flaw Testing (USFD)" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs text-on-surface focus:outline-none focus:border-primary" required/>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="flex flex-col gap-1.5">
+                    <label class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Asset Identifier Code *</label>
+                    <input type="text" id="m-code" placeholder="e.g. TRK-850 / SIG-204" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs text-on-surface focus:outline-none focus:border-primary font-data-mono" required/>
+                  </div>
+                  <div class="flex flex-col gap-1.5">
+                    <label class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Corridor Location / KM *</label>
+                    <input type="text" id="m-location" placeholder="e.g. KM 42.5 UP Line" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs text-on-surface focus:outline-none focus:border-primary" required/>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="flex flex-col gap-1.5">
+                    <label class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Duration (Minutes) *</label>
+                    <input type="number" id="m-duration" value="120" min="15" max="480" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs text-on-surface focus:outline-none focus:border-primary font-data-mono" required/>
+                  </div>
+                  <div class="flex flex-col gap-1.5">
+                    <label class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Block Category *</label>
+                    <select id="m-blocktype" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs text-on-surface focus:outline-none focus:border-primary">
+                      <option value="TRAFFIC_POWER_BLOCK">Traffic + Power Block</option>
+                      <option value="TRAFFIC_BLOCK">Traffic Block Only</option>
+                      <option value="POWER_BLOCK">Power Block (25kV AC)</option>
+                      <option value="SIGNAL_DISCONNECTION">Signal Disconnection</option>
+                      <option value="NON_INTERLOCKED_BLOCK">Caution / Non-Interlocked</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="font-label-caps text-xs text-on-surface-variant uppercase font-bold">Machine &amp; Crew Resource Requirements *</label>
+                  <input type="text" id="m-machinereq" placeholder="e.g. 1x BCM Machine + 12 PW Gang Trackmen" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs text-on-surface focus:outline-none focus:border-primary" required/>
+                </div>
+              </div>
+
+              <!-- Right Col: PRD Multi-Factor Scoring Sliders -->
+              <div class="col-span-6 bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b border-outline-variant/10 pb-3">
+                  <span class="font-headline-md text-sm font-bold text-on-surface">PRD Priority Scoring Factors</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-on-surface-variant">Live Score:</span>
+                    <span id="live-score-preview" class="font-data-mono text-xl text-primary font-bold">72%</span>
+                  </div>
+                </div>
+
+                <!-- Sliders -->
+                <div class="space-y-3">
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-on-surface">Asset Criticality (Weight 0.30):</span>
+                      <span id="lbl-crit" class="font-data-mono text-primary font-bold">0.80</span>
+                    </div>
+                    <input type="range" id="rng-crit" min="0" max="1" step="0.05" value="0.80" oninput="updateLiveScore()" class="w-full accent-primary cursor-pointer"/>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-on-surface">Defect Severity (Weight 0.25):</span>
+                      <span id="lbl-sev" class="font-data-mono text-error font-bold">0.75</span>
+                    </div>
+                    <input type="range" id="rng-sev" min="0" max="1" step="0.05" value="0.75" oninput="updateLiveScore()" class="w-full accent-error cursor-pointer"/>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-on-surface">Urgency / Due Date (Weight 0.20):</span>
+                      <span id="lbl-urg" class="font-data-mono text-tertiary font-bold">0.70</span>
+                    </div>
+                    <input type="range" id="rng-urg" min="0" max="1" step="0.05" value="0.70" oninput="updateLiveScore()" class="w-full accent-tertiary cursor-pointer"/>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-on-surface">Operational Impact (Weight 0.15):</span>
+                      <span id="lbl-op" class="font-data-mono text-secondary font-bold">0.60</span>
+                    </div>
+                    <input type="range" id="rng-op" min="0" max="1" step="0.05" value="0.60" oninput="updateLiveScore()" class="w-full accent-secondary cursor-pointer"/>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-on-surface">Historical Failure Risk (Weight 0.10):</span>
+                      <span id="lbl-risk" class="font-data-mono text-outline font-bold">0.50</span>
+                    </div>
+                    <input type="range" id="rng-risk" min="0" max="1" step="0.05" value="0.50" oninput="updateLiveScore()" class="w-full accent-outline cursor-pointer"/>
+                  </div>
+                </div>
+
+                <div class="mt-auto pt-4 flex gap-3 border-t border-outline-variant/10">
+                  <button type="submit" class="flex-1 bg-primary text-on-primary font-label-caps text-xs py-3 rounded-xl uppercase font-bold shadow-lg hover:bg-primary-fixed transition-all flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">save</span>
+                    <span>Save Task &amp; Commit to Database</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ================= TAB 3: DATABASE BACKUPS & MANAGEMENT ================= -->
+        <div id="tab-content-database" class="hidden flex-col gap-gutter">
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-surface-container rounded-2xl p-5 shadow-xl border border-outline-variant/10 flex flex-col gap-3">
+              <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-primary text-[18px]">storage</span>
+                Active Database Store
+              </span>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class="font-data-mono text-3xl text-primary font-bold" id="db-total-tasks-stat">6</span>
+                <span class="text-xs text-outline">Maintenance Tasks Stored</span>
+              </div>
+              <p class="text-xs text-on-surface-variant">Synchronized across browser session &amp; local storage.</p>
+            </div>
+
+            <div class="bg-surface-container rounded-2xl p-5 shadow-xl border border-outline-variant/10 flex flex-col gap-3">
+              <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-secondary text-[18px]">auto_awesome</span>
+                Bundling Synergy
+              </span>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class="font-data-mono text-3xl text-secondary font-bold">2 Bundles</span>
+                <span class="text-xs text-outline">B-104 &amp; B-105 Active</span>
+              </div>
+              <p class="text-xs text-on-surface-variant">Auto-recomputed when new tasks are added.</p>
+            </div>
+
+            <div class="bg-surface-container rounded-2xl p-5 shadow-xl border border-outline-variant/10 flex flex-col gap-3">
+              <span class="font-label-caps text-xs text-on-surface-variant uppercase font-bold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-emerald-400 text-[18px]">history</span>
+                Audit Events
+              </span>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class="font-data-mono text-3xl text-emerald-400 font-bold" id="db-audit-count-stat">4</span>
+                <span class="text-xs text-outline">Logged Operations</span>
+              </div>
+              <p class="text-xs text-on-surface-variant">Immutable controller action logs.</p>
             </div>
           </div>
 
-          <div class="overflow-x-auto custom-scrollbar">
-            <table class="w-full text-left text-xs font-body-base border-collapse">
-              <thead>
-                <tr class="border-b border-outline-variant/20 text-on-surface-variant font-label-caps text-[11px] uppercase bg-surface-container-lowest/50">
-                  <th class="p-3">Task ID</th>
-                  <th class="p-3">Dept</th>
-                  <th class="p-3">Title &amp; Work Description</th>
-                  <th class="p-3">Location</th>
-                  <th class="p-3">Duration</th>
-                  <th class="p-3">Calculated Priority</th>
-                  <th class="p-3">Status</th>
-                  <th class="p-3">Safety Block Type</th>
-                </tr>
-              </thead>
-              <tbody id="preview-table-body" class="divide-y divide-outline-variant/10 text-on-surface font-data-mono">
-                <tr>
-                  <td colspan="8" class="p-6 text-center text-outline font-data-mono">
-                    No new file uploaded yet. Upload a CSV/JSON or paste raw text above to preview records.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Backup & Restore Actions Card -->
+          <div class="bg-surface-container rounded-2xl p-6 shadow-xl border border-outline-variant/10 flex flex-col gap-5">
+            <h2 class="font-headline-md text-headline-md text-on-surface">Database Backup &amp; Disaster Recovery</h2>
+
+            <div class="grid grid-cols-2 gap-6">
+              <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex flex-col gap-3">
+                <h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[20px]">file_download</span>
+                  Export Complete Database (JSON)
+                </h3>
+                <p class="text-xs text-on-surface-variant">
+                  Download a full JSON dump containing all tasks, bundles, priority formulas, and audit records.
+                </p>
+                <button onclick="exportDatabaseDump()" class="mt-auto self-start bg-primary text-on-primary font-label-caps text-xs px-4 py-2.5 rounded-lg uppercase font-bold shadow-md hover:bg-primary-fixed transition-colors flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px]">download</span>
+                  <span>Export Database JSON</span>
+                </button>
+              </div>
+
+              <div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex flex-col gap-3">
+                <h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[20px]">file_upload</span>
+                  Restore Database from Backup
+                </h3>
+                <p class="text-xs text-on-surface-variant">
+                  Upload a previously exported `.json` database file to restore all tasks and parameters.
+                </p>
+                <input type="file" id="db-restore-file" class="hidden" accept=".json" onchange="handleDatabaseRestore(event)"/>
+                <button onclick="document.getElementById('db-restore-file').click()" class="mt-auto self-start bg-surface-container-highest hover:bg-secondary/20 hover:text-secondary text-on-surface font-label-caps text-xs px-4 py-2.5 rounded-lg uppercase font-bold border border-outline-variant/20 transition-colors flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px]">settings_backup_restore</span>
+                  <span>Upload &amp; Restore Backup</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </main>
   </div>
@@ -371,6 +594,33 @@
   <script>
     let currentParsedData = [];
     let activeCategory = 'ALL';
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.ingest-tab-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'text-primary');
+        btn.classList.add('border-transparent', 'text-on-surface-variant');
+      });
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-on-surface-variant');
+        activeBtn.classList.add('border-primary', 'text-primary');
+      }
+
+      ['upload', 'create', 'database'].forEach(t => {
+        const el = document.getElementById('tab-content-' + t);
+        if (el) {
+          if (t === tabId) {
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+          } else {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+          }
+        }
+      });
+
+      refreshDatabaseStats();
+    }
 
     function selectCategory(cat) {
       activeCategory = cat;
@@ -402,7 +652,7 @@
       processRawTextInput();
     }
 
-    // Drag and drop handlers
+    // Drag and Drop
     function handleDragOver(e) {
       e.preventDefault();
       document.getElementById('drop-area').classList.add('dropzone-active');
@@ -453,7 +703,6 @@
           return;
         }
       } else {
-        // Parse CSV
         const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
         if (lines.length < 2) {
           alert("CSV requires a header line and at least 1 record row.");
@@ -480,7 +729,8 @@
             failureRisk: parseFloat(row['failurerisk'] || 0.5),
             status: (row['status'] || 'HIGH').toUpperCase(),
             safetyProfile: row['safetyprofile'] || "Absolute Safety Block",
-            blockType: row['blocktype'] || "TRAFFIC_POWER_BLOCK"
+            blockType: row['blocktype'] || "TRAFFIC_POWER_BLOCK",
+            machineReq: row['machinereq'] || row['machinerequirement'] || "PW Gang Equipment"
           };
           taskObj.priorityScore = RailTwinEngine.getPriorityScore(taskObj);
           parsed.push(taskObj);
@@ -525,7 +775,7 @@
             <td class="p-3 text-on-surface-variant">${r.durationMinutes} mins</td>
             <td class="p-3 text-primary font-bold">${r.priorityScore}%</td>
             <td class="p-3"><span class="${badgeColor} px-2 py-0.5 rounded uppercase text-[10px] font-label-caps">${r.status}</span></td>
-            <td class="p-3 text-outline text-[11px]">${r.blockType}</td>
+            <td class="p-3 text-outline text-[11px]">${r.machineReq || r.blockType}</td>
           </tr>
         `;
       }).join('');
@@ -538,23 +788,128 @@
       const res = RailTwinEngine.importTasksFromCSV(rawCsv);
 
       if (res.success) {
-        showToast("Data Ingestion Successful", `Ingested ${res.count} task records into the planning backlog.`);
-        document.getElementById('kpi-task-count').innerText = `${RailTwinEngine.getTasks().length} Tasks`;
+        showToast("Database Updated", `Ingested & stored ${res.count} task records into persistent storage.`);
+        refreshDatabaseStats();
         document.getElementById('commit-btn').disabled = true;
       } else {
         alert("Ingestion Error: " + res.error);
       }
     }
 
+    // Tab 2: Manual Creator Form
+    function updateDeptDefaults() {
+      const d = document.getElementById('m-dept').value;
+      if (d === 'SNT') {
+        document.getElementById('m-code').placeholder = "SIG-125";
+        document.getElementById('m-blocktype').value = "SIGNAL_DISCONNECTION";
+        document.getElementById('m-machinereq').value = "Point Motor Testing Rig + 4 S&T Techs";
+      } else if (d === 'TRD') {
+        document.getElementById('m-code').placeholder = "OHE-408";
+        document.getElementById('m-blocktype').value = "POWER_BLOCK";
+        document.getElementById('m-machinereq').value = "Tower Wagon TW-01 + 6 Linemen";
+      } else if (d === 'ENG_BRIDGE') {
+        document.getElementById('m-code').placeholder = "BRG-310";
+        document.getElementById('m-blocktype').value = "TRAFFIC_BLOCK";
+        document.getElementById('m-machinereq').value = "Grouting Pump + 10 Bridge Cadre";
+      } else {
+        document.getElementById('m-code').placeholder = "TRK-920";
+        document.getElementById('m-blocktype').value = "TRAFFIC_BLOCK";
+        document.getElementById('m-machinereq').value = "Tamping Machine + 8 PW Trackmen";
+      }
+    }
+
+    function updateLiveScore() {
+      const crit = parseFloat(document.getElementById('rng-crit').value);
+      const sev  = parseFloat(document.getElementById('rng-sev').value);
+      const urg  = parseFloat(document.getElementById('rng-urg').value);
+      const op   = parseFloat(document.getElementById('rng-op').value);
+      const risk = parseFloat(document.getElementById('rng-risk').value);
+
+      document.getElementById('lbl-crit').innerText = crit.toFixed(2);
+      document.getElementById('lbl-sev').innerText  = sev.toFixed(2);
+      document.getElementById('lbl-urg').innerText  = urg.toFixed(2);
+      document.getElementById('lbl-op').innerText   = op.toFixed(2);
+      document.getElementById('lbl-risk').innerText = risk.toFixed(2);
+
+      const score = Math.round(((0.30 * crit) + (0.25 * sev) + (0.20 * urg) + (0.15 * op) + (0.10 * risk)) * 100);
+      document.getElementById('live-score-preview').innerText = `${score}%`;
+    }
+
+    function handleManualTaskSubmit(e) {
+      e.preventDefault();
+      const dept = document.getElementById('m-dept').value;
+      const taskData = {
+        title: document.getElementById('m-title').value,
+        code: document.getElementById('m-code').value,
+        dept: dept.startsWith('ENG') ? 'ENG' : dept,
+        deptName: dept === 'SNT' ? 'Signal & Telecom (SMMS)' : (dept === 'TRD' ? 'Traction Distribution (TDMS)' : 'Track Engineering (TMS)'),
+        source: dept === 'SNT' ? 'SMMS Portal' : (dept === 'TRD' ? 'TDMS Portal' : 'TMS Portal'),
+        location: document.getElementById('m-location').value,
+        durationMinutes: parseInt(document.getElementById('m-duration').value, 10),
+        blockType: document.getElementById('m-blocktype').value,
+        machineReq: document.getElementById('m-machinereq').value,
+        criticality: parseFloat(document.getElementById('rng-crit').value),
+        severity: parseFloat(document.getElementById('rng-sev').value),
+        urgency: parseFloat(document.getElementById('rng-urg').value),
+        opImpact: parseFloat(document.getElementById('rng-op').value),
+        failureRisk: parseFloat(document.getElementById('rng-risk').value),
+        status: parseFloat(document.getElementById('rng-crit').value) >= 0.9 ? 'CRITICAL' : 'HIGH'
+      };
+
+      const created = RailTwinEngine.addTask(taskData);
+      showToast("Task Saved", `Stored ${created.id}: ${created.title} with priority ${created.priorityScore}%.`);
+      refreshDatabaseStats();
+      document.getElementById('task-creator-form').reset();
+      updateLiveScore();
+    }
+
+    // Tab 3: Database Dump & Restore
+    function exportDatabaseDump() {
+      const dump = RailTwinEngine.exportDatabaseJSON();
+      const blob = new Blob([dump], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `railtwin_database_backup_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function handleDatabaseRestore(e) {
+      if (e.target.files && e.target.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          const res = RailTwinEngine.importDatabaseJSON(evt.target.result);
+          if (res.success) {
+            showToast("Database Restored", `Successfully loaded ${res.count} tasks from backup.`);
+            refreshDatabaseStats();
+          } else {
+            alert("Failed to restore: " + res.error);
+          }
+        };
+        reader.readAsText(e.target.files[0]);
+      }
+    }
+
     function resetDataToFactory() {
       if (confirm("Reset backlog tasks and schedule back to original baseline factory state?")) {
         RailTwinEngine.resetToDefaults();
-        document.getElementById('kpi-task-count').innerText = `${RailTwinEngine.getTasks().length} Tasks`;
+        refreshDatabaseStats();
         currentParsedData = [];
         renderPreviewTable([]);
         document.getElementById('raw-csv-input').value = "";
         showToast("Database Reset", "Backlog restored to factory default records.");
       }
+    }
+
+    function refreshDatabaseStats() {
+      const tasks = RailTwinEngine.getTasks();
+      const logs = RailTwinEngine.getAuditLogs();
+      document.getElementById('kpi-task-count').innerText = `${tasks.length} Tasks`;
+      const tStat = document.getElementById('db-total-tasks-stat');
+      if (tStat) tStat.innerText = tasks.length;
+      const lStat = document.getElementById('db-audit-count-stat');
+      if (lStat) lStat.innerText = logs.length;
     }
 
     function showToast(title, msg) {
@@ -578,7 +933,8 @@
       document.getElementById('hdr-zone').innerText = net.zone;
       document.getElementById('hdr-div').innerText = net.division;
       document.getElementById('hdr-section').innerText = net.section;
-      document.getElementById('kpi-task-count').innerText = `${RailTwinEngine.getTasks().length} Tasks`;
+      refreshDatabaseStats();
+      updateLiveScore();
     });
   </script>
 </body>
