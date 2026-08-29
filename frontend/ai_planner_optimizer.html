@@ -34,7 +34,14 @@
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
     /* Corridor scroll container */
     #corridor-scroll { overflow-x: auto !important; overflow-y: visible !important; display: block !important; }
-    #corridor-grid-wrapper { min-width: 960px; }
+    #corridor-grid-wrapper {
+      display: grid !important;
+      grid-template-columns: 90px repeat(7, minmax(120px, 1fr)) !important;
+      gap: 4px !important;
+      margin-bottom: 8px !important;
+      min-width: 930px !important;
+    }
+    #corridor-scroll > .space-y-1\.5 { min-width: 930px; }
   
     /* === GOVERNMENT RAILWAY THEME OVERRIDE === */
     html,body{background:#F5F7F9 !important;color:#1A2B45 !important;}
