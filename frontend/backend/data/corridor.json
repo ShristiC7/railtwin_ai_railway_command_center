@@ -1,0 +1,83 @@
+{
+  "corridor_id": "CR-01",
+  "corridor_name": "Sample Corridor - Section A to F",
+  "stations": [
+    {
+      "code": "STA",
+      "name": "Station A",
+      "km": 0.0
+    },
+    {
+      "code": "STB",
+      "name": "Station B",
+      "km": 12.5
+    },
+    {
+      "code": "STC",
+      "name": "Station C",
+      "km": 24.0
+    },
+    {
+      "code": "STD",
+      "name": "Station D",
+      "km": 38.2
+    },
+    {
+      "code": "STE",
+      "name": "Station E",
+      "km": 51.0
+    },
+    {
+      "code": "STF",
+      "name": "Station F",
+      "km": 64.5
+    }
+  ],
+  "sections": [
+    {
+      "section_id": "SEC-01",
+      "corridor_id": "CR-01",
+      "from_station": "STA",
+      "to_station": "STB",
+      "start_km": 0.0,
+      "end_km": 12.5,
+      "traffic_density": "high"
+    },
+    {
+      "section_id": "SEC-02",
+      "corridor_id": "CR-01",
+      "from_station": "STB",
+      "to_station": "STC",
+      "start_km": 12.5,
+      "end_km": 24.0,
+      "traffic_density": "high"
+    },
+    {
+      "section_id": "SEC-03",
+      "corridor_id": "CR-01",
+      "from_station": "STC",
+      "to_station": "STD",
+      "start_km": 24.0,
+      "end_km": 38.2,
+      "traffic_density": "moderate"
+    },
+    {
+      "section_id": "SEC-04",
+      "corridor_id": "CR-01",
+      "from_station": "STD",
+      "to_station": "STE",
+      "start_km": 38.2,
+      "end_km": 51.0,
+      "traffic_density": "high"
+    },
+    {
+      "section_id": "SEC-05",
+      "corridor_id": "CR-01",
+      "from_station": "STE",
+      "to_station": "STF",
+      "start_km": 51.0,
+      "end_km": 64.5,
+      "traffic_density": "high"
+    }
+  ]
+}

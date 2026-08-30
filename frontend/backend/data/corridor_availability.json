@@ -1,0 +1,1402 @@
+[
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-01",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-01",
+    "start_time": "01:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-02",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-03",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-03",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-04",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-04",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-05",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-05",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-06",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-07",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-07",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-08",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-09",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-09",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-10",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-11",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-12",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-13",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-14",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-15",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-16",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-17",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-18",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-19",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-20",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-21",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-21",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-22",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-22",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-23",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-24",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-25",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-25",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-26",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-27",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-27",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-28",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-29",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-01",
+    "date": "2026-09-30",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-01",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-02",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-03",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-04",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-05",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-06",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-06",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-07",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-08",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-09",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-09",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-10",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-11",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-12",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-13",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-13",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-14",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-15",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-16",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-17",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-18",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-19",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-19",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-20",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-21",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-22",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-22",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-23",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-24",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-24",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-25",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-26",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-26",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-27",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-28",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-28",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-29",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-30",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-02",
+    "date": "2026-09-30",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-01",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-01",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-02",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-03",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-04",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-05",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-06",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-07",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-08",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-09",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-10",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-10",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-11",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-11",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-12",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-13",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-13",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-14",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-14",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-15",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-15",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-16",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-17",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-18",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-19",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-19",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-20",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-20",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-21",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-22",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-23",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-23",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-24",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-25",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-26",
+    "start_time": "01:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-27",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-27",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-28",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-29",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-03",
+    "date": "2026-09-30",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-01",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-01",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-02",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-03",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-04",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-05",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-06",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-06",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-07",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-08",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-08",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-09",
+    "start_time": "01:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-10",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-11",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-12",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-13",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-14",
+    "start_time": "01:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-14",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-15",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-16",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-17",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-17",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-18",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-18",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-19",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-20",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-21",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-22",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-23",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-23",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-24",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-24",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-25",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-26",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-27",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-27",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-28",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-28",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-29",
+    "start_time": "01:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-30",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-04",
+    "date": "2026-09-30",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-01",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-01",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-02",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-03",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-04",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-05",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-05",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-06",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-07",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-07",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-08",
+    "start_time": "14:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-09",
+    "start_time": "14:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-10",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-11",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-12",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-12",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-13",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-13",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-14",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-14",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-15",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-15",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-16",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-17",
+    "start_time": "03:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-18",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-19",
+    "start_time": "01:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-19",
+    "start_time": "02:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-20",
+    "start_time": "02:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-21",
+    "start_time": "01:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-22",
+    "start_time": "03:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-23",
+    "start_time": "13:00",
+    "duration_hours": 2,
+    "goods_traffic_level": "moderate"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-24",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-25",
+    "start_time": "01:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-25",
+    "start_time": "13:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-26",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-27",
+    "start_time": "13:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-28",
+    "start_time": "14:00",
+    "duration_hours": 4,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-28",
+    "start_time": "02:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-29",
+    "start_time": "03:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "high"
+  },
+  {
+    "section_id": "SEC-05",
+    "date": "2026-09-30",
+    "start_time": "01:00",
+    "duration_hours": 3,
+    "goods_traffic_level": "low"
+  }
+]
