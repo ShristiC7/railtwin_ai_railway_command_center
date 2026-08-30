@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -158,6 +158,23 @@
               </span>
             </button>
           </form>
+
+          <!-- Quick Demo Access Roles -->
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid #E2E8F0;">
+            <div style="font-size:10.5px;font-weight:700;color:var(--rt-text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">
+              Quick Demo Access (1-Click Sign In):
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <button type="button" onclick="quickLogin('NRD-4829', 'Chief Controller (Northern Railway)')" style="background:#F1F5F9;border:1px solid #CBD5E1;border-radius:4px;padding:6px 8px;font-size:11px;font-weight:600;color:#1E293B;cursor:pointer;text-align:left;display:flex;align-items:center;gap:4px;">
+                <span class="material-symbols-outlined" style="font-size:14px;color:#005A9C;">badge</span>
+                <span>Chief Controller</span>
+              </button>
+              <button type="button" onclick="quickLogin('DEL-1044', 'Divisional Block Planner')" style="background:#F1F5F9;border:1px solid #CBD5E1;border-radius:4px;padding:6px 8px;font-size:11px;font-weight:600;color:#1E293B;cursor:pointer;text-align:left;display:flex;align-items:center;gap:4px;">
+                <span class="material-symbols-outlined" style="font-size:14px;color:#005A9C;">assignment_ind</span>
+                <span>Block Planner</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="login-footer">
@@ -251,6 +268,18 @@
         }
         window.location.href = 'index.html';
       }, 900);
+    }
+
+    function quickLogin(id, roleName) {
+      document.getElementById('employee-id').value = id;
+      document.getElementById('password').value = 'railway2026';
+      setLoading(true);
+      setTimeout(() => {
+        const authData = { id, role: roleName, time: Date.now(), keep: true };
+        sessionStorage.setItem('rt_auth', JSON.stringify(authData));
+        try { localStorage.setItem('rt_auth', JSON.stringify(authData)); } catch(e) {}
+        window.location.href = 'index.html';
+      }, 500);
     }
 
     // Restore from localStorage if "keep signed in" was used
