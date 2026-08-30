@@ -1,99 +1,131 @@
 """
-Prioritization Engine
-Indian Railways - SIH Hackathon Project
+RailTwin AI - Prioritization Engine
+Indian Railways - SIH Hackathon Project (Problem Statement 26027)
 
-Yeh script Supabase se defects padhta hai, har ek ko
-ek priority score deta hai (severity + urgency + safety + traffic
-ke combination se), aur wapas database mein update kar deta hai.
+Implements PRD Section 8.2 Priority Scoring Formula:
+Priority = 0.30 * Criticality + 0.25 * Severity + 0.20 * Urgency + 0.15 * Operational_Impact + 0.10 * Failure_Risk
 
-Formula:
-priority_score = (severity * 3) + (days_overdue_score * 2) 
-                  + (safety_bonus) + (traffic_bonus)
-
-- severity: already 1-10 scale hai
-- days_overdue_score: days_overdue ko 0-10 scale mein normalize karte hain
-- safety_bonus: agar safety_signal True hai to +15 extra
-- traffic_bonus: high traffic corridor pe extra weight (+10 high, +5 moderate, +0 low)
+Provides:
+- calculate_priority_score(task): returns priority score (0-100) and explainability factors.
+- Standalone execution with Supabase or local JSON sync.
 """
 
 import os
-from dotenv import load_dotenv
-from supabase import create_client, Client
+import json
+from typing import Dict, Any, Tuple
 
-load_dotenv()
-
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-print("Supabase se connection ban gaya.\n")
-
-# -----------------------------
-# STEP 1: Saare defects fetch karna
-# -----------------------------
-response = supabase.table("defects").select("*").execute()
-defects = response.data
-
-print(f"{len(defects)} defects mile database mein.\n")
-
-
-def calculate_priority_score(defect):
+def calculate_priority_score(defect_or_task: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
     """
-    Har defect ke liye priority score calculate karta hai.
-    Higher score = zyada urgent, pehle schedule hona chahiye.
+    Calculates an explainable priority score for a maintenance task based on PRD Section 8.2.
+    Accepts both snake_case (database/API) and camelCase (frontend/legacy).
     """
-    severity = defect["severity"] or 0
+    # 1. Asset Criticality (0.0 to 1.0 or 1 to 10)
+    raw_crit = defect_or_task.get("criticality")
+    if raw_crit is None:
+        raw_crit = 0.7
+    elif raw_crit > 1.0:
+        raw_crit = min(raw_crit / 10.0, 1.0)
 
-    # days_overdue ko 0-10 scale mein normalize karna
-    # (45 din ya usse zyada overdue = poora 10 score)
-    days_overdue = defect["days_overdue"] or 0
-    days_overdue_score = min(days_overdue / 45 * 10, 10)
+    # 2. Defect Severity (0.0 to 1.0 or 1 to 10)
+    raw_sev = defect_or_task.get("severity")
+    if raw_sev is None:
+        raw_sev = 0.6
+    elif raw_sev > 1.0:
+        raw_sev = min(raw_sev / 10.0, 1.0)
 
-    # Safety-critical defects ko bada bonus
-    safety_bonus = 15 if defect["safety_signal"] else 0
+    # 3. Urgency / Overdue Exposure
+    days_overdue = defect_or_task.get("days_overdue", 0) or 0
+    raw_urg = defect_or_task.get("urgency")
+    if raw_urg is None:
+        raw_urg = min(days_overdue / 45.0, 1.0)
+    elif raw_urg > 1.0:
+        raw_urg = min(raw_urg / 10.0, 1.0)
 
-    # Traffic impact ke hisaab se bonus
-    traffic_map = {"high": 10, "moderate": 5, "low": 0}
-    traffic_bonus = traffic_map.get(defect["traffic_impact"], 0)
+    # 4. Operational Impact
+    raw_op = defect_or_task.get("opImpact") or defect_or_task.get("operational_impact")
+    if raw_op is None:
+        traffic = str(defect_or_task.get("traffic_impact", "moderate")).lower()
+        raw_op = 0.9 if traffic == "high" else (0.6 if traffic == "moderate" else 0.3)
+    elif raw_op > 1.0:
+        raw_op = min(raw_op / 10.0, 1.0)
 
-    score = (severity * 3) + (days_overdue_score * 2) + safety_bonus + traffic_bonus
+    # 5. Failure Risk / Historical Frequency
+    raw_risk = defect_or_task.get("failureRisk") or defect_or_task.get("failure_risk")
+    if raw_risk is None:
+        raw_risk = 0.85 if defect_or_task.get("safety_signal", False) else 0.5
+    elif raw_risk > 1.0:
+        raw_risk = min(raw_risk / 10.0, 1.0)
 
-    return round(score, 2)
-
-
-# -----------------------------
-# STEP 2: Har defect ko score dena aur update karna
-# -----------------------------
-scored_defects = []
-
-for defect in defects:
-    score = calculate_priority_score(defect)
-    scored_defects.append({**defect, "priority_score": score})
-
-    # Supabase mein update karna
-    supabase.table("defects").update({"priority_score": score}).eq(
-        "defect_id", defect["defect_id"]
-    ).execute()
-
-print("Saare defects ko priority score mil gaya aur database update ho gaya.\n")
-
-# -----------------------------
-# STEP 3: Top 10 sabse urgent tasks dikhana
-# -----------------------------
-sorted_defects = sorted(scored_defects, key=lambda d: d["priority_score"], reverse=True)
-
-print("=" * 90)
-print("TOP 10 SABSE URGENT TASKS (Priority ke hisaab se ranked)")
-print("=" * 90)
-print(f"{'#':<3}{'Defect ID':<12}{'Dept':<8}{'Type':<28}{'Severity':<10}{'Overdue':<10}{'Safety':<8}{'Score'}")
-print("-" * 90)
-
-for i, d in enumerate(sorted_defects[:10], 1):
-    print(
-        f"{i:<3}{d['defect_id']:<12}{d['department']:<8}{d['defect_type'][:26]:<28}"
-        f"{d['severity']:<10}{d['days_overdue']:<10}"
-        f"{'Yes' if d['safety_signal'] else 'No':<8}{d['priority_score']}"
+    # Calculate weighted priority (0 to 1.0)
+    score_normalized = (
+        0.30 * raw_crit +
+        0.25 * raw_sev +
+        0.20 * raw_urg +
+        0.15 * raw_op +
+        0.10 * raw_risk
     )
 
-print("\nPrioritization complete! Supabase  'defects' table main  priority_score column check .")
+    # Scale to 0-100
+    score_100 = round(score_normalized * 100, 1)
+
+    factors = {
+        "criticality_weight": 0.30,
+        "criticality_value": round(raw_crit, 2),
+        "severity_weight": 0.25,
+        "severity_value": round(raw_sev, 2),
+        "urgency_weight": 0.20,
+        "urgency_value": round(raw_urg, 2),
+        "operational_impact_weight": 0.15,
+        "operational_impact_value": round(raw_op, 2),
+        "failure_risk_weight": 0.10,
+        "failure_risk_value": round(raw_risk, 2),
+        "final_score": score_100,
+        "is_safety_critical": bool(score_100 >= 80 or defect_or_task.get("safety_signal"))
+    }
+
+    return score_100, factors
+
+
+def run_prioritization_on_dataset(tasks_or_defects: list) -> list:
+    """Calculates and attaches priority score and factors to each item in a list."""
+    scored = []
+    for item in tasks_or_defects:
+        score, factors = calculate_priority_score(item)
+        updated = dict(item)
+        updated["priority_score"] = score
+        updated["priorityScore"] = score
+        updated["priority_factors"] = factors
+        scored.append(updated)
+    return sorted(scored, key=lambda x: x.get("priority_score", 0), reverse=True)
+
+
+if __name__ == "__main__":
+    from dotenv import load_dotenv
+    load_dotenv()
+
+    supabase_url = os.environ.get("SUPABASE_URL")
+    supabase_key = os.environ.get("SUPABASE_KEY")
+
+    if supabase_url and supabase_key:
+        from supabase import create_client
+        supabase = create_client(supabase_url, supabase_key)
+        print("Connected to Supabase. Fetching defects...")
+        response = supabase.table("defects").select("*").execute()
+        defects = response.data
+        scored = run_prioritization_on_dataset(defects)
+        for d in scored:
+            supabase.table("defects").update({"priority_score": d["priority_score"]}).eq("defect_id", d["defect_id"]).execute()
+        print(f"Updated {len(scored)} records in Supabase.")
+    else:
+        # Local JSON mode
+        data_path = os.path.join(os.path.dirname(__file__), "data", "defects.json")
+        if os.path.exists(data_path):
+            with open(data_path, "r") as f:
+                defects = json.load(f)
+            scored = run_prioritization_on_dataset(defects)
+            with open(data_path, "w") as f:
+                json.dump(scored, f, indent=2)
+            print(f"Calculated priority scores for {len(scored)} local defects.")
+            print("\nTop 5 Urgent Tasks:")
+            for i, d in enumerate(scored[:5], 1):
+                print(f" {i}. [{d.get('defect_id', d.get('id'))}] Dept: {d.get('department', d.get('dept'))} | Type: {d.get('defect_type', d.get('title'))[:30]} | Priority Score: {d.get('priority_score')}%")

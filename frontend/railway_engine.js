@@ -1,21 +1,25 @@
 /**
- * RailTwin AI — Client-Side Railway Intelligence Engine
- * SIH 2026 | Problem Statement 26027
+ * RailTwin AI — Unified Railway Intelligence & Command Center Engine
+ * SIH 2026 | Problem Statement 26027 | Ministry of Railways
  * 
  * Features:
- * - Persistent Database Layer (localStorage + sessionStorage Sync)
- * - CRUD Maintenance Task & Requirements Engine
- * - Multi-Department Ingestion (TMS/Engineering, SMMS/S&T, TDMS/TRD)
- * - Explainable Priority Scoring (PRD Formula)
- * - Multi-Department Bundling & CP-SAT Constraint Optimization Simulator
- * - Dynamic Re-Planning & Critical Defect Injection
- * - What-If Scenario Simulator
- * - Human Approval Lifecycle & Audit Logging
- * - Full Database Export / Backup & Restore
+ * - Dual Engine: FastAPI REST API Integration + Zero-Dependency Local Fallback
+ * - 7-Level Network Hierarchy (Zone -> Division -> Section -> Corridor -> Block Section -> Track -> Asset)
+ * - Multi-Department Ingestion & Task Normalization (TMS / SMMS / TDMS / COA)
+ * - PRD Section 8.2 Explainable Priority Engine
+ * - Multi-Department Block Bundling & CP-SAT Constraint Solver
+ * - Dynamic Re-Planning & Emergency Rail Defect Injection
+ * - What-If Scenario Simulation (Block Cancellation, Freight Surge, Speed Restrictions)
+ * - Human-in-the-loop Approval & Audit Logging (DRAFT -> RECOMMENDED -> APPROVED -> LOCKED)
+ * - Live Status Indicator for FastAPI CP-SAT Server
  */
 
 const RailTwinEngine = (function() {
   'use strict';
+
+  const API_BASE_URL = 'http://127.0.0.1:8000';
+  let backendConnected = false;
+  let backendChecked = false;
 
   // --- Network Hierarchy ---
   const NETWORKS = [
@@ -80,7 +84,7 @@ const RailTwinEngine = (function() {
     }
   ];
 
-  // --- Initial Task Backlog ---
+  // --- Initial Task Backlog (PRD FR-02, FR-04) ---
   const INITIAL_TASKS = [
     {
       id: "TSK-892A",
@@ -91,6 +95,7 @@ const RailTwinEngine = (function() {
       title: "Flash-Butt Weld Testing & Ultrasonic Inspection",
       location: "KM 42.5 UP Line (Maripat–Dadri)",
       durationMinutes: 150,
+      durationHrs: 2.5,
       criticality: 0.95,
       severity: 0.90,
       urgency: 0.85,
@@ -111,6 +116,7 @@ const RailTwinEngine = (function() {
       title: "Electronic Interlocking & Point Machine Diagnostic",
       location: "KM 43.1 Point 104A (Maripat–Dadri)",
       durationMinutes: 120,
+      durationHrs: 2.0,
       criticality: 0.80,
       severity: 0.75,
       urgency: 0.80,
@@ -131,6 +137,7 @@ const RailTwinEngine = (function() {
       title: "25kV Catenary Contact Wire Height Adjustment",
       location: "KM 41.8 – 44.0 (Maripat–Dadri)",
       durationMinutes: 120,
+      durationHrs: 2.0,
       criticality: 0.75,
       severity: 0.60,
       urgency: 0.70,
@@ -151,6 +158,7 @@ const RailTwinEngine = (function() {
       title: "Bridge BX-8092 Pier 4 Micro-Crack Epoxy Grouting",
       location: "KM 26.4 UP Line",
       durationMinutes: 210,
+      durationHrs: 3.5,
       criticality: 0.98,
       severity: 0.95,
       urgency: 0.90,
@@ -171,6 +179,7 @@ const RailTwinEngine = (function() {
       title: "Digital Axle Counter Head Calibration",
       location: "GZB Yard Track 4",
       durationMinutes: 90,
+      durationHrs: 1.5,
       criticality: 0.50,
       severity: 0.40,
       urgency: 0.45,
@@ -191,6 +200,7 @@ const RailTwinEngine = (function() {
       title: "Ballast Tamping & Track Geometry Alignment",
       location: "GZB Yard Turnout 12",
       durationMinutes: 120,
+      durationHrs: 2.0,
       criticality: 0.70,
       severity: 0.65,
       urgency: 0.60,
@@ -206,15 +216,17 @@ const RailTwinEngine = (function() {
 
   // --- PRD Priority Scoring Formula (Section 8.2) ---
   function calculatePriority(task) {
-    const p = (0.30 * (task.criticality || 0.5)) +
-              (0.25 * (task.severity || 0.5)) +
-              (0.20 * (task.urgency || 0.5)) +
-              (0.15 * (task.opImpact || 0.5)) +
-              (0.10 * (task.failureRisk || 0.5));
+    const crit = task.criticality > 1 ? task.criticality / 10 : (task.criticality || 0.7);
+    const sev = task.severity > 1 ? task.severity / 10 : (task.severity || 0.6);
+    const urg = task.urgency > 1 ? task.urgency / 10 : (task.urgency || 0.6);
+    const op = task.opImpact > 1 ? task.opImpact / 10 : (task.opImpact || 0.5);
+    const risk = task.failureRisk > 1 ? task.failureRisk / 10 : (task.failureRisk || 0.5);
+
+    const p = (0.30 * crit) + (0.25 * sev) + (0.20 * urg) + (0.15 * op) + (0.10 * risk);
     return Math.round(p * 100);
   }
 
-  // --- Bundles ---
+  // --- Bundles (PRD Section 7.1) ---
   const BUNDLES = [
     {
       bundleId: "B-104",
@@ -252,18 +264,17 @@ const RailTwinEngine = (function() {
     }
   ];
 
-  // --- Initial Audit Trail ---
+  // --- Initial Audit Trail (PRD FR-16) ---
   const INITIAL_AUDIT = [
     { id: "AUD-101", user: "NRD-4829 (Chief Controller)", action: "SYSTEM_INITIALIZE", note: "Common railway data model loaded from TMS, SMMS, TDMS", timestamp: "08:30:15" },
-    { id: "AUD-102", user: "AI_OPTIMIZER_V2.4", action: "BUNDLE_DISCOVERY", note: "Multi-department bundle B-104 formed (ENG + SNT + TRD at KM 42.5)", timestamp: "09:12:44" },
-    { id: "AUD-103", user: "AI_OPTIMIZER_V2.4", action: "CP_SAT_SOLVER_PASS", note: "0 hard constraint violations detected. 8 soft objectives maximized.", timestamp: "09:12:45" },
+    { id: "AUD-102", user: "AI_OPTIMIZER_V2.5", action: "BUNDLE_DISCOVERY", note: "Multi-department bundle B-104 formed (ENG + SNT + TRD at KM 42.5)", timestamp: "09:12:44" },
+    { id: "AUD-103", user: "AI_OPTIMIZER_V2.5", action: "CP_SAT_SOLVER_PASS", note: "0 hard constraint violations detected. 8 soft objectives maximized.", timestamp: "09:12:45" },
     { id: "AUD-104", user: "NRD-4829", action: "PLAN_STATUS_UPDATE", note: "Plan status set to RECOMMENDED for Ghaziabad-Aligarh Section", timestamp: "09:45:00" }
   ];
 
-  // --- Unified Persistent Storage Layer (localStorage + sessionStorage) ---
+  // --- Persistent Storage Layer ---
   function getStored(key, fallback) {
     try {
-      // Check localStorage first, fallback to sessionStorage, then default
       const localData = localStorage.getItem('rt_' + key);
       if (localData) return JSON.parse(localData);
       const sessData = sessionStorage.getItem('rt_' + key);
@@ -292,10 +303,53 @@ const RailTwinEngine = (function() {
 
   tasks.forEach(t => {
     t.priorityScore = calculatePriority(t);
+    t.durationHrs = t.durationHrs || (t.durationMinutes ? (t.durationMinutes / 60).toFixed(1) : 2.0);
   });
 
+  // --- Async REST Backend Connector ---
+  async function checkBackendConnection() {
+    try {
+      const resp = await fetch(`${API_BASE_URL}/`, { method: 'GET', signal: AbortSignal.timeout(2000) });
+      if (resp.ok) {
+        backendConnected = true;
+        backendChecked = true;
+        updateStatusBadges();
+        return true;
+      }
+    } catch (e) {
+      backendConnected = false;
+      backendChecked = true;
+      updateStatusBadges();
+      return false;
+    }
+    return false;
+  }
+
+  function updateStatusBadges() {
+    const badges = document.querySelectorAll('.rt-backend-badge');
+    badges.forEach(b => {
+      if (backendConnected) {
+        b.className = 'rt-backend-badge flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/30';
+        b.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>FastAPI CP-SAT Online</span>';
+        b.title = "Connected to Python FastAPI Backend (Google OR-Tools CP-SAT Solver Active)";
+      } else {
+        b.className = 'rt-backend-badge flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-700 border border-amber-500/30';
+        b.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-amber-500"></span><span>Local Simulation Engine</span>';
+        b.title = "Operating in high-fidelity client-side simulation mode";
+      }
+    });
+  }
+
+  // Automatic connection probe on engine load
+  setTimeout(checkBackendConnection, 100);
+
   return {
-    // --- Network Queries ---
+    // --- Connection Status ---
+    isBackendConnected: () => backendConnected,
+    checkBackendHealth: checkBackendConnection,
+    getApiUrl: () => API_BASE_URL,
+
+    // --- Network Queries (FR-01) ---
     getNetworks: () => NETWORKS,
     getCurrentNetwork: () => NETWORKS[currentCorridorIndex] || NETWORKS[0],
     setCorridorIndex: (idx) => {
@@ -304,7 +358,7 @@ const RailTwinEngine = (function() {
       RailTwinEngine.logAudit("CORRIDOR_SWITCH", `Switched active corridor to: ${NETWORKS[idx].name}`);
     },
 
-    // --- Task Backlog Queries & CRUD ---
+    // --- Task Backlog Queries & CRUD (FR-02, FR-05, FR-06) ---
     getTasks: () => tasks,
     getTasksByDept: (dept) => {
       if (!dept || dept === 'ALL') return tasks;
@@ -313,7 +367,7 @@ const RailTwinEngine = (function() {
     getPriorityScore: calculatePriority,
 
     // Add New Maintenance Task / Requirement (Manual Creator)
-    addTask: function(taskData) {
+    addTask: async function(taskData, onComplete) {
       const newTask = Object.assign({
         id: "TSK-" + Math.floor(1000 + Math.random() * 9000),
         code: "AST-" + Math.floor(100 + Math.random() * 900),
@@ -323,6 +377,7 @@ const RailTwinEngine = (function() {
         title: "Field Maintenance Request",
         location: "KM 42.0 UP Line",
         durationMinutes: 120,
+        durationHrs: 2.0,
         criticality: 0.70,
         severity: 0.65,
         urgency: 0.60,
@@ -339,6 +394,19 @@ const RailTwinEngine = (function() {
       tasks.unshift(newTask);
       setStored('tasks', tasks);
       RailTwinEngine.logAudit("TASK_CREATED", `Created maintenance task ${newTask.id} (${newTask.title}) in database.`);
+
+      // Sync with FastAPI if connected
+      if (backendConnected) {
+        try {
+          await fetch(`${API_BASE_URL}/tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newTask)
+          });
+        } catch (e) {}
+      }
+
+      if (onComplete) onComplete(newTask);
       return newTask;
     },
 
@@ -348,21 +416,45 @@ const RailTwinEngine = (function() {
       RailTwinEngine.logAudit("TASK_DELETED", `Removed task ${taskId} from active database.`);
     },
 
-    // --- Bundles & Optimization ---
+    // --- Bundles & Optimization (FR-07, FR-09, FR-10, FR-11) ---
     getBundles: () => BUNDLES,
     getOptimizationStatus: () => isOptimized,
     getPlanStatus: () => planStatus,
 
-    runOptimization: (onComplete) => {
+    runOptimization: async (horizon = "weekly", onComplete) => {
       isOptimized = true;
       setStored('is_optimized', true);
-      RailTwinEngine.logAudit("CP_SAT_OPTIMIZE", "Manual CP-SAT constraint optimization run completed. Bundles refreshed.");
-      if (onComplete) onComplete({
+
+      let solverStats = {
         blockReduction: "-42%",
-        utilization: "78%",
+        utilization: "78.4%",
         downtimeSaved: "4.5h",
-        trainConflicts: 0
-      });
+        trainConflicts: 0,
+        jointBundles: BUNDLES.length
+      };
+
+      if (backendConnected) {
+        try {
+          const resp = await fetch(`${API_BASE_URL}/optimize`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ horizon: horizon })
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data.result) {
+              solverStats.blockReduction = `-${data.result.reduction_pct}%`;
+              solverStats.utilization = `${data.result.block_utilization_pct}%`;
+              solverStats.downtimeSaved = `${data.result.downtime_saved_hours}h`;
+              solverStats.jointBundles = data.result.joint_multi_department_blocks;
+            }
+          }
+        } catch (e) {}
+      }
+
+      RailTwinEngine.logAudit("CP_SAT_OPTIMIZE", `CP-SAT constraint optimization run completed for ${horizon} horizon. Multi-department bundles generated.`);
+      if (onComplete) onComplete(solverStats);
+      return solverStats;
     },
 
     setPlanStatus: (newStatus) => {
@@ -371,8 +463,40 @@ const RailTwinEngine = (function() {
       RailTwinEngine.logAudit("PLAN_APPROVAL", `Plan state transitioned to ${newStatus}`);
     },
 
-    // --- Dynamic Re-Planner / Defect Injection ---
-    injectEmergencyDefect: (onComplete) => {
+    approvePlan: async (onComplete) => {
+      planStatus = "APPROVED";
+      setStored('plan_status', "APPROVED");
+      RailTwinEngine.logAudit("PLAN_APPROVED", "Plan approved by Chief Controller without manual overrides.");
+      if (backendConnected) {
+        try {
+          await fetch(`${API_BASE_URL}/plans/weekly/approve`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: "APPROVE", note: "Approved via Command Center UI" })
+          });
+        } catch (e) {}
+      }
+      if (onComplete) onComplete("APPROVED");
+    },
+
+    lockPlan: async (onComplete) => {
+      planStatus = "LOCKED";
+      setStored('plan_status', "LOCKED");
+      RailTwinEngine.logAudit("PLAN_LOCKED", "Plan finalized and locked for live field dispatch.");
+      if (backendConnected) {
+        try {
+          await fetch(`${API_BASE_URL}/plans/weekly/approve`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: "LOCK", note: "Locked for live field execution" })
+          });
+        } catch (e) {}
+      }
+      if (onComplete) onComplete("LOCKED");
+    },
+
+    // --- Dynamic Re-Planner / Defect Injection (FR-12, Demo Step 7) ---
+    injectEmergencyDefect: async (onComplete) => {
       if (emergencyInjected) return;
       emergencyInjected = true;
       setStored('emergency_injected', true);
@@ -386,6 +510,7 @@ const RailTwinEngine = (function() {
         title: "EMERGENCY: Rail Fracture at KM 42.8 UP Line",
         location: "KM 42.8 UP Line (Maripat–Dadri)",
         durationMinutes: 90,
+        durationHrs: 1.5,
         criticality: 1.0,
         severity: 1.0,
         urgency: 1.0,
@@ -401,48 +526,75 @@ const RailTwinEngine = (function() {
       tasks.unshift(emergencyTask);
       setStored('tasks', tasks);
 
+      if (backendConnected) {
+        try {
+          await fetch(`${API_BASE_URL}/events/critical-defect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: emergencyTask.title, location: emergencyTask.location })
+          });
+        } catch (e) {}
+      }
+
       RailTwinEngine.logAudit("EMERGENCY_INJECT", "CRITICAL ALERT: Rail Fracture detected at KM 42.8. Dynamic Re-Optimizer triggered.");
       RailTwinEngine.logAudit("DYNAMIC_REOPTIMIZE", "Targeted re-optimization complete. Preserved unaffected schedules in BLK-01, BLK-04, BLK-05. Shifted downstream freight G-8891 by 35 mins.");
 
       if (onComplete) onComplete(emergencyTask);
     },
 
-    // --- What-If Simulator ---
-    simulateWhatIf: (scenarioType) => {
+    // --- What-If Simulator (FR-13, Demo Step 8) ---
+    simulateWhatIf: async (scenarioType) => {
       let result = {};
       if (scenarioType === 'CANCEL_BLOCK') {
         result = {
           title: "What-If: Block Cancellation at Maripat-Dadri",
-          baselineUtilization: "78%",
-          simulatedUtilization: "61%",
+          baselineUtilization: "78.4%",
+          simulatedUtilization: "61.2%",
           impactSummary: "Cancelling Block B-104 defers 3 tasks (TRK-842, SIG-119, OHE-992). Overdue risk score rises by +24%.",
           recommendedAlternative: "Auto-shift workload to Tuesday 02:00 window (Slot S-208) with zero passenger train delays.",
-          kpiDelta: { utilization: "-17%", separateBlocks: "+2", delayRisk: "+12m" }
+          kpiDelta: { utilization: "-17.2%", separateBlocks: "+2", delayRisk: "+12m" }
         };
       } else if (scenarioType === 'FREIGHT_SURGE') {
         result = {
-          title: "What-If: 3 Additional Goods Trains (DFCCIL Reroute)",
-          baselineUtilization: "78%",
-          simulatedUtilization: "74%",
+          title: "What-If: +3 Additional Goods Trains (DFCCIL Reroute)",
+          baselineUtilization: "78.4%",
+          simulatedUtilization: "74.0%",
           impactSummary: "Available maintenance gaps reduce from 240 mins to 190 mins. All bundled tasks still fit within 180 min window.",
           recommendedAlternative: "Tighten buffer times between track tamping and TRD tower wagon clearing.",
-          kpiDelta: { utilization: "-4%", separateBlocks: "0", delayRisk: "+4m" }
+          kpiDelta: { utilization: "-4.4%", separateBlocks: "0", delayRisk: "+4m" }
         };
       } else {
         result = {
           title: "What-If: 30 km/h Temporary Speed Restriction (TSR)",
-          baselineUtilization: "78%",
-          simulatedUtilization: "76%",
+          baselineUtilization: "78.4%",
+          simulatedUtilization: "76.1%",
           impactSummary: "Pass-through time for Shatabdi increased by 6.2 mins. Scheduled maintenance block start shifted by +8 mins.",
           recommendedAlternative: "Adjust start from 01:00 to 01:08; maintain full 180 min maintenance duration.",
-          kpiDelta: { utilization: "-2%", separateBlocks: "0", delayRisk: "+6.2m" }
+          kpiDelta: { utilization: "-2.3%", separateBlocks: "0", delayRisk: "+6.2m" }
         };
       }
+
+      if (backendConnected) {
+        try {
+          const resp = await fetch(`${API_BASE_URL}/scenarios`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scenario_type: scenarioType })
+          });
+          if (resp.ok) {
+            const apiRes = await resp.json();
+            result.title = apiRes.title || result.title;
+            result.impactSummary = apiRes.impact_summary || result.impactSummary;
+            result.recommendedAlternative = apiRes.recommended_recovery || result.recommendedAlternative;
+          }
+        } catch (e) {}
+      }
+
       RailTwinEngine.logAudit("WHAT_IF_SIMULATION", `Executed What-If simulation: ${result.title}. Baseline preserved intact.`);
       return result;
     },
 
-    // --- CSV & JSON Ingestion Engine ---
+    // --- CSV & JSON Ingestion Engine (FR-02, FR-04) ---
     importTasksFromCSV: function(csvText) {
       if (!csvText || typeof csvText !== 'string') return { success: false, error: "Empty CSV file" };
       try {
@@ -459,6 +611,7 @@ const RailTwinEngine = (function() {
           const row = {};
           headers.forEach((h, idx) => { row[h] = cols[idx] || ""; });
 
+          const durMins = parseInt(row['durationminutes'] || row['duration'] || 120, 10);
           const taskObj = {
             id: row['taskid'] || row['id'] || ("TSK-" + Math.floor(1000 + Math.random() * 9000)),
             code: row['code'] || row['assetcode'] || ("AST-" + Math.floor(100 + Math.random() * 900)),
@@ -467,7 +620,8 @@ const RailTwinEngine = (function() {
             source: row['source'] || (row['dept'] === 'SNT' ? 'SMMS Portal' : (row['dept'] === 'TRD' ? 'TDMS Portal' : 'TMS Portal')),
             title: row['title'] || row['tasktitle'] || "Imported Maintenance Order",
             location: row['location'] || "KM " + (Math.random() * 80).toFixed(1) + " UP Line",
-            durationMinutes: parseInt(row['durationminutes'] || row['duration'] || 120, 10),
+            durationMinutes: durMins,
+            durationHrs: (durMins / 60).toFixed(1),
             criticality: parseFloat(row['criticality'] || 0.7),
             severity: parseFloat(row['severity'] || 0.6),
             urgency: parseFloat(row['urgency'] || 0.6),
@@ -500,6 +654,7 @@ const RailTwinEngine = (function() {
       const parsed = jsonList.map(t => {
         const item = Object.assign({}, t);
         item.priorityScore = calculatePriority(item);
+        item.durationHrs = item.durationHrs || (item.durationMinutes ? (item.durationMinutes / 60).toFixed(1) : 2.0);
         return item;
       });
       tasks = [...parsed, ...tasks];
@@ -526,7 +681,10 @@ const RailTwinEngine = (function() {
         const data = JSON.parse(jsonStr);
         if (data.tasks && Array.isArray(data.tasks)) {
           tasks = data.tasks;
-          tasks.forEach(t => { t.priorityScore = calculatePriority(t); });
+          tasks.forEach(t => {
+            t.priorityScore = calculatePriority(t);
+            t.durationHrs = t.durationHrs || (t.durationMinutes ? (t.durationMinutes / 60).toFixed(1) : 2.0);
+          });
           setStored('tasks', tasks);
         }
         if (data.auditLogs && Array.isArray(data.auditLogs)) {
@@ -551,7 +709,7 @@ const RailTwinEngine = (function() {
       RailTwinEngine.logAudit("DATABASE_RESET", "Backlog and planning schedule restored to baseline factory state.");
     },
 
-    // Sample Download Generators
+    // Sample Download Generators (PRD FR-02)
     getSampleCSV: function(type = 'TASKS_ALL') {
       if (type === 'TMS_ENG') {
         return `Task ID,Code,Dept,Title,Location,Duration Minutes,Criticality,Severity,Urgency,Op Impact,Failure Risk,Status,Safety Profile,Block Type,Machine Requirement
@@ -579,18 +737,18 @@ TSK-3001,OHE-501,TRD,Catenary Insulator High-Pressure Washing,KM 42.0 - 45.0,150
       }
     },
 
-    // --- KPI Suite ---
+    // --- KPI Suite (PRD Section 19) ---
     getKPIs: () => ({
-      blockUtilization: { baseline: "48%", optimized: "78%", diff: "+30%" },
-      separateBlocks: { baseline: "24", optimized: "14", diff: "-42%" },
-      totalDowntimeHrs: { baseline: "46.5h", optimized: "30.2h", diff: "-35%" },
+      blockUtilization: { baseline: "48.2%", optimized: "78.4%", diff: "+30.2%" },
+      separateBlocks: { baseline: "24", optimized: "14", diff: "-41.7%" },
+      totalDowntimeHrs: { baseline: "46.5h", optimized: "30.2h", diff: "-35.1%" },
       criticalCompletionRate: { baseline: "75%", optimized: "100%", diff: "+25%" },
       multiDeptBundlesCount: BUNDLES.length,
       trainConflictCount: 0,
-      scheduleStability: "86%"
+      scheduleStability: "86.4%"
     }),
 
-    // --- Audit Logging ---
+    // --- Audit Logging (FR-16) ---
     getAuditLogs: () => auditLogs,
     logAudit: (action, note) => {
       const auth = JSON.parse(sessionStorage.getItem('rt_auth') || '{"id":"NRD-4829"}');
